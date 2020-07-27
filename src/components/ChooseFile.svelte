@@ -101,7 +101,7 @@ function toEmitOrNotToEmit(file){
     on:click={handleBoxClick}
     ondragover="return false"
   >
-    <p>Drag and drop a Darwin Core CSV file here or click to select</p>
+    <p>Drag and drop a Specify query result file here or click to select</p>
   </div>
 </div>
 <input type="file" bind:this={hiddenInput} style="visibility:hidden" on:change={onFileSelected}>
