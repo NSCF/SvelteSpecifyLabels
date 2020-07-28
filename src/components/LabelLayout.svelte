@@ -30,7 +30,8 @@ export let labelData = [
   }
 ]
 
-let sortingField
+let catNumField
+let boxField
 let sortedData
 
 $: labelData, sortData()
@@ -43,33 +44,39 @@ afterUpdate(() => {
 });
 
 const sortData = _ => {
-  let sortingFields = [
-    'catalogNumber',
-    '1.collectionobject.catalogNumber',
-    'collectorNumber',
-    'collectorNo',
-    'recordNumber',
-    'fieldNumber',
-    'fieldNo',
-    '1.collectionobject.fieldNumber',
-  ]
+  let sortingFields = ['catalogNumber', '1.collectionobject.catalogNumber', 'Catalog Number']
+  let boxFields = ['Box', '1,63-preparations,58.storage.Box']
 
   for (let field of sortingFields) {
     if(labelData[0].hasOwnProperty(field)){
-      sortingField = field
+      catNumField = field
       break
     }
   }
-  let compare = makeComparer(sortingField)
+
+  for (let field of boxFields) {
+    if(labelData[0].hasOwnProperty(field)){
+      boxField = field
+      break
+    }
+  }
+
+  let compare = makeComparer(boxField, catNumField)
   sortedData = labelData.sort(compare)
 }
 
-const makeComparer = field => {
+const makeComparer = (boxField, catNumField) => {
   return function(a, b){
-    if (a[field] < b[field]){
+    if (a[boxField] < b[boxField]){
       return -1;
     }
-    if ( a[field] > b[field] ){
+    if ( a[boxField] > b[boxField] ){
+      return 1;
+    }
+    if (a[catNumField] < b[catNumField]){
+      return -1;
+    }
+    if ( a[catNumField] > b[catNumField] ){
       return 1;
     }
     return 0;

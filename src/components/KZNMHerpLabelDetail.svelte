@@ -9,6 +9,8 @@ export let includePunch = true
 </script>
 
 <div class="label">
+  <div style="padding:4px;">Box: {labelRecord.storageBox} -- cut this off label</div>
+  <hr class='subdiv'>
   <div class="label-part">
     {#if includePunch}
       <div class="labelpunch">
@@ -20,7 +22,7 @@ export let includePunch = true
     <div class="labeltext">
       <div>
         <span class="floatleft"><strong>{labelRecord.catalogNumber}</strong></span>
-        {#if labelRecord.collectorNumber && labelRecord.collectorNumber.trim()}
+        {#if labelRecord.collectorNumber}
           <span class="floatright inlineblock padright">CollNo:{labelRecord.collectorNumber}</span>
         {/if}
       </div>
@@ -37,7 +39,7 @@ export let includePunch = true
       </div>
       <div class="labelrow">{labelRecord.habitat || ''}</div>
       <div class="labelrow">
-        {#if labelRecord.collectionDate && labelRecord.collectionDate.toString().trim()}
+        {#if labelRecord.collectionDate}
           <span class='padright'>{labelRecord.collectionDate}</span>
         {/if}
         {#if labelRecord.recordedBy && labelRecord.recordedBy.length}
@@ -45,14 +47,14 @@ export let includePunch = true
             <span class="inlineblock padright-sm">{coll}</span>
           {/each}
         {/if}
-        {#if labelRecord.permitNumber && labelRecord.permitNumber.toString().trim()}
+        {#if labelRecord.permitNumber}
           <span class="inlineblock padleft">Permit:&nbsp;{labelRecord.permitNumber}</span>
         {/if}  
-        {#if labelRecord.collectionMethod && labelRecord.collectionMethod.trim()}
+        {#if labelRecord.collectionMethod}
           <span class="inlineblock padleft">{labelRecord.collectionMethod}</span>
         {/if}
       </div>
-      {#if labelRecord.specimenCount && !isNaN(labelRecord.specimenCount) && labelRecord.specimenCount > 1}
+      {#if labelRecord.specimenCount}
         <div>
           <span class="padright">Specimens:&nbsp;{labelRecord.specimenCount}</span>
           {#if labelRecord.specimenStageSex}
@@ -83,20 +85,23 @@ export let includePunch = true
         </div>
       {/if}
       <div class="labeltext">
-        <span style="width:100%;text-align:right"><strong>{labelRecord.catalogNumber}</strong></span>
-        <div class="clearfloat">{labelRecord.labelDetName}</div>
+        <div style="width:100%;text-align:right">
+          <span ><strong>{labelRecord.catalogNumber}</strong></span>
+        </div>
         <div>
-          {#if labelRecord.detBy || labelRecord.detDate || labelRecord.detMethod}
+          {labelRecord.labelDetName}
+        </div>
+        <div>
+          {#if labelRecord.identifiedBy || labelRecord.dateIdentified || labelRecord.identificationMethod}
             det:&nbsp;
-            <span >{labelRecord.detBy || ''}</span>
-            <span class="inlineblock">{labelRecord.detDate || ''}</span>
-            <span class="inlineblock">{labelRecord.detMethod || ''}</span>
+            <span >{labelRecord.identifiedBy || ''}</span>
+            <span class="inlineblock">{labelRecord.dateIdentified || ''}</span>
+            <span class="inlineblock">{labelRecord.identificationMethod || ''}</span>
           {:else}
             (No det data)
           {/if}
         </div>
       </div>
-      
     </div>
   {/if}
 </div>
@@ -106,7 +111,7 @@ export let includePunch = true
 <style>
 .label {
   font-family: 'Arial Narrow', 'PT Sans Narrow', Arial, sans-serif;
-  font-size:0.8em;
+  font-size:0.7em;
   line-height: 95%;
   width: 5cm;
   border-bottom: 0.5px solid black;
@@ -124,7 +129,7 @@ export let includePunch = true
 
 .labelpunch {
   width: 10%;
-  text-align: center;
+  text-align: right;
 }
 .labeltext {
   width: 80%;

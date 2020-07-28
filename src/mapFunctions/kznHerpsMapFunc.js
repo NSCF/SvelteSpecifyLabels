@@ -1,154 +1,102 @@
-const mapRecord = record => {
+let mapper = record => {
 
-  let catalogNumber
-  if(record.catalogNumber && record.catalogNumber.toString().trim()){
-    catalogNumber = record.catalogNumber.toString().trim()
-  }
-  else {
-    if (record['1.collectionobject.catalogNumber'] && record['1.collectionobject.catalogNumber'].trim()){
-      catalogNumber = record['1.collectionobject.catalogNumber'].trim()
-      if(catalogNumber.includes('-zzz')){
-        catalogNumber = catalogNumber.replace('-zzz', '-Her')
-      }
-    }
-  }
+  let mappedRecord = mapRecord(record, fieldsMapping)
 
-  let collectorNumber
-  if(record.collectorNumber && record.collectorNumber.toString().trim()){
-    if(Number(record.collectorNumber) == 0) {
-      collectorNumber = null
-    }
-    else {
-      collectorNumber = record.collectorNumber.toString().trim()
-    }
+  if(mappedRecord.catalogNumber.includes('-zzz')){
+    mappedRecord.catalogNumber = mappedRecord.catalogNumber.replace('-zzz', '-Her')
   }
   
-  let geography = record['1,10,2.locality.text2'] //orig.prov
-  if(!geography || !geography.trim()){
-    let country = record['1,10,2,3.geography.Country']
-    let stateProv = record['1,10,2,3.geography.State']
+  if(mappedRecord.geography == null){
     
-    if (/^\s*South\s+Africa\s*$/i.test(country)){
-      country = 'RSA'
+    if (/^\s*South\s+Africa\s*$/i.test(mappedRecord.country)){
+      mappedRecord.country = 'RSA'
     }
-    if (/congo/i.test(country) && /democratic/i.test(country)){
-      country = 'DRC'
+    if (/congo/i.test(mappedRecord.country) && /democratic/i.test(mappedRecord.country)){
+      mappedRecord.country = 'DRC'
     }
 
-    geography = [country, stateProv].filter(x=>x).map(x => x.trim()).filter(x=>x).join(';')
+    mappedRecord.geography = [mappedRecord.country, mappedRecord.stateProvince].filter(x=>x).map(x => x.trim()).filter(x=>x).join(';')
 
   }
   
-  let fullCoordsString
-  if(record.fullCoordsString && record.fullCoordsString.trim()) {
-    fullCoordsString = record.fullCoordsString.trim()
-  }
-  else {
+  if(!mappedRecord.fullCoordsString) {
     let coords
-    if (record['1,10,2.locality.relationToNamedPlace'] && 
-      record['1,10,2.locality.relationToNamedPlace'].trim()){ //being used for verbatim coordinates!!!
-        coords = record['1,10,2.locality.relationToNamedPlace'].trim()
-    }
-    else if(record['1,10,2.locality.lat1text'] && record['1,10,2.locality.lat1text'].trim()
-    && record['1,10,2.locality.long1text'] && record['1,10,2.locality.long1text'].trim()){
-      coords = `${record['1,10,2.locality.lat1text']}, ${record['1,10,2.locality.long1text']}`
-    }
-    
-    if(record['1,10,2,123-geocoorddetails.geocoorddetail.maxUncertaintyEst'] && 
-      record['1,10,2,123-geocoorddetails.geocoorddetail.maxUncertaintyEst'].toString.trim() &&
-      record['1,10,2,123-geocoorddetails.geocoorddetail.maxUncertaintyEstUnit'] && 
-      record['1,10,2,123-geocoorddetails.geocoorddetail.maxUncertaintyEstUnit'].trim()){
-        let uncertainty = record['1,10,2,123-geocoorddetails.geocoorddetail.maxUncertaintyEst'] + record['1,10,2,123-geocoorddetails.geocoorddetail.maxUncertaintyEstUnit']
-        coords = coords + '±' + uncertainty
+    if (mappedRecord.verbatimCoordinates == null) {
+      if(mappedRecord.verbatimLatitude && mappedRecord.verbatimLongitude){
+        coords = `${mappedRecord.verbatimLatitude} ${mappedRecord.verbatimLongitude}`
       }
-    
-    if(coords){
-      fullCoordsString = [coords, record['1,10,2.locality.latLongMethod'], record['1,10,2.locality.datum']]
-      .filter(item => item && item.toString().trim())
-      .join('  ')
+      else if(mappedRecord.decimalLatitude && mappedRecord.decimalLongitude) {
+        coords = `${mappedRecord.decimalLatitude} ${mappedRecord.decimalLongitude}`
+      }
     }
-  }
-  
+    else {
+      coords = mappedRecord.verbatimCoordinates
+    }
+    
+    if(coords && mappedRecord.maxUncertainty != null && mappedRecord.maxUncertaintyUnit) {
+      let uncertainty = `${mappedRecord.maxUncertainty}${mappedRecord.maxUncertaintyUnit}`
+      coords = coords + '±' + uncertainty
+    }
+    
+    if(coords && mappedRecord.coordsSource){
+      coords += `  ${mappedRecord.coordsSource}`
+    }
 
-  let elevationString
-  if(record.elevationString && record.elevationString.trim()) {
-    elevationString = record.elevationString.trim()
+    if(coords && mappedRecord.verbatimSRS){
+      coords += `  ${mappedRecord.verbatimSRS}`
+    }
+
+    mappedRecord.fullCoordsString = coords
   }
-  else {
-    if(record['1,10,2.locality.verbatimElevation'] && record['1,10,2.locality.verbatimElevation'].trim()){
-      elevationString = record['1,10,2.locality.verbatimElevation'].trim().replace(/\s+/g,'')
+
+  if (!mappedRecord.labelElevation){
+    if(mappedRecord.verbatimElevation) {
+      mappedRecord.labelElevation = mappedRecord.verbatimElevation
     }
     else {
-      let minElev = Math.round(record['1,10,2.locality.minElevation'])
-      let maxElev = Math.round(record['1,10,2.locality.maxElevation'])
-      if (minElev == maxElev && minElev != 0) {
-        elevationString = minElev + 'm'
-      }
-      if (!elevationString && minElev > maxElev){
-        elevationString = [maxElev, minElev].join('-') + 'm'
-      }
-      if (!elevationString && maxElev > minElev){
-        elevationString = [minElev,maxElev].join('-') + 'm'
-      }
-    }
-  }
-  
-  let fullLocality
-  if(record.fullLocality && record.fullLocality.trim()) {
-    fullLocality = record.fullLocality.trim()
-  }
-  else {
-    let locality = record['1,10,2.locality.localityName']
-    if(locality && locality.trim()){
-      locality = locality.trim()
-      if(locality != '-' && locality.toLowerCase() != 'none') {
-        if(locality.toLowerCase().includes(geography.toLowerCase())){
-          fullLocality = locality
-        }
-        else {
-          fullLocality = [geography,locality].join(';')
+      if(mappedRecord.minElevationMeters) {
+        if(mappedRecord.maxElevationMeters){
+          if(mappedRecord.minElevationMeters == mappedRecord.maxElevationMeters){
+            mappedRecord.verbatimElevation = mappedRecord.minElevationMeters + 'm'
+          }
+          else {
+            let elevVals = [Number(mappedRecord.minElevationMeters), Number(mappedRecord.maxElevationMeters)]
+            let minElev = Math.min(elevVals)
+            let maxElev = Math.max(elevVals)
+            mappedRecord.verbatimElevation = [minElev,maxElev].join('-') + 'm'
+          }
         }
       }
     }
+  }
+
+  if (!mappedRecord.fullLocality) {
+    if(mappedRecord.locality){
+      if(mappedRecord.locality.toLowerCase().includes(mappedRecord.geography.toLowerCase())) {
+        mappedRecord.fullLocality = mappedRecord.locality
+      }
+      else {
+        mappedRecord.fullLocality = [mappedRecord.geography, mappedRecord.locality].join(';')
+      }
+    }
     else {
-      fullLocality = geography
+      mappedRecord.fullLocality = mappedRecord.geography
     }
   }
   
   //just some cleaning
-  if(fullLocality) {
-    fullLocality = fullLocality.replace(/\s+/g, ' ') 
-    if (fullLocality.includes(elevationString)){ //this is happening for altitudes and QDSs
-      fullLocality = fullLocality.replace(elevationString, '').trim()
+  if(mappedRecord.fullLocality) {
+    if (mappedRecord.fullLocality.includes(mappedRecord.verbatimElevation)){ //this is happening for altitudes and QDSs
+      mappedRecord.fullLocality = mappedRecord.fullLocality.replace(mappedRecord.verbatimElevation, '').trim()
     }
-    fullLocality = fullLocality.replace(/[\.~]+$/, '').trim()
   }
 
-  let collectionDate
-  if(record.collectionDate && record.collectionDate.trim()){
-    collectionDate = record.collectionDate.trim()
-  }
-  else if (record['1,10.collectingevent.startDate'] && record['1,10.collectingevent.startDate'].trim()){
-    collectionDate = record['1,10.collectingevent.startDate'].trim()
-  }
-  
   //we need this so we can break lines on full names
-  let recordedBy
-  if(record.recordedBy && record.recordedBy.trim()){
-    recordedBy = record.recordedBy.trim()
-  } 
-  else {
-    if(record['1,10,30-collectors.collectingevent.collectors'] && record['1,10,30-collectors.collectingevent.collectors'].trim()) {
-      recordedBy = record['1,10,30-collectors.collectingevent.collectors'].trim()
-    }
-  }
-
-  //fixing them
-  if(recordedBy) {
-    recordedBy = recordedBy.split(/\s*[;|]\s*/g).filter(x=>x).map(x=>x.trim()).filter(x=>x)
+  if(mappedRecord.recordedBy) {
+    mappedRecord.recordedBy = mappedRecord.recordedBy.split(/\s*[;|]\s*/g).filter(x=>x).map(x=>x.trim()).filter(x=>x)
     //we need to transform full names into initials
     let fixed = []
-    for(let name of recordedBy){
+    for(let name of mappedRecord.recordedBy){
       let parts = name.split(/\s*,\s*/g) //lets hope only two!!
       if(parts[1]) {
         let firstName = parts[1]
@@ -165,203 +113,272 @@ const mapRecord = record => {
         fixed.push(name)
       }
     }
-    recordedBy = fixed
 
-    for (let i = 0; i < recordedBy.length -1; i++){
-      recordedBy[i] = recordedBy[i] + ';'
+    for (let i = 0; i < fixed.length -1; i++){
+      fixed[i] = fixed[i] + ';'
+    }
+    
+    mappedRecord.recordedBy = fixed
+
+  }
+
+  if(!mappedRecord.collectionDate) {
+    if(mappedRecord.collectionStartDate) {
+      mappedRecord.collectionDate = mappedRecord.collectionStartDate
+    }
+    //TODO else if we have an end date. None for KZN Museum herps at this point
+  }
+
+  if(!mappedRecord.specimenStageSex) {
+    let sexes, stages
+    if(mappedRecord.sex){
+      sexes = mappedRecord.sex.split(',').map(x=>x.trim()).filter(x=>x && x.toLowerCase() != 'unknown').join(' and ')
+    }
+    if(mappedRecord.lifeStage){
+      stages = mappedRecord.lifeStage.split(',').map(x=> {
+        let value = x.trim()
+        if(value && (value.toLowerCase()) == 'unknown' || value.toLowerCase().startsWith('indet')){
+          return 'stage ' + value
+        }
+        else {
+          return value
+        }
+      }).filter(x=>x).join(' and ')
+    }
+
+    if(sexes && stages) {
+      mappedRecord.specimenStageSex = `${sexes}, ${stages}`
+    }
+    else {
+      mappedRecord.specimenStageSex = `${sexes || stages || ''}`
     }
   }
-
-  let collectionMethod
-  if(record.collectionMethod && record.collectionMethod.trim()){
-    collectionMethod = record.collectionMethod.trim()
-  }
-  else if (record['1,10.collectingevent.method'] && record['1,10.collectingevent.method'].trim()){
-    collectionMethod = record['1,10.collectingevent.method'].trim()
+  
+  if(mappedRecord.occurrenceRemarks){
+    if(mappedRecord.occurrenceRemarks == '-' || mappedRecord.occurrenceRemarks.toLowerCase() == 'no data' || mappedRecord.occurrenceRemarks.toLowerCase() == 'no identification label'){
+      mappedRecord.occurrenceRemarks = null
+    }
   }
   
-  let specimenStageSex
-  if(record.specimenStageSex && record.specimenStageSex.trim()){
-    specimenStageSex = record.specimenStageSex.trim()
-  }
-  else {
-    if(record['1,63-preparations.preparation.text4'] && record['1,63-preparations.preparation.text4'].trim())(
-      specimenStageSex = record['1,63-preparations.preparation.text4'].trim() //stageSex
-    )
-    else {
-      let sexes 
-      let stages
-      if(record['1,63-preparations.preparation.text1'] && record['1,63-preparations.preparation.text1'].trim()){
-        sexes = record['1,63-preparations.preparation.text1'].trim()
-        sexes = sexes.split(',').map(x=>x.trim()).filter(x=>x && x.toLowerCase() != 'unknown').join(' and ')
-      }
-      if(record['1,63-preparations.preparation.text2'] && record['1,63-preparations.preparation.text2'].trim()){
-        stages = record['1,63-preparations.preparation.text2'].trim()
-        stages = stages.split(',').map(x=> {
-            let value = x.trim()
-            if(value && (value.toLowerCase()) == 'unknown' || value.toLowerCase().startsWith('indet')){
-              return 'stage ' + value
-            }
-            else {
-              return value
-            }
-          }).filter(x=>x).join(' and ')
-      }
-  
-      if(sexes && stages) {
-        specimenStageSex = `${sexes}, ${stages}`
+  if(mappedRecord.specimenStageSex != null) {
+    if(!isNaN(mappedRecord.specimenCount)){
+      if(Number(mappedRecord.specimenCount) > 0){
+        mappedRecord.specimenCount = Number(mappedRecord.specimenCount)
       }
       else {
-        specimenStageSex = `${sexes || stages || ''}`
+        mappedRecord.specimenCount = null
       }
-    }
-  }
-  
-  let occurrenceRemarks
-  if(record.occurrenceRemarks && record.occurrenceRemarks.trim()){
-    occurrenceRemarks = record.occurrenceRemarks.trim().replace(/[\.~]+$/, '').trim()
-  }
-  else {
-    if(record['1.collectionobject.remarks'] && record['1.collectionobject.remarks'].trim()){
-      occurrenceRemarks = record['1.collectionobject.remarks'].trim().replace(/\s+/g, ' ').replace(/[\.~]+$/, '').trim()
-      if(occurrenceRemarks == '-' || occurrenceRemarks.toLowerCase() == 'no data' || occurrenceRemarks.toLowerCase() == 'no identification label'){
-        occurrenceRemarks = null
-      }
-    }  
-  }
-  
-  let specimenCount
-  if(record.specimenCount && !isNaN(record.specimenCount) && record.specimenCount > 0) {
-    specimenCount = record.specimenCount
-  }
-  else {
-      if(record['1,63-preparations.preparation.countAmt'] && !isNaN(record['1,63-preparations.preparation.countAmt'])){
-      specimenCount = Number(record['1,63-preparations.preparation.countAmt'])
     }
     else {
-      specimenCount = null
+      mappedRecord.specimenCount =  null
     }
   }
 
   //det stuff
+  //TODO update when we have sensu
   let labelDetName
-  if(record.labelDetName && record.labelDetName.trim()){
-    labelDetName = record.labelDetName.trim()
-  }
-  else if (record['1,9-determinations,4.taxon.fullName'] && record['1,9-determinations,4.taxon.fullName'].trim()){
-    let taxonAuthor
-    if(record['1,9-determinations,4.taxon.author'] && record['1,9-determinations,4.taxon.author'].trim()){
-      taxonAuthor = record['1,9-determinations,4.taxon.author'].trim()
-    }
-    
-    if(record['1,9-determinations.determination.qualifier'] && record['1,9-determinations.determination.qualifier'].trim()){
-      let qualifier = record['1,9-determinations.determination.qualifier'].trim()
-      if(['aff.', 'cf.', 'nr'].includes(qualifier)){
-        let nameParts = record['1,9-determinations,4.taxon.fullName'].trim().split(' ')
-        if(nameParts.length > 1){
-          let lastPart = nameParts.pop()
-          nameParts.push(qualifier)
-          nameParts.push(lastPart)
-          if(taxonAuthor){
-            nameParts.push(taxonAuthor)
+  if(!mappedRecord.labelDetName) {
+    if(mappedRecord.canonicalName) {
+      
+      let questionMark = false
+      if(mappedRecord.identificationConfidence){
+        if(mappedRecord.identificationConfidence.toLowerCase() != 'high'){
+          questionMark = true
+        }
+      }
+
+      if(mappedRecord.identificationQualifier){
+        if(['aff.', 'cf.', 'nr'].includes(mappedRecord.identificationQualifier)){
+          let nameParts = mappedRecord.canonicalName.split(' ')
+          if(nameParts.length > 1){
+            let lastPart = nameParts.pop()
+            nameParts.push(mappedRecord.identificationQualifier)
+            nameParts.push(lastPart)
+            if(questionMark){
+              nameParts.push('?')
+            }
+            else if(mappedRecord.scientificNameAuthorship){
+              nameParts.push(mappedRecord.scientificNameAuthorship)
+            }
+            mappedRecord.labelDetName = nameParts.join(' ')
           }
-          labelDetName = nameParts.join(' ')
+          else {
+            mappedRecord.labelDetName = [mappedRecord.identificationQualifier, mappedRecord.canonicalName].join(' ')
+            if(questionMark){
+              mappedRecord.labelDetName += ' ?'
+            }
+            else if (mappedRecord.scientificNameAuthorship){
+              mappedRecord.labelDetName += ` ${mappedRecord.scientificNameAuthorship}`
+            }
+          }
         }
         else {
-          labelDetName = [qualifier, nameParts[0]].join(' ')
-          if (taxonAuthor){
-            labelDetName += ` ${taxonAuthor}`
+          mappedRecord.labelDetName = [mappedRecord.canonicalName, mappedRecord.identificationQualifier].join(' ')
+        } 
+      }
+      else {
+        mappedRecord.labelDetName = mappedRecord.canonicalName
+        if(questionMark) {
+          mappedRecord.labelDetName += ' ?'
+        }
+        else if (mappedRecord.scientificNameAuthorship){
+          mappedRecord.labelDetName += ` ${mappedRecord.scientificNameAuthorship}`
+        }
+      }
+    }
+  }  
+
+
+  if(!mappedRecord.identifiedBy){
+    //TODO Specify has an Initials field as well as middle initial, need to reconcile those
+    if(mappedRecord.detByLast) {
+      mappedRecord.identifiedBy = mappedRecord.detByLast
+      if(mappedRecord.detByFirst){
+        if(/^[A-Z\.\s]+$/.test(mappedRecord.detByFirst)){ //its initials
+          mappedRecord.identifiedBy += `, ${Array.from(mappedRecord.detByFirst).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')}`
+        }
+        else {//its a name
+          mappedRecord.identifiedBy += `, ${mappedRecord.detByFirst[0].toUpperCase() + '.'}`
+          if(mappedRecord.detByMiddleInitial) {
+            if(/^[A-Z\.\s]+$/.test(mappedRecord.detByMiddleInitial)){ //its initials
+              mappedRecord.identifiedBy += Array.from(mappedRecord.detByMiddleInitial).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')
+            }
+            else {//its a name
+              mappedRecord.identifiedBy += mappedRecord.detByMiddleInitial[0].toUpperCase() + '.'
+            }
           }
         }
       }
-      else {
-        labelDetName = [record['1,9-determinations,4.taxon.fullName'].trim(), qualifier].join(' ')
-      } 
-    }
-    else {
-      labelDetName = record['1,9-determinations,4.taxon.fullName'].trim()
-      if (taxonAuthor){
-        labelDetName += ` ${taxonAuthor}`
+      else if (mappedRecord.detByMiddleInitial){
+        if(/^[A-Z\.\s]+$/.test(mappedRecord.detByMiddleInitial)){ //its initials
+          mappedRecord.identifiedBy += `, ${Array.from(mappedRecord.detByMiddleInitial).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')}`
+        }
+        else {
+          mappedRecord.identifiedBy += mappedRecord.detByMiddleInitial[0].toUpperCase() + '.'
+        }
       }
     }
-  }
-
-  if(labelDetName){
-    if(record['1,9-determinations.determination.confidence'] && 
-    record['1,9-determinations.determination.confidence'].trim() &&
-    record['1,9-determinations.determination.confidence'].trim().toLowerCase() != 'high'){
-      labelDetName += '?'
+    else {
+      if(mappedRecord.detByFirst){
+        if(/^[A-Z\.\s]+$/.test(mappedRecord.detByFirst)){ //its initials
+          mappedRecord.identifiedBy = Array.from(mappedRecord.detByFirst).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')
+        }
+        else {//its a name
+          mappedRecord.identifiedBy = mappedRecord.detByFirst
+          if(mappedRecord.detByMiddleInitial) {
+            if(/^[A-Z\.\s]+$/.test(mappedRecord.detByMiddleInitial)){ //its initials
+              mappedRecord.identifiedBy += ` ${Array.from(mappedRecord.detByMiddleInitial).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')}`
+            }
+            else {//its a name
+              mappedRecord.identifiedBy += ` ${mappedRecord.detByMiddleInitial}`
+            }
+          }
+        }
+      }
+      else if (mappedRecord.detByMiddleInitial){
+        mappedRecord.identifiedBy = mappedRecord.detByMiddleInitial
+      }
     }
-  }
-
-  //TODO we need the author, and possibly also the sensu
-
-  let detMethod
-  if(record.detMethod && record.detMethod.trim()){
-    detMethod = record.detMethod
-  }
-  else if(record['1,9-determinations.determination.method'] && record['1,9-determinations.determination.method'].trim()){
-    detMethod = record['1,9-determinations.determination.method'].trim()
-  }
-
-  let detBy
-  if(record.detBy && record.detBy.trim()){
-    detBy = record.detBy
-  }
-  else if(record['1,9-determinations,5-determiner.agent.lastName'] && record['1,9-determinations,5-determiner.agent.lastName'].trim()) {
-    let detByLast = record['1,9-determinations,5-determiner.agent.lastName'].trim()
-    let detByFirst, detByInitial, allInitials
-    if(record['1,9-determinations,5-determiner.agent.firstName'] && record['1,9-determinations,5-determiner.agent.firstName'].trim()){
-      detByFirst = record['1,9-determinations,5-determiner.agent.firstName'].trim()
-    }
-    if(record['1,9-determinations,5-determiner.agent.middleInitial'] && record['1,9-determinations,5-determiner.agent.middleInitial'].trim()){
-      detByInitial = record['1,9-determinations,5-determiner.agent.middleInitial'].trim()
-    }
-
-    if(/^[A-Z\.\s]+$/.test(detByFirst)){ //its initials
-      allInitials = Array.from(detByFirst).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')
-      detBy = detByLast + ', ' + allInitials
-    }
-    else if (detByFirst && !detByInitial){ //its a name
-      detBy = detByLast + ', ' + detByFirst[0].toUpperCase() + '.'
-    }
-    else if(detByFirst && detByInitial){ // we assume initial is middle initial
-      allInitials = detByFirst[0].toUpperCase() + detByInitial
-      allInitials = Array.from(allInitials).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')
-      detBy = detByLast + ', ' + allInitials
-    }
-  }
-
-  let detDate
-  if(record.detDate && record.detDate.trim()) {
-    detDate = record.detDate.trim()
-  }
-  else if(record['1,9-determinations.determination.determinedDate'] && record['1,9-determinations.determination.determinedDate'].trim()) {
-    detDate = record['1,9-determinations.determination.determinedDate'].trim()
   }
 
   //TODO we need the det reference
   
-  //we add the field names here in case they exist already
-  let returnRecord = {
-    catalogNumber,
-    collectorNumber,
-    labelDetName,
-    detBy,
-    detDate, 
-    detMethod,
-    fullLocality,
-    labelElevation: elevationString,
-    fullCoordsString,
-    collectionDate,
-    recordedBy,
-    collectionMethod,
-    specimenCount,
-    specimenStageSex,
-    occurrenceRemarks
-  }
-
-  return returnRecord
+  return mappedRecord
 
 }
-module.exports = mapRecord
+
+let fieldsMapping = { //this uses DwC, mostly...
+  catalogNumber: ['1.collectionobject.catalogNumber', 'Catalog Number'], 
+  collectorNumber:['1.collectionobject.fieldNumber', 'recordedNumber', 'Field Number', 'collNum', 'collNo'],
+  geography: ['1,10,2.locality.text2', 'Orig. Prov'],
+  country: ['1,10,2,3.geography.Country', 'Country'],
+  stateProvince: ['1,10,2,3.geography.State', 'Province'],
+  locality: ['1,10,2.locality.localityName', 'Locality Name'],
+  fullLocality: [],//empty because searches on the key name only
+  fullCoordsString: [], //ditto
+  verbatimCoordinates: ['1,10,2.locality.relationToNamedPlace', 'Orig. Coord'],
+  verbatimLatitude: ['1,10,2.locality.lat1text', 'Lat1text', 'verbatimLat'],
+  verbatimLongitude: ['1,10,2.locality.long1text', 'Long1text', 'verbatimLong'],
+  decimalLatitude: ['Latitude1', '1,10,2.locality.latitude1', 'ddLat', 'ddlat', 'decimalLat'],
+  decimalLongitude:['Longitude1', '1,10,2.locality.longitude1', 'ddLong', 'ddLon', 'decimalLong', 'decimalLon'],
+  maxUncertainty: ['1,10,2,123-geocoorddetails.geocoorddetail.maxUncertaintyEst', 'Max Uncertainty Est'],
+  maxUncertaintyUnit:['1,10,2,123-geocoorddetails.geocoorddetail.maxUncertaintyEstUnit', 'Max Uncertainty Est Unit'],
+  coordsSource: ['1,10,2.locality.latLongMethod', 'Lat/Long Method', 'georeferenceSources', 'georefSource', 'coordsMethod', 'coordsSource'], //because its should not be a georeference!!
+  verbatimSRS: ['Datum', '1,10,2.locality.datum'],
+  labelElevation: [],
+  verbatimElevation: ['1,10,2.locality.verbatimElevation', 'elevation', 'altitude', 'Verbatim Elev.'],
+  minElevationMeters:['Min Elevation in meters', '1,10,2.locality.minElevation', 'minElev'],
+  maxElevationMeters:['Max Elevation in meters', '1,10,2.locality.maxElevation', 'maxElev'],
+  habitat: [], //NOTE we don't have this in the KZN dataset
+  collectionDate: ['verbatimEventDate','dateCollected', 'eventDate'],
+  collectionStartDate: ['Start Date', '1,10.collectingevent.startDate'],
+  collectEndDate: ['End Date', '1,10.collectingevent.endDate'],
+  permitNumber: ['permit', 'permitcode', 'permitCode', 'permitnumber'],
+  recordedBy: ['Collectors [Aggregated]', '1,10,30-collectors.collectingevent.collectors', 'collector', 'collectors'],
+  samplingProtocol: ['collectionMethod', '1,10.collectingevent.method', 'Collecting Information/Method'],
+  specimenStageSex: ['1,63-preparations.preparation.text4', 'Stage Sex Count'],
+  sex:['Sex', '1,63-preparations.preparation.text1'],
+  lifeStage: ['stage', 'Stage', 'lifestage', '1,63-preparations.preparation.text2'],
+  specimenCount:['1,63-preparations.preparation.countAmt', 'Count'],
+  occurrenceRemarks: ['Remarks', 'Collection Object Remarks', '1.collectionobject.remarks', 'Collection Object/Remarks'],
+
+  //det stuff
+  labelDetName: [],
+  canonicalName: ['1,9-determinations,4.taxon.fullName', 'Full Name'], 
+  scientificNameAuthorship: ['1,9-determinations,4.taxon.author', 'Author', 'author', 'authority', 'taxonAuthority', 'nameAuthority'],
+  identificationQualifier:['Qualifier', '1,9-determinations.determination.qualifier', 'qualifier'],
+  identificationConfidence:['1,9-determinations.determination.confidence', 'Confidence'],
+  identificationMethod:['1,9-determinations.determination.method', 'Determinations/Method'],
+  identifiedBy:['detBy'],
+  detByLast: ['Last Name', '1,9-determinations,5-determiner.agent.lastName'],
+  detByFirst: ['First Name', '1,9-determinations,5-determiner.agent.firstName'],
+  detByMiddleInitial: ['Middle Initial', '1,9-determinations,5-determiner.agent.middleInitial'],
+  dateIdentified: ['Determined Date', '1,9-determinations.determination.determinedDate'],
+  identificationRemarks: ['1,9-determinations.determination.remarks', 'Determinations/Remarks', 'Determinations Remarks', 'detRemarks', 'detNotes'],
+
+  //type data
+  typeStatus: ['Type Status', '1,9-determinations.determination.typeStatusName'], 
+  typeNumber: ['Type Number', '1,9-determinations.determination.text1'],
+
+  //storage
+  storageBox: ['Box', '1,63-preparations,58.storage.Box']
+}
+
+let mapRecord = (record, fieldsMapping) => {
+  
+  let toReturn = {}
+
+  for (let [field, candidates] of Object.entries(fieldsMapping)) {
+    candidates.unshift(field)
+    for (let candidate of candidates){
+      if(record[candidate] != null) {
+        if(isNaN(record[candidate])){
+          if(typeof record[candidate] == 'boolean'){
+            toReturn[field] = record[candidate]
+            break;
+          }
+          else if (record[candidate].trim()){
+            toReturn[field] = record[candidate].trim()
+            break;
+          }
+        }
+        else {
+          if(typeof record[candidate] == 'string'){
+            toReturn[field] = record[candidate].trim().replace(/\s+/g,' ').replace(/[\.~]+$/,'')
+            break;
+          }
+          else { //has to be a number
+            toReturn[field] = record[candidate]
+            break;
+          }
+        }
+      }
+    }
+    if(!record[field]){
+      record[field] = null
+    }
+  }
+  return toReturn
+}
+
+module.exports = mapper

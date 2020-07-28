@@ -14,6 +14,8 @@ fs.createReadStream(path.join(filePath, fileName))
   .on('error', error => console.error(error))
   .on('data', record => {
     let mappedRecord = mapRecord(record)
-    let i = 0
+    if(mappedRecord.catalogNumber.endsWith('8191')) {
+      let z = 2
+    }
   })
   .on('end', rowCount => console.log(`Parsed ${rowCount} rows`));
