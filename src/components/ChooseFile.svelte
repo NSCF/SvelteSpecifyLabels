@@ -2,7 +2,6 @@
 import {getContext, createEventDispatcher } from 'svelte';
 import Alert from './Alert.svelte'
 
-
 const dispatch = createEventDispatcher();
 const { open } = getContext('simple-modal');
 

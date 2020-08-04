@@ -1,6 +1,7 @@
 <script>
 import { onMount, afterUpdate } from 'svelte';
 import KZNMHerpLabel from './KZNMHerpLabel.svelte'
+import mapRecord from '../mapFunctions/kznHerpsMapFunc.js'
 
 export let showInstitution = false
 export let collectionName
@@ -8,7 +9,9 @@ export let labelPerSpecimen = false
 export let detLabel = true
 export let includePunch = true
 
-export let labelData = [
+export let inputData 
+
+let testData = [
   {
     catalogNumber: 'NMSA-herp-0.1245',
     collectorNumber: 'WC02-2135',
@@ -32,37 +35,48 @@ export let labelData = [
 
 let catNumField
 let boxField
+let authorities = {}
+
+let mappedData = []
+let okaySort = false
 let sortedData
 
-$: labelData, sortData()
+$: inputData, mapData()
+$: if(okaySort) sortData()
 
-onMount(_ => {
-  sortData()
-})
-afterUpdate(() => {
-  //window.print()
-});
+const mapData = async _ => {
+  console.log('starting to map data')
+  
+  for (let inputRecord of inputData) {
+    let mappedRecord = await mapRecord(inputRecord, true, authorities)
+    mappedData.push(mappedRecord)
+  }
+  console.log('data mapping complete')
+  okaySort = true
+}
 
 const sortData = _ => {
+  console.log('sorting', mappedData.length, 'records')
   let sortingFields = ['catalogNumber', '1.collectionobject.catalogNumber', 'Catalog Number']
-  let boxFields = ['Box', '1,63-preparations,58.storage.Box']
+  let boxFields = ['storageBox', 'Box', '1,63-preparations,58.storage.Box']
 
   for (let field of sortingFields) {
-    if(labelData[0].hasOwnProperty(field)){
+    if(mappedData[0].hasOwnProperty(field)){
       catNumField = field
       break
     }
   }
 
   for (let field of boxFields) {
-    if(labelData[0].hasOwnProperty(field)){
+    if(mappedData[0].hasOwnProperty(field)){
       boxField = field
       break
     }
   }
 
   let compare = makeComparer(boxField, catNumField)
-  sortedData = labelData.sort(compare)
+  sortedData = mappedData.sort(compare)
+  console.log('sorting data complete')
 }
 
 const makeComparer = (boxField, catNumField) => {
@@ -83,13 +97,17 @@ const makeComparer = (boxField, catNumField) => {
   }
 }
 
+
+
 </script>
 
 <!-- ################################# -->
 <div class="cols"> 
-  {#each sortedData as r}
-    <KZNMHerpLabel record={r} labelPerSpecimen={labelPerSpecimen} {showInstitution} {detLabel} {includePunch} {collectionName}/>
-  {/each}
+  {#if sortedData}
+    {#each sortedData as labelRecord}
+      <KZNMHerpLabel {labelRecord} {labelPerSpecimen} {showInstitution} {detLabel} {includePunch} {collectionName}/>
+    {/each}
+  {/if}
 </div>
 
 <!-- ################################# -->

@@ -67,6 +67,14 @@ export let includePunch = true
         {/if}
       {/if}
       <div>{labelRecord.occurrenceRemarks || ''}</div>
+      {#if labelRecord.typeStatus}
+        <div class="clearfix">
+          <span class="floatleft typestatus">{labelRecord.typeStatus}</span>
+          {#if labelRecord.typeNumber}
+            <span class="floatright">Type No:{labelRecord.typeNumber}</span>
+          {/if}
+        </div>
+      {/if}
       {#if showInstitution}
         <div class="museumname">
           <span>{collectionName}</span>
@@ -89,6 +97,7 @@ export let includePunch = true
           <span ><strong>{labelRecord.catalogNumber}</strong></span>
         </div>
         <div>
+          <!-- TODO if type then original name otherwise preferred name -->
           {labelRecord.labelDetName}
         </div>
         <div>
@@ -98,9 +107,21 @@ export let includePunch = true
             <span class="inlineblock">{labelRecord.dateIdentified || ''}</span>
             <span class="inlineblock">{labelRecord.identificationMethod || ''}</span>
           {:else}
-            (No det data)
+          <!-- TODO if type then exclude this -->
+            (orig. det. conf. Jordaan & Steenkamp 2020)
           {/if}
         </div>
+        <div>
+          {labelRecord.identificationRemarks || ''}
+        </div>
+        {#if labelRecord.typeStatus}
+          <div class="clearfix">
+            <span class="floatleft typestatus">{labelRecord.typeStatus}</span>
+            {#if labelRecord.typeNumber}
+              <span class="floatright">Type No:{labelRecord.typeNumber}</span>
+            {/if}
+          </div>
+        {/if}
       </div>
     </div>
   {/if}
@@ -127,12 +148,23 @@ export let includePunch = true
   min-height: 2cm;
 }
 
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.typestatus {
+  text-transform: capitalize;
+  font-size: 1em;
+  font-weight: bold;
+}
 .labelpunch {
   width: 10%;
   text-align: right;
 }
 .labeltext {
-  width: 80%;
+  width: 90%;
 }
 
 .labelrow {

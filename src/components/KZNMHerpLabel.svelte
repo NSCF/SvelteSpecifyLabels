@@ -1,24 +1,20 @@
 <script>
-import mapRecord from '../mapFunctions/kznHerpsMapFunc.js'
 import LabelDetail from './KZNMHerpLabelDetail.svelte'
 
-export let record
+export let labelRecord
 export let showInstitution = false
 export let collectionName
 export let labelPerSpecimen = false
 export let detLabel = true
 export let includePunch = true
 
-let labelRecord
 let makeLabel
 
-$: record, (labelRecord = mapRecord(record),
-  makeLabel = (labelRecord.fullLocality || 
+$: labelRecord, makeLabel = (labelRecord.fullLocality || 
   labelRecord.fullCoordsString ||
   labelRecord.collectionDate ||
   labelRecord.recordedBy ||
   labelRecord.occurrenceRemarks)
-) //this where all mapping and cleaning takes place 
 
 </script>
 {#if makeLabel}

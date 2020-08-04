@@ -67,7 +67,7 @@
 		</div>
 		{#if toLabels}
 			<div>
-				<LabelLayout labelData={data} {labelPerSpecimen} {showInstitution} {detLabel} {includePunch} {collectionName}></LabelLayout>
+				<LabelLayout inputData={data} {labelPerSpecimen} {showInstitution} {detLabel} {includePunch} {collectionName}></LabelLayout>
 			</div>
 		{/if}
 	</Modal>

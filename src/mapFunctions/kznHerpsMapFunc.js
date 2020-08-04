@@ -1,6 +1,10 @@
-let mapper = record => {
+let mapper = async (record, getAuthority, authorities) => {
 
-  let mappedRecord = mapRecord(record, fieldsMapping)
+  if(getAuthority && !authorities === Object(authorities)){ //this is how we test for real {} objects
+    throw new Error('An authority object is requred if getAuthority is true')
+  }
+
+  let mappedRecord = await mapRecord(record, fieldsMapping, getAuthority, authorities)
 
   if(mappedRecord.catalogNumber.includes('-zzz')){
     mappedRecord.catalogNumber = mappedRecord.catalogNumber.replace('-zzz', '-Her')
@@ -228,7 +232,6 @@ let mapper = record => {
     }
   }  
 
-
   if(!mappedRecord.identifiedBy){
     //TODO Specify has an Initials field as well as middle initial, need to reconcile those
     if(mappedRecord.detByLast) {
@@ -344,12 +347,13 @@ let fieldsMapping = { //this uses DwC, mostly...
   storageBox: ['Box', '1,63-preparations,58.storage.Box']
 }
 
-let mapRecord = (record, fieldsMapping) => {
+let mapRecord = async (record, fieldsMapping, getAuthority, authorities) => {
   
   let toReturn = {}
 
   for (let [field, candidates] of Object.entries(fieldsMapping)) {
     candidates.unshift(field)
+    candidates.unshift(`dwc:${field}`)
     for (let candidate of candidates){
       if(record[candidate] != null) {
         if(isNaN(record[candidate])){
@@ -378,6 +382,54 @@ let mapRecord = (record, fieldsMapping) => {
       record[field] = null
     }
   }
+
+  //get authorities if requested
+  if(!toReturn.scientificNameAuthorship && getAuthority){
+    if (toReturn.canonicalName) {
+      if(authorities[toReturn.canonicalName]){
+        toReturn.scientificNameAuthorship = authorities[toReturn.canonicalName]
+      }
+      else {
+        console.log('fetching author for', toReturn.canonicalName)
+        let URL = String.raw`https://api.gbif.org/v1/species`
+        let encodedTaxonName = encodeURI(toReturn.canonicalName)
+        let response = await fetch(`${URL}?name=${encodedTaxonName}`)
+        let data = await response.json()
+    
+        //majority rules
+        let options = {}
+        for (let result of data.results){
+          if(result.authorship && result.authorship.trim() && !result.synonym){
+            if(options[result.authorship.trim()]){
+              options[result.authorship.trim()]++
+            }
+            else {
+              options[result.authorship.trim()] = 1
+            }
+          }
+        }
+
+        let maxcount = 0
+        let winner
+        for (let [key, value] of Object.entries(options)){
+          if(value > maxcount){
+            winner = key
+            maxcount = value
+          }
+        }
+
+        if(winner){
+          toReturn.scientificNameAuthorship = winner
+          authorities[toReturn.canonicalName] = toReturn.scientificNameAuthorship
+          console.log('author is', toReturn.scientificNameAuthorship)
+        }
+        else {
+          console.log('no author found')
+        }
+      }
+    }
+  }
+
   return toReturn
 }
 
