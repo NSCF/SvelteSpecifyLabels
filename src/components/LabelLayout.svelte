@@ -1,17 +1,17 @@
 <script>
 import { onMount, afterUpdate } from 'svelte';
 import KZNMHerpLabel from './KZNMHerpLabel.svelte'
-import mapRecord from '../mapFunctions/kznHerpsMapFunc.js'
+
 
 export let showInstitution = false
 export let collectionName
 export let labelPerSpecimen = false
 export let detLabel = true
 export let includePunch = true
+export let includeTaxonAuthorities = false
+export let authorities
 
-export let inputData 
-
-let testData = [
+export let inputData = [
   {
     catalogNumber: 'NMSA-herp-0.1245',
     collectorNumber: 'WC02-2135',
@@ -33,80 +33,17 @@ let testData = [
   }
 ]
 
-let catNumField
-let boxField
-let authorities = {}
-
-let mappedData = []
-let okaySort = false
-let sortedData
-
-$: inputData, mapData()
-$: if(okaySort) sortData()
-
-const mapData = async _ => {
-  console.log('starting to map data')
-  
-  for (let inputRecord of inputData) {
-    let mappedRecord = await mapRecord(inputRecord, true, authorities)
-    mappedData.push(mappedRecord)
-  }
-  console.log('data mapping complete')
-  okaySort = true
-}
-
-const sortData = _ => {
-  console.log('sorting', mappedData.length, 'records')
-  let sortingFields = ['catalogNumber', '1.collectionobject.catalogNumber', 'Catalog Number']
-  let boxFields = ['storageBox', 'Box', '1,63-preparations,58.storage.Box']
-
-  for (let field of sortingFields) {
-    if(mappedData[0].hasOwnProperty(field)){
-      catNumField = field
-      break
-    }
-  }
-
-  for (let field of boxFields) {
-    if(mappedData[0].hasOwnProperty(field)){
-      boxField = field
-      break
-    }
-  }
-
-  let compare = makeComparer(boxField, catNumField)
-  sortedData = mappedData.sort(compare)
-  console.log('sorting data complete')
-}
-
-const makeComparer = (boxField, catNumField) => {
-  return function(a, b){
-    if (a[boxField] < b[boxField]){
-      return -1;
-    }
-    if ( a[boxField] > b[boxField] ){
-      return 1;
-    }
-    if (a[catNumField] < b[catNumField]){
-      return -1;
-    }
-    if ( a[catNumField] > b[catNumField] ){
-      return 1;
-    }
-    return 0;
-  }
-}
-
-
 
 </script>
 
 <!-- ################################# -->
 <div class="cols"> 
-  {#if sortedData}
-    {#each sortedData as labelRecord}
-      <KZNMHerpLabel {labelRecord} {labelPerSpecimen} {showInstitution} {detLabel} {includePunch} {collectionName}/>
+  {#if inputData && inputData.length}
+    {#each inputData as labelRecord}
+      <KZNMHerpLabel {labelRecord} {labelPerSpecimen} {showInstitution} {detLabel} {includePunch} {includeTaxonAuthorities} {authorities} {collectionName}/>
     {/each}
+  {:else}
+  No data to show, refresh to start over and choose a different file
   {/if}
 </div>
 

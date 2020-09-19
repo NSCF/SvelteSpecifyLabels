@@ -3,24 +3,77 @@
 	import ChooseFile from './ChooseFile.svelte'
 	import LabelLayout from './LabelLayout.svelte'
 	import Papa from 'papaparse'
+
+	import mapRecord from '../functions/kznHerpsMapFunc.js'
+	import getAuthorities from '../functions/getTaxonAuthorities.js'
 	
 	let toLabels = false
 	let data = []
+	let taxonAuthoritiesChecked = false
+	let authorities
+	let propogateIncludeTaxonAuthorities = false //we use this to send the instruction down once we have fetched the authorities
 
 	let showInstitution = false
 	let collectionName
 	let labelPerSpecimen = false
 	let detLabel = true
 	let includePunch = true
+	let includeTaxonAuthorities = false
+	let showFetchingAuthorites = false
 
+	$: includeTaxonAuthorities, updateTaxonAuthorities()
+
+	const updateTaxonAuthorities = async _ => {
+		if(data.length) {
+			if(includeTaxonAuthorities && !taxonAuthoritiesChecked){
+				showFetchingAuthorites = true
+				authorities = await getAuthorities(data)
+				showFetchingAuthorites = false
+				taxonAuthoritiesChecked = true
+				propogateIncludeTaxonAuthorities = true
+			}
+			propogateIncludeTaxonAuthorities = includeTaxonAuthorities
+		} 
+		
+	}
+
+	let mapped
 	const handleFileSelected = (ev) => {
 		let file = ev.detail.file
-		Papa.parse(file, { header: true,
-			step: function(row) {
-				data.push(row.data)
-			},
-			complete: function() {
-				console.log(`${data.length} records read for labels`)
+		Papa.parse(file, { 
+			header: true,
+			complete:async results => {
+				console.log(`${results.data.length} records read for labels`)
+				console.log('raw data:')
+				console.log(results.data[0])
+
+				for (let raw of results.data){
+					data.push(mapRecord(raw))
+				}
+
+				console.log('mapped:')
+				console.log(data[0])
+
+				//sort them
+				data.sort((a, b) => {
+					if (a.storageBox < b.storageBox){
+						return -1;
+					}
+					if ( a.storageBox > b.storageBox ){
+						return 1;
+					}
+					if (a.catalogNumber < b.catalogNumber){
+						return -1;
+					}
+					if ( a.catalogNumber > b.catalogNumber ){
+						return 1;
+					}
+					return 0;
+				})
+
+				if(includeTaxonAuthorities && !taxonAuthoritiesChecked){
+					await updateTaxonAuthorities()
+				}
 				toLabels = true;
 			}
 		})
@@ -59,6 +112,14 @@
 				Include punch mark
 			</label>
 			<br/>
+			<label style="display:inline">
+				<input type=checkbox bind:checked={includeTaxonAuthorities}>
+				Include taxon authorities
+			</label>
+			{#if showFetchingAuthorites}
+				<span>   one moment please, this might take a few minutes...</span>
+			{/if}
+			<br/>
 			<button on:click={showPrint} disabled={!toLabels}>Let's print these babies!!</button>
 			{#if !toLabels}
 			<ChooseFile on:file-selected={handleFileSelected} fileMIMETypes={['text/csv', 'application/vnd.ms-excel']}></ChooseFile>
@@ -67,7 +128,7 @@
 		</div>
 		{#if toLabels}
 			<div>
-				<LabelLayout inputData={data} {labelPerSpecimen} {showInstitution} {detLabel} {includePunch} {collectionName}></LabelLayout>
+				<LabelLayout inputData={data} {labelPerSpecimen} {showInstitution} {detLabel} {includePunch} includeTaxonAuthorities={propogateIncludeTaxonAuthorities} {authorities} {collectionName}></LabelLayout>
 			</div>
 		{/if}
 	</Modal>

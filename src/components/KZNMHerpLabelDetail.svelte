@@ -4,10 +4,75 @@ export let showInstitution = false
 export let collectionName
 export let detLabel = true
 export let includePunch = true
+export let includeTaxonAuthorities = false
+export let authorities
 
+let labelDet = null
+$: includeTaxonAuthorities, getLabelDet()
+
+const getLabelDet = _ => {
+  //TODO add sensu when we have it
+
+  if(includeTaxonAuthorities) {
+    if(!labelRecord.scientificNameAuthorship || !labelRecord.scientificNameAuthorship.trim()){
+      if(authorities[labelRecord.canonicalName]){
+        labelRecord.scientificNameAuthorship = authorities[labelRecord.canonicalName]
+      }
+    }
+  }
+
+  if(labelRecord.canonicalName && labelRecord.canonicalName.trim()){
+    
+    let questionMark = false
+    if(labelRecord.identificationConfidence){
+      if(labelRecord.identificationConfidence.toLowerCase() != 'high'){
+        questionMark = true
+      }
+    }
+
+    if(labelRecord.identificationQualifier){
+      if(['aff.', 'cf.', 'nr'].includes(labelRecord.identificationQualifier)){
+        let nameParts = labelRecord.canonicalName.split(' ')
+        if(nameParts.length > 1){
+          let lastPart = nameParts.pop()
+          nameParts.push(labelRecord.identificationQualifier)
+          nameParts.push(lastPart)
+          if(questionMark){
+            nameParts.push('?')
+          }
+          else if(labelRecord.scientificNameAuthorship && includeTaxonAuthorities){
+            nameParts.push(labelRecord.scientificNameAuthorship)
+          }
+          labelDet = nameParts.join(' ')
+        }
+        else {
+          labelDet = [labelRecord.identificationQualifier, labelRecord.canonicalName].join(' ')
+          if(questionMark){
+            labelDet += ' ?'
+          }
+          else if (labelRecord.scientificNameAuthorship && includeTaxonAuthorities){
+            labelDet += ` ${labelRecord.scientificNameAuthorship}`
+          }
+        }
+      }
+      else {
+        labelDet = [labelRecord.canonicalName, labelRecord.identificationQualifier].join(' ')
+      } 
+    }
+    else {
+      labelDet = labelRecord.canonicalName
+      if(questionMark) {
+        labelDet += ' ?'
+      }
+      else if (labelRecord.scientificNameAuthorship && includeTaxonAuthorities){
+        labelDet += ` ${labelRecord.scientificNameAuthorship}`
+      }
+    }
+  }
+
+}
 
 </script>
-
 <div class="label">
   <div style="padding:4px;">Box: {labelRecord.storageBox} -- cut this off label</div>
   <hr class='subdiv'>
@@ -82,7 +147,7 @@ export let includePunch = true
       {/if}
     </div>
   </div>
-  {#if detLabel && labelRecord.labelDetName}
+  {#if detLabel && detLabel} <!-- Apoligies to readers for these, detLabel flags whether to add the label, label det is what goes on the label -->
     <hr class='subdiv'>
     <div class="label-part">
       {#if includePunch}
@@ -98,7 +163,7 @@ export let includePunch = true
         </div>
         <div>
           <!-- TODO if type then original name otherwise preferred name -->
-          {labelRecord.labelDetName}
+          {labelDet}
         </div>
         <div>
           {#if labelRecord.identifiedBy || labelRecord.dateIdentified || labelRecord.identificationMethod}

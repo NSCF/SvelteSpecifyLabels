@@ -1,13 +1,23 @@
-let mapper = async (record, getAuthority, authorities) => {
+let mapper = record => {
 
-  if(getAuthority && !authorities === Object(authorities)){ //this is how we test for real {} objects
-    throw new Error('An authority object is requred if getAuthority is true')
+  let mappedRecord = mapRecord(record, fieldsMapping)
+
+  if(mappedRecord.catalogNumber){
+
+    //remove prefixed zeros from number
+    let patt = /\d+$/
+    let matches = mappedRecord.catalogNumber.match(patt)
+    if(matches.length){
+      let number = Number(matches[0])
+      mappedRecord.catalogNumber = mappedRecord.catalogNumber.replace(matches[0], number.toString())
+    }
+    
+    if(mappedRecord.catalogNumber.includes('-zzz')){
+      mappedRecord.catalogNumber = mappedRecord.catalogNumber.replace('-zzz', '-Her')
+    }
   }
-
-  let mappedRecord = await mapRecord(record, fieldsMapping, getAuthority, authorities)
-
-  if(mappedRecord.catalogNumber.includes('-zzz')){
-    mappedRecord.catalogNumber = mappedRecord.catalogNumber.replace('-zzz', '-Her')
+  else {
+    let i = 0
   }
   
   if(mappedRecord.geography == null){
@@ -179,59 +189,6 @@ let mapper = async (record, getAuthority, authorities) => {
   }
 
   //det stuff
-  //TODO update when we have sensu
-  let labelDetName
-  if(!mappedRecord.labelDetName) {
-    if(mappedRecord.canonicalName) {
-      
-      let questionMark = false
-      if(mappedRecord.identificationConfidence){
-        if(mappedRecord.identificationConfidence.toLowerCase() != 'high'){
-          questionMark = true
-        }
-      }
-
-      if(mappedRecord.identificationQualifier){
-        if(['aff.', 'cf.', 'nr'].includes(mappedRecord.identificationQualifier)){
-          let nameParts = mappedRecord.canonicalName.split(' ')
-          if(nameParts.length > 1){
-            let lastPart = nameParts.pop()
-            nameParts.push(mappedRecord.identificationQualifier)
-            nameParts.push(lastPart)
-            if(questionMark){
-              nameParts.push('?')
-            }
-            else if(mappedRecord.scientificNameAuthorship){
-              nameParts.push(mappedRecord.scientificNameAuthorship)
-            }
-            mappedRecord.labelDetName = nameParts.join(' ')
-          }
-          else {
-            mappedRecord.labelDetName = [mappedRecord.identificationQualifier, mappedRecord.canonicalName].join(' ')
-            if(questionMark){
-              mappedRecord.labelDetName += ' ?'
-            }
-            else if (mappedRecord.scientificNameAuthorship){
-              mappedRecord.labelDetName += ` ${mappedRecord.scientificNameAuthorship}`
-            }
-          }
-        }
-        else {
-          mappedRecord.labelDetName = [mappedRecord.canonicalName, mappedRecord.identificationQualifier].join(' ')
-        } 
-      }
-      else {
-        mappedRecord.labelDetName = mappedRecord.canonicalName
-        if(questionMark) {
-          mappedRecord.labelDetName += ' ?'
-        }
-        else if (mappedRecord.scientificNameAuthorship){
-          mappedRecord.labelDetName += ` ${mappedRecord.scientificNameAuthorship}`
-        }
-      }
-    }
-  }  
-
   if(!mappedRecord.identifiedBy){
     //TODO Specify has an Initials field as well as middle initial, need to reconcile those
     if(mappedRecord.detByLast) {
@@ -326,7 +283,7 @@ let fieldsMapping = { //this uses DwC, mostly...
   occurrenceRemarks: ['Remarks', 'Collection Object Remarks', '1.collectionobject.remarks', 'Collection Object/Remarks'],
 
   //det stuff
-  labelDetName: [],
+  labelDetName: [], //can be used for verbatimIdentification, if we have that
   canonicalName: ['1,9-determinations,4.taxon.fullName', 'Full Name'], 
   scientificNameAuthorship: ['1,9-determinations,4.taxon.author', 'Author', 'author', 'authority', 'taxonAuthority', 'nameAuthority'],
   identificationQualifier:['Qualifier', '1,9-determinations.determination.qualifier', 'qualifier'],
@@ -347,7 +304,7 @@ let fieldsMapping = { //this uses DwC, mostly...
   storageBox: ['Box', '1,63-preparations,58.storage.Box']
 }
 
-let mapRecord = async (record, fieldsMapping, getAuthority, authorities) => {
+let mapRecord = (record, fieldsMapping) => {
   
   let toReturn = {}
 
@@ -382,54 +339,6 @@ let mapRecord = async (record, fieldsMapping, getAuthority, authorities) => {
       record[field] = null
     }
   }
-
-  //get authorities if requested
-  if(!toReturn.scientificNameAuthorship && getAuthority){
-    if (toReturn.canonicalName) {
-      if(authorities[toReturn.canonicalName]){
-        toReturn.scientificNameAuthorship = authorities[toReturn.canonicalName]
-      }
-      else {
-        console.log('fetching author for', toReturn.canonicalName)
-        let URL = String.raw`https://api.gbif.org/v1/species`
-        let encodedTaxonName = encodeURI(toReturn.canonicalName)
-        let response = await fetch(`${URL}?name=${encodedTaxonName}`)
-        let data = await response.json()
-    
-        //majority rules
-        let options = {}
-        for (let result of data.results){
-          if(result.authorship && result.authorship.trim() && !result.synonym){
-            if(options[result.authorship.trim()]){
-              options[result.authorship.trim()]++
-            }
-            else {
-              options[result.authorship.trim()] = 1
-            }
-          }
-        }
-
-        let maxcount = 0
-        let winner
-        for (let [key, value] of Object.entries(options)){
-          if(value > maxcount){
-            winner = key
-            maxcount = value
-          }
-        }
-
-        if(winner){
-          toReturn.scientificNameAuthorship = winner
-          authorities[toReturn.canonicalName] = toReturn.scientificNameAuthorship
-          console.log('author is', toReturn.scientificNameAuthorship)
-        }
-        else {
-          console.log('no author found')
-        }
-      }
-    }
-  }
-
   return toReturn
 }
 
