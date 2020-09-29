@@ -69,7 +69,6 @@ const getLabelDet = _ => {
       }
     }
   }
-
 }
 
 </script>
@@ -163,7 +162,7 @@ const getLabelDet = _ => {
         </div>
         <div>
           <!-- TODO if type then original name otherwise preferred name -->
-          {labelDet}
+          <span class="inlineblock">{labelDet}</span>
         </div>
         <div>
           {#if labelRecord.identifiedBy || labelRecord.dateIdentified || labelRecord.identificationMethod}
@@ -173,7 +172,11 @@ const getLabelDet = _ => {
             <span class="inlineblock">{labelRecord.identificationMethod || ''}</span>
           {:else}
           <!-- TODO if type then exclude this -->
-            (orig. det. conf. Jordaan & Steenkamp 2020)
+            {#if labelRecord.acceptedName}
+              <span>(accepted name: {labelRecord.acceptedName}; orig. det. conf. Jordaan & Steenkamp 2020)</span>
+            {:else}
+              <span>(orig. det. conf. Jordaan & Steenkamp 2020)</span>
+            {/if}
           {/if}
         </div>
         <div>

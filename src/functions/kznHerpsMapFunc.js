@@ -189,6 +189,10 @@ let mapper = record => {
   }
 
   //det stuff
+  if(mappedRecord.acceptedName == mappedRecord.canonicalName){
+    mappedRecord.acceptedName = null
+  }
+
   if(!mappedRecord.identifiedBy){
     //TODO Specify has an Initials field as well as middle initial, need to reconcile those
     if(mappedRecord.detByLast) {
@@ -284,7 +288,8 @@ let fieldsMapping = { //this uses DwC, mostly...
 
   //det stuff
   labelDetName: [], //can be used for verbatimIdentification, if we have that
-  canonicalName: ['1,9-determinations,4.taxon.fullName', 'Full Name'], 
+  acceptedName: ['1,9-determinations,4-preferredtaxon.taxon.fullName','Preferred Taxon/Full Name', 'acceptedName', 'acceptedNameUsage'],
+  canonicalName: ['1,9-determinations,4.taxon.fullName', 'Full Name', 'Taxon/Full Name'], 
   scientificNameAuthorship: ['1,9-determinations,4.taxon.author', 'Author', 'author', 'authority', 'taxonAuthority', 'nameAuthority'],
   identificationQualifier:['Qualifier', '1,9-determinations.determination.qualifier', 'qualifier'],
   identificationConfidence:['1,9-determinations.determination.confidence', 'Confidence'],
