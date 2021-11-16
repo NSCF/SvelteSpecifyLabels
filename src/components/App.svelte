@@ -10,75 +10,108 @@
 	
 	let toLabels = false
 	let data = []
-	let taxonAuthoritiesChecked = false
-	let authorities
+	let authorities = {}
 	let propogateIncludeTaxonAuthorities = false //we use this to send the instruction down once we have fetched the authorities
 
 	let showInstitution = false
 	let collectionName
 	let labelPerSpecimen = false
 	let detLabel = true
-	let showStorage = true
-	let includePunch = true
+	let showStorage = false
+	let includePunch = false
 	let includeTaxonAuthorities = false
 	let showFetchingAuthorites = false
 
+	$: data, authorities, updateTaxonAuthorities()
 	$: includeTaxonAuthorities, updateTaxonAuthorities()
 
 	const updateTaxonAuthorities = async _ => {
-		if(data.length) {
-			if(includeTaxonAuthorities && !taxonAuthoritiesChecked){
-				showFetchingAuthorites = true
-				authorities = await getAuthorities(data)
-				showFetchingAuthorites = false
-				taxonAuthoritiesChecked = true
-				propogateIncludeTaxonAuthorities = true
+		if(data && data.length) {
+			if(includeTaxonAuthorities){
+				//first check if we already have the authorities
+				const taxaWithNoAuthority = new Set()
+				for (const record of data) {
+					if(record.canonicalName && !record.scientificNameAuthorship) {
+						if(authorities.hasOwnProperty(record.canonicalName)) {
+							record.scientificNameAuthorship = authorities[record.canonicalName]
+						}
+						else {
+							taxaWithNoAuthority.add(record.canonicalName)
+						}
+					}
+				}
+
+				if(taxaWithNoAuthority.size){
+					showFetchingAuthorites = true
+					const newAuthorities = await getAuthorities(Array.from(taxaWithNoAuthority))
+					authorities = {...authorities, ...newAuthorities} //this triggers this function to run again...
+					showFetchingAuthorites = false
+					propogateIncludeTaxonAuthorities = true
+				}
 			}
+
 			propogateIncludeTaxonAuthorities = includeTaxonAuthorities
+
+			toLabels = true;
+
 		} 
 		
 	}
 
-	let mapped
-	const handleFileSelected = (ev) => {
+	const handleFileSelected = ev => {
 		let file = ev.detail.file
-		Papa.parse(file, { 
-			header: true,
-			complete:async results => {
-				console.log(`${results.data.length} records read for labels`)
-				console.log('raw data:')
-				console.log(results.data[0])
-
-				for (let raw of results.data){
-					data.push(mapRecord(raw))
+		console.log('file type:', file.type)
+		if(file.type.endsWith('json')){
+			console.log('reading json')
+			file.text().then(fileText => {
+				const json = JSON.parse(fileText)
+				if(json && Array.isArray(json) && json.length){
+					data = json.map(x => mapRecord(x))
+					console.log(data[0])
 				}
-
-				console.log('mapped:')
-				console.log(data[0])
-
-				//sort them
-				data.sort((a, b) => {
-					if (a.storageBox < b.storageBox){
-						return -1;
-					}
-					if ( a.storageBox > b.storageBox ){
-						return 1;
-					}
-					if (a.catalogNumber < b.catalogNumber){
-						return -1;
-					}
-					if ( a.catalogNumber > b.catalogNumber ){
-						return 1;
-					}
-					return 0;
-				})
-
-				if(includeTaxonAuthorities && !taxonAuthoritiesChecked){
-					await updateTaxonAuthorities()
+				else {
+					console.error(json)
+					alert('invalid json file, see console')
 				}
-				toLabels = true;
-			}
-		})
+			}).catch(err => console.error('error parsing JSON:', err.message))
+		}
+		else {
+			console.log('reading csv')
+			Papa.parse(file, { 
+				header: true,
+				complete: async results => {
+					console.log(`${results.data.length} records read for labels`)
+					console.log('raw data:')
+					console.log(results.data[0])
+
+					for (let raw of results.data){
+						data.push(mapRecord(raw))
+					}
+
+					console.log('mapped:')
+					console.log(data[0])
+
+					//sort them
+					data.sort((a, b) => {
+						if (a.storageBox < b.storageBox){
+							return -1;
+						}
+						if ( a.storageBox > b.storageBox ){
+							return 1;
+						}
+						if (a.catalogNumber < b.catalogNumber){
+							return -1;
+						}
+						if ( a.catalogNumber > b.catalogNumber ){
+							return 1;
+						}
+						return 0;
+					})
+
+				}
+			})
+		}
+		
 	}
 
 	const showPrint = _ => {
@@ -124,12 +157,12 @@
 				Include taxon authorities
 			</label>
 			{#if showFetchingAuthorites}
-				<span>   one moment please, this might take a few minutes...</span>
+				<span>   one moment please, this might take a few minutes (see the console)...</span>
 			{/if}
 			<br/>
 			<button on:click={showPrint} disabled={!toLabels}>Let's print these babies!!</button>
 			{#if !toLabels}
-			<ChooseFile on:file-selected={handleFileSelected} fileMIMETypes={['text/csv', 'application/vnd.ms-excel']}></ChooseFile>
+			<ChooseFile on:file-selected={handleFileSelected} fileMIMETypes={['text/csv', 'application/vnd.ms-excel', 'text/json', 'application/json']}></ChooseFile>
 			{/if}
 			<hr/>
 		</div>

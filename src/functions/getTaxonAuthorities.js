@@ -1,26 +1,23 @@
-const getAuthorities = async records => {
-  let authorities = {}
+/**
+ * 
+ * @param {Array} taxonNames The list of taxon names to fetch authorities for
+ * @returns Object of name: authority values, with nulls if no authority found
+ */
+const getAuthorities = async taxonNames => {
+  //clean in case...
+  taxonNames = taxonNames.filter(x => x).map(x => x.trim()).filter(x => x)
   let noAuthority = []
-  for (let record of records){
-    let taxonName = record.canonicalName
-    if(taxonName){
-      let authority = record.scientificNameAuthorship
-      if(!authority || !authority.trim()){ //we give preference to authorities from the original source
-        if(!authorities[taxonName]) {
-          console.log('fetching authority for', taxonName)
-          authority = await getAuthority(taxonName)
-          if(authority){
-            authorities[taxonName] = authority
-            console.log('authority for', taxonName,  'is', authority)
-          }
-          else {
-            if(!noAuthority.includes(taxonName)) {
-              console.log('no authority for', taxonName)
-              noAuthority.push(taxonName)
-            }
-          }
-        }
-      }
+  let authorities = {}
+  for (let name of taxonNames){
+    console.log('fetching authority for', name)
+    const authority = await getAuthority(name)
+    authorities[name] = authority
+    if(authority){
+      console.log('authority for', name,  'is', authority)
+    }
+    else {
+      console.log('no authority for', name)
+      noAuthority.push(name)
     }
   }
   console.log('no authorities for', noAuthority.join(', '))

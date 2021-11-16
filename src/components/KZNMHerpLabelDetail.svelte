@@ -1,6 +1,5 @@
 <script>
 
-  import {onMount} from 'svelte'
   export let labelRecord
   export let showInstitution = false
   export let showStorage = false
@@ -12,6 +11,11 @@
 
 let labelDet = null
 $: includeTaxonAuthorities, getLabelDet()
+
+$:if(labelRecord) {
+  let hasManySSCs = Boolean(labelRecord.seriesSampleCounts)
+  console.log('has many:', hasManySSCs)
+}
 
 const getLabelDet = _ => {
   //TODO add sensu when we have it
@@ -26,56 +30,66 @@ const getLabelDet = _ => {
     }
   }
 
-  if(labelRecord.canonicalName && labelRecord.canonicalName.trim()){
-    
-    let questionMark = false
-    if(labelRecord.identificationConfidence){
-      if(labelRecord.identificationConfidence.toLowerCase() != 'high'){
-        questionMark = true
-      }
-    }
-
-    if(labelRecord.identificationQualifier){
-      if(['aff.', 'cf.', 'nr'].includes(labelRecord.identificationQualifier)){
-        let nameParts = labelRecord.canonicalName.split(' ')
-        if(nameParts.length > 1){
-          let lastPart = nameParts.pop()
-          nameParts.push(labelRecord.identificationQualifier)
-          nameParts.push(lastPart)
-          if(questionMark){
-            nameParts.push('?')
-          }
-          else if(labelRecord.scientificNameAuthorship && includeTaxonAuthorities){
-            nameParts.push(labelRecord.scientificNameAuthorship)
-          }
-          labelDet = nameParts.join(' ')
-        }
-        else {
-          labelDet = [labelRecord.identificationQualifier, labelRecord.canonicalName].join(' ')
-          if(questionMark){
-            labelDet += ' ?'
-          }
-          else if (labelRecord.scientificNameAuthorship && includeTaxonAuthorities){
-            labelDet += ` ${labelRecord.scientificNameAuthorship}`
-          }
-        }
-      }
-      else {
-        labelDet = [labelRecord.canonicalName, labelRecord.identificationQualifier].join(' ')
-      } 
-    }
-    else {
-      labelDet = labelRecord.canonicalName
-      if(questionMark) {
-        labelDet += ' ?'
-      }
-      else if (labelRecord.scientificNameAuthorship && includeTaxonAuthorities){
-        labelDet += ` ${labelRecord.scientificNameAuthorship}`
-      }
+  if(labelRecord.labelDetName){
+    labelDet = labelRecord.labelDetName
+    if(includeTaxonAuthorities && labelRecord.labelDetName == labelRecord.canonicalName && labelRecord.scientificNameAuthorship) {
+      labelDet += ' ' + labelRecord.scientificNameAuthorship
     }
   }
   else {
-    labelDet = labelRecord.labelDetName
+    if(labelRecord.canonicalName && labelRecord.canonicalName.trim()){
+    
+      let questionMark = false
+      if(labelRecord.identificationConfidence){
+        if(labelRecord.identificationConfidence.toLowerCase() != 'high'){
+          questionMark = true
+        }
+      }
+
+      if(labelRecord.identificationQualifier){
+        if(['aff.', 'cf.', 'nr'].includes(labelRecord.identificationQualifier)){
+          let nameParts = labelRecord.canonicalName.split(' ')
+          if(nameParts.length > 1){
+            let lastPart = nameParts.pop()
+            nameParts.push(labelRecord.identificationQualifier)
+            nameParts.push(lastPart)
+            if(questionMark){
+              nameParts.push('?')
+            }
+            else if(labelRecord.scientificNameAuthorship && includeTaxonAuthorities){
+              nameParts.push(labelRecord.scientificNameAuthorship)
+            }
+            labelDet = nameParts.join(' ')
+          }
+          else {
+            labelDet = [labelRecord.identificationQualifier, labelRecord.canonicalName].join(' ')
+            if(questionMark){
+              labelDet += ' ?'
+            }
+            else if (labelRecord.scientificNameAuthorship && includeTaxonAuthorities){
+              labelDet += ` ${labelRecord.scientificNameAuthorship}`
+            }
+          }
+        }
+        else {
+          labelDet = [labelRecord.canonicalName, labelRecord.identificationQualifier].join(' ')
+        } 
+      }
+      else {
+        labelDet = labelRecord.canonicalName
+        if(questionMark) {
+          labelDet += ' ?'
+        }
+        else if (labelRecord.scientificNameAuthorship && includeTaxonAuthorities){
+          labelDet += ` ${labelRecord.scientificNameAuthorship}`
+        }
+      }
+    }
+    else {
+
+      labelDet = labelRecord.labelDetName
+
+    }
   }
 }
 
@@ -89,7 +103,7 @@ const getLabelDet = _ => {
     {:else}
       <div style="padding:4px;">No storage recorded -- cut this off label</div>
     {/if}
-    <hr class='subdiv'>
+    <hr class='subdiv' />
   {/if}
   <div class="label-part">
     {#if includePunch}
@@ -173,8 +187,42 @@ const getLabelDet = _ => {
       {/if}
     </div>
   </div>
-  {#if detLabel && labelDet} <!-- Apoligies to readers for these, detLabel flags whether to add the label, label det is what goes on the label -->
-    <hr class='subdiv'>
+  {#if labelRecord.seriesSampleCounts && Array.isArray(labelRecord.seriesSampleCounts) && labelRecord.seriesSampleCounts.length > 1} <!--this is customized for label data from Arthrobase-->
+    <hr class='subdiv' />
+    <div class="label-part">
+      <div class="labeltext">
+        <div class="inlineblock"><strong>Collecting events:</strong></div>
+        {#if labelRecord.catalogNumber}
+          <div class="floatright inlineblock padright"><strong>{labelRecord.catalogNumber}</strong></div>
+        {:else}
+          {#if labelRecord.collectorNumber}
+            <div class="floatright inlineblock padright"><strong>{labelRecord.collectorNumber}</strong></div>
+          {/if}
+        {/if}
+        {#each labelRecord.seriesSampleCounts as ssc}
+          {#if ssc.collectingDate}
+            <br/>
+            <div>{ssc.collectingDate}</div>
+            {#if ssc.collectors}
+              <div>{ssc.collectors}</div>
+            {/if}
+            {#if ssc.collectMethods}
+              <div>{ssc.collectMethods}</div>
+            {/if}
+            {#if ssc.conditions}
+              <div>{ssc.conditions}</div>
+            {/if}
+            {#if ssc.lifeStageSexCounts}
+              <div>{ssc.lifeStageSexCounts}</div>
+            {/if}
+            <br/>
+          {/if}
+        {/each}
+      </div>
+    </div>
+  {/if}
+  {#if detLabel && labelDet} <!-- Apologies to readers for these, detLabel flags whether to add the label, label det is what goes on the label -->
+    <hr class='subdiv' />
     <div class="label-part det-label">
       {#if includePunch}
         <div class="labelpunch">
@@ -185,7 +233,7 @@ const getLabelDet = _ => {
       {/if}
       <div class="labeltext">
         {#if labelRecord.catalogNumber}
-        <div class="floatright inlineblock padright"><strong>{labelRecord.collectorNumber}</strong></div>
+        <div class="floatright inlineblock padright"><strong>{labelRecord.catalogNumber}</strong></div>
         {:else}
           {#if labelRecord.collectorNumber}
             <div class="floatright inlineblock padright"><strong>{labelRecord.collectorNumber}</strong></div>
@@ -196,14 +244,13 @@ const getLabelDet = _ => {
           <span class="inlineblock">{labelDet}</span>
         </div>
         <div>
-          {#if labelRecord.identifiedBy || labelRecord.dateIdentified || labelRecord.identificationMethod}
+          {#if labelRecord.identifiedBy || labelRecord.dateIdentified}
             {#if labelRecord.acceptedName}
               <span>(accepted name: {labelRecord.acceptedName})</span><br/>
             {/if}
             <span>det: </span>
             <span >{labelRecord.identifiedBy || ''}</span>
             <span class="inlineblock">{labelRecord.dateIdentified || ''}</span>
-            <span class="inlineblock">{labelRecord.identificationMethod || ''}</span>
           {:else}
           <!-- TODO if type then exclude this -->
             {#if labelRecord.acceptedName}
@@ -270,7 +317,7 @@ const getLabelDet = _ => {
   text-align: right;
 }
 .labeltext {
-  /* width: 90%; */
+  width: 100%;
 }
 
 .labelrow {
