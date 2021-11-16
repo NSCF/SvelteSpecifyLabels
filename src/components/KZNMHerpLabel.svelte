@@ -6,6 +6,7 @@ export let showInstitution = false
 export let collectionName
 export let labelPerSpecimen = false
 export let detLabel = true
+export let showStorage = true
 export let includePunch = true
 export let includeTaxonAuthorities = false
 export let authorities
@@ -21,10 +22,10 @@ $: labelRecord, makeLabel = (labelRecord.fullLocality ||
 </script>
 {#if makeLabel}
   {#if !labelPerSpecimen}
-    <LabelDetail {labelRecord} {showInstitution} {detLabel} {includePunch} {includeTaxonAuthorities} {authorities} {collectionName}/>
+    <LabelDetail {labelRecord} {showInstitution} {detLabel} {showStorage} {includePunch} {includeTaxonAuthorities} {authorities} {collectionName}/>
   {:else}
     {#each Array(labelRecord.specimenCount || 1) as i}
-      <LabelDetail {labelRecord} {showInstitution} {detLabel} {includePunch} {includeTaxonAuthorities} {authorities} {collectionName}/>
+      <LabelDetail {labelRecord} {showInstitution} {detLabel} {showStorage} {includePunch} {includeTaxonAuthorities} {authorities} {collectionName}/>
     {/each}
   {/if}
 {/if}

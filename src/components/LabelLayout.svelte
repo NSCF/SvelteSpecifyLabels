@@ -7,6 +7,7 @@ export let showInstitution = false
 export let collectionName
 export let labelPerSpecimen = false
 export let detLabel = true
+export let showStorage = true
 export let includePunch = true
 export let includeTaxonAuthorities = false
 export let authorities
@@ -40,7 +41,7 @@ export let inputData = [
 <div class="cols"> 
   {#if inputData && inputData.length}
     {#each inputData as labelRecord}
-      <KZNMHerpLabel {labelRecord} {labelPerSpecimen} {showInstitution} {detLabel} {includePunch} {includeTaxonAuthorities} {authorities} {collectionName}/>
+      <KZNMHerpLabel {labelRecord} {labelPerSpecimen} {showInstitution} {detLabel} {showStorage} {includePunch} {includeTaxonAuthorities} {authorities} {collectionName}/>
     {/each}
   {:else}
   No data to show, refresh to start over and choose a different file

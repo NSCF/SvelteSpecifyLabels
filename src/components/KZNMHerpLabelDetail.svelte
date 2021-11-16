@@ -1,17 +1,22 @@
 <script>
-export let labelRecord
-export let showInstitution = false
-export let collectionName
-export let detLabel = true
-export let includePunch = true
-export let includeTaxonAuthorities = false
-export let authorities
+
+  import {onMount} from 'svelte'
+  export let labelRecord
+  export let showInstitution = false
+  export let showStorage = false
+  export let collectionName
+  export let detLabel = true
+  export let includePunch = true
+  export let includeTaxonAuthorities = false
+  export let authorities
 
 let labelDet = null
 $: includeTaxonAuthorities, getLabelDet()
 
 const getLabelDet = _ => {
   //TODO add sensu when we have it
+
+  console.log('getting labelDet')
 
   if(includeTaxonAuthorities) {
     if(!labelRecord.scientificNameAuthorship || !labelRecord.scientificNameAuthorship.trim()){
@@ -69,12 +74,23 @@ const getLabelDet = _ => {
       }
     }
   }
+  else {
+    labelDet = labelRecord.labelDetName
+  }
 }
 
 </script>
+
+
 <div class="label">
-  <div style="padding:4px;">Box: {labelRecord.storageBox} -- cut this off label</div>
-  <hr class='subdiv'>
+  {#if showStorage}
+    {#if labelRecord.storageBox}
+      <div style="padding:4px;">Box: {labelRecord.storageBox} -- cut this off label</div>
+    {:else}
+      <div style="padding:4px;">No storage recorded -- cut this off label</div>
+    {/if}
+    <hr class='subdiv'>
+  {/if}
   <div class="label-part">
     {#if includePunch}
       <div class="labelpunch">
@@ -85,9 +101,13 @@ const getLabelDet = _ => {
     {/if}
     <div class="labeltext">
       <div>
-        <span class="floatleft"><strong>{labelRecord.catalogNumber}</strong></span>
-        {#if labelRecord.collectorNumber}
-          <span class="floatright inlineblock padright">CollNo:{labelRecord.collectorNumber}</span>
+        {#if labelRecord.catalogNumber}
+          <span class="floatleft"><strong>{labelRecord.catalogNumber}</strong></span>
+          {#if labelRecord.collectorNumber}
+            <span class="floatright inlineblock padright">CollNo:{labelRecord.collectorNumber}</span>
+          {/if}
+        {:else}
+        <span class="floatright inlineblock padright"><strong>{labelRecord.collectorNumber}</strong></span>
         {/if}
       </div>
       <div class="labelrow clearfloat">
@@ -112,10 +132,17 @@ const getLabelDet = _ => {
           {/each}
         {/if}
         {#if labelRecord.permitNumber}
-          <span class="inlineblock padleft">Permit:&nbsp;{labelRecord.permitNumber}</span>
+          <span class="inlineblock padright-sm">Permit:&nbsp;{labelRecord.permitNumber}</span>
         {/if}  
-        {#if labelRecord.collectionMethod}
-          <span class="inlineblock padleft">{labelRecord.collectionMethod}</span>
+        {#if labelRecord.samplingProtocol && !labelRecord.eventRemarks}
+          <span class="inlineblock">{labelRecord.samplingProtocol}</span>
+        {/if}
+      </div>
+      <div class="labelrow">
+        {#if labelRecord.samplingProtocol && labelRecord.eventRemarks}
+          <span class="inlineblock">{labelRecord.samplingProtocol} ({labelRecord.eventRemarks.toLowerCase()})</span>
+        {:else}
+          {labelRecord.eventRemarks || ''}
         {/if}
       </div>
       {#if labelRecord.specimenCount}
@@ -146,9 +173,9 @@ const getLabelDet = _ => {
       {/if}
     </div>
   </div>
-  {#if detLabel && detLabel} <!-- Apoligies to readers for these, detLabel flags whether to add the label, label det is what goes on the label -->
+  {#if detLabel && labelDet} <!-- Apoligies to readers for these, detLabel flags whether to add the label, label det is what goes on the label -->
     <hr class='subdiv'>
-    <div class="label-part">
+    <div class="label-part det-label">
       {#if includePunch}
         <div class="labelpunch">
           <svg height="10" width="10">
@@ -157,16 +184,23 @@ const getLabelDet = _ => {
         </div>
       {/if}
       <div class="labeltext">
-        <div style="width:100%;text-align:right">
-          <span ><strong>{labelRecord.catalogNumber}</strong></span>
-        </div>
-        <div>
+        {#if labelRecord.catalogNumber}
+        <div class="floatright inlineblock padright"><strong>{labelRecord.collectorNumber}</strong></div>
+        {:else}
+          {#if labelRecord.collectorNumber}
+            <div class="floatright inlineblock padright"><strong>{labelRecord.collectorNumber}</strong></div>
+          {/if}
+        {/if}
+        <div class="clearfloat">
           <!-- TODO if type then original name otherwise preferred name -->
           <span class="inlineblock">{labelDet}</span>
         </div>
         <div>
           {#if labelRecord.identifiedBy || labelRecord.dateIdentified || labelRecord.identificationMethod}
-            det:&nbsp;
+            {#if labelRecord.acceptedName}
+              <span>(accepted name: {labelRecord.acceptedName})</span><br/>
+            {/if}
+            <span>det: </span>
             <span >{labelRecord.identifiedBy || ''}</span>
             <span class="inlineblock">{labelRecord.dateIdentified || ''}</span>
             <span class="inlineblock">{labelRecord.identificationMethod || ''}</span>
@@ -200,7 +234,7 @@ const getLabelDet = _ => {
 <style>
 .label {
   font-family: 'Arial Narrow', 'PT Sans Narrow', Arial, sans-serif;
-  font-size:0.7em;
+  font-size:0.6em;
   line-height: 95%;
   width: 5cm;
   border-bottom: 0.5px solid black;
@@ -214,6 +248,10 @@ const getLabelDet = _ => {
   padding-top:3px;
   padding-bottom:3px;
   min-height: 2cm;
+}
+
+.det-label {
+  min-height: 1cm;
 }
 
 .clearfix::after {
@@ -232,7 +270,7 @@ const getLabelDet = _ => {
   text-align: right;
 }
 .labeltext {
-  width: 90%;
+  /* width: 90%; */
 }
 
 .labelrow {

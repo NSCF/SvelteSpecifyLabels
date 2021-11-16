@@ -5,6 +5,7 @@
 	import Papa from 'papaparse'
 
 	import mapRecord from '../functions/kznHerpsMapFunc.js'
+
 	import getAuthorities from '../functions/getTaxonAuthorities.js'
 	
 	let toLabels = false
@@ -17,6 +18,7 @@
 	let collectionName
 	let labelPerSpecimen = false
 	let detLabel = true
+	let showStorage = true
 	let includePunch = true
 	let includeTaxonAuthorities = false
 	let showFetchingAuthorites = false
@@ -113,6 +115,11 @@
 			</label>
 			<br/>
 			<label style="display:inline">
+				<input type=checkbox bind:checked={showStorage}>
+				Show storage info
+			</label>
+			<br/>
+			<label style="display:inline">
 				<input type=checkbox bind:checked={includeTaxonAuthorities}>
 				Include taxon authorities
 			</label>
@@ -128,7 +135,7 @@
 		</div>
 		{#if toLabels}
 			<div>
-				<LabelLayout inputData={data} {labelPerSpecimen} {showInstitution} {detLabel} {includePunch} includeTaxonAuthorities={propogateIncludeTaxonAuthorities} {authorities} {collectionName}></LabelLayout>
+				<LabelLayout inputData={data} {labelPerSpecimen} {showInstitution} {detLabel} {showStorage} {includePunch} includeTaxonAuthorities={propogateIncludeTaxonAuthorities} {authorities} {collectionName}></LabelLayout>
 			</div>
 		{/if}
 	</Modal>

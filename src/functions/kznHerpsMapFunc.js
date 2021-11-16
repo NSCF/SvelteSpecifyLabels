@@ -29,7 +29,7 @@ let mapper = record => {
       mappedRecord.country = 'DRC'
     }
 
-    mappedRecord.geography = [mappedRecord.country, mappedRecord.stateProvince].filter(x=>x).map(x => x.trim()).filter(x=>x).join(';')
+    mappedRecord.geography = [mappedRecord.country, mappedRecord.stateProvince].filter(x=>x).map(x => x.trim()).filter(x=>x).join('; ')
 
   }
   
@@ -90,7 +90,7 @@ let mapper = record => {
         mappedRecord.fullLocality = mappedRecord.locality
       }
       else {
-        mappedRecord.fullLocality = [mappedRecord.geography, mappedRecord.locality].join(';')
+        mappedRecord.fullLocality = [mappedRecord.geography, mappedRecord.locality].join('; ')
       }
     }
     else {
@@ -186,6 +186,9 @@ let mapper = record => {
     else {
       mappedRecord.specimenCount =  null
     }
+
+    //change M and F to symbols
+    mappedRecord.specimenStageSex = mappedRecord.specimenStageSex.replace(/M/g, '♂').replace(/F/g, '♀')
   }
 
   //det stuff
@@ -253,7 +256,7 @@ let mapper = record => {
 
 let fieldsMapping = { //this uses DwC, mostly...
   catalogNumber: ['1.collectionobject.catalogNumber', 'Catalog Number'], 
-  collectorNumber:['1.collectionobject.fieldNumber', 'recordedNumber', 'Field Number', 'collNum', 'collNo'],
+  collectorNumber:['1.collectionobject.fieldNumber', 'recordNumber', 'Field Number', 'collNum', 'collNo'],
   geography: ['1,10,2.locality.text2', 'Orig. Prov'],
   country: ['1,10,2,3.geography.Country', 'Country'],
   stateProvince: ['1,10,2,3.geography.State', 'Province'],
@@ -280,6 +283,7 @@ let fieldsMapping = { //this uses DwC, mostly...
   permitNumber: ['permit', 'permitcode', 'permitCode', 'permitnumber'],
   recordedBy: ['Collectors [Aggregated]', '1,10,30-collectors.collectingevent.collectors', 'collector', 'collectors'],
   samplingProtocol: ['collectionMethod', '1,10.collectingevent.method', 'Collecting Information/Method'],
+  eventRemarks:[], //TODO add the relevant Specify fields
   specimenStageSex: ['1,63-preparations.preparation.text4', 'Stage Sex Count'],
   sex:['Sex', '1,63-preparations.preparation.text1'],
   lifeStage: ['stage', 'Stage', 'lifestage', '1,63-preparations.preparation.text2'],
@@ -287,7 +291,7 @@ let fieldsMapping = { //this uses DwC, mostly...
   occurrenceRemarks: ['Remarks', 'Collection Object Remarks', '1.collectionobject.remarks', 'Collection Object/Remarks'],
 
   //det stuff
-  labelDetName: [], //can be used for verbatimIdentification, if we have that
+  labelDetName: ['verbatimIdentification'], //can be used for verbatimIdentification, if we have that
   acceptedName: ['1,9-determinations,4-preferredtaxon.taxon.fullName','Preferred Taxon/Full Name', 'acceptedName', 'acceptedNameUsage'],
   canonicalName: ['1,9-determinations,4.taxon.fullName', 'Full Name', 'Taxon/Full Name'], 
   scientificNameAuthorship: ['1,9-determinations,4.taxon.author', 'Author', 'author', 'authority', 'taxonAuthority', 'nameAuthority'],
