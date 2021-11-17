@@ -270,25 +270,25 @@ let mapper = record => {
 
     if(mappedRecord.identificationReferences) {
       mappedRecord.identificationMethod += ` (${mappedRecord.identificationReferences})`
+    }
 
-      if(mappedRecord.identificationRemarks) {
-        mappedRecord.identificationRemarks = [mappedRecord.identificationMethod, mappedRecord.identificationRemarks].join('; ')
-      }
-      else {
-        mappedRecord.identificationRemarks = mappedRecord.identificationMethod
-      }
+    if(mappedRecord.identificationRemarks) {
+      mappedRecord.identificationRemarks = [mappedRecord.identificationMethod, mappedRecord.identificationRemarks].join('; ')
+    }
+    else {
+      mappedRecord.identificationRemarks = mappedRecord.identificationMethod
     }
   }
   else {
     if(mappedRecord.identificationReferences) {
       mappedRecord.identificationReferences = `From ${mappedRecord.identificationReferences}`
+    }
 
-      if(mappedRecord.identificationRemarks) {
-        mappedRecord.identificationRemarks = [mappedRecord.identificationReferences, mappedRecord.identificationRemarks].join('; ')
-      }
-      else {
-        mappedRecord.identificationRemarks = mappedRecord.identificationReferences
-      }
+    if(mappedRecord.identificationRemarks) {
+      mappedRecord.identificationRemarks = [mappedRecord.identificationReferences, mappedRecord.identificationRemarks].join('; ')
+    }
+    else {
+      mappedRecord.identificationRemarks = mappedRecord.identificationReferences
     }
   }
   
