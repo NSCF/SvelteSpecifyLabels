@@ -63,4 +63,4 @@ const getAuthority = async taxonName => {
   }
 }
 
-module.exports = getAuthorities
+export default getAuthorities

@@ -1,14 +1,12 @@
+import fs from 'fs-extra'
+import path from 'path'
+import csv from 'fast-csv'
 
+import mapRecord from '../lib/mapRecord.js'
+import getAuthorities from '../lib/getTaxonAuthorities.js'
 
-const fs = require('fs-extra');
-const path = require('path');
-const csv = require('fast-csv');
-
-const mapRecord = require('../functions/kznHerpsMapFunc.js')
-let getAuthorities = require('../functions/getTaxonAuthorities.js');
-
-const filePath = String.raw`C:\Users\engelbrechti\Downloads`
-const fileName = String.raw`query_results_2020-07-24T12_18_00.233191.csv`
+const filePath = String.raw`C:\Users\Ian Engelbrecht\Downloads`
+const fileName = String.raw`Theraphosid-Engelbrecht-Dets-OpenRefine.csv`
 
 let data = []
 
@@ -22,7 +20,8 @@ fs.createReadStream(path.join(filePath, fileName))
     console.log(`Parsed ${rowCount} rows`)
     let mappedRecords = []
     for (let record of data){
-      mappedRecords.push(mapRecord(record))
+      const mappedRecord = mapRecord(record)
+      mappedRecords.push(mappedRecord)
     }
     console.log('fetching authorities')
     await getAuthorities(mappedRecords)

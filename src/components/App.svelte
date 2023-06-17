@@ -4,9 +4,9 @@
 	import LabelLayout from './LabelLayout.svelte'
 	import Papa from 'papaparse'
 
-	import mapRecord from '../functions/kznHerpsMapFunc.js'
+	import mapRecord from '../lib/mapRecord.js'
 
-	import getAuthorities from '../functions/getTaxonAuthorities.js'
+	import getAuthorities from '../lib/getTaxonAuthorities.js'
 	
 	let toLabels = false
 	let data = []
@@ -17,6 +17,7 @@
 	let collectionName
 	let labelPerSpecimen = false
 	let detLabel = true
+	let detLabelOnly = false
 	let showStorage = false
 	let includePunch = false
 	let includeTaxonAuthorities = false
@@ -26,6 +27,7 @@
 	$: includeTaxonAuthorities, updateTaxonAuthorities()
 
 	const updateTaxonAuthorities = async _ => {
+		console.log('running update authorities')
 		if(data && data.length) {
 			if(includeTaxonAuthorities){
 				//first check if we already have the authorities
@@ -51,6 +53,8 @@
 			}
 
 			propogateIncludeTaxonAuthorities = includeTaxonAuthorities
+
+			console.log('going to labels')
 
 			toLabels = true;
 
@@ -92,6 +96,7 @@
 					console.log(data[0])
 
 					//sort them
+					console.log('sorting records')
 					data.sort((a, b) => {
 						if (a.storageBox < b.storageBox){
 							return -1;
@@ -107,6 +112,8 @@
 						}
 						return 0;
 					})
+
+					data = data
 
 				}
 			})
@@ -143,6 +150,11 @@
 			</label>
 			<br/>
 			<label style="display:inline">
+				<input type=checkbox bind:checked={detLabelOnly}>
+				Make det labels only
+			</label>
+			<br/>
+			<label style="display:inline">
 				<input type=checkbox bind:checked={includePunch}>
 				Include punch mark
 			</label>
@@ -168,7 +180,7 @@
 		</div>
 		{#if toLabels}
 			<div>
-				<LabelLayout inputData={data} {labelPerSpecimen} {showInstitution} {detLabel} {showStorage} {includePunch} includeTaxonAuthorities={propogateIncludeTaxonAuthorities} {authorities} {collectionName}></LabelLayout>
+				<LabelLayout inputData={data} {labelPerSpecimen} {showInstitution} {detLabel} {detLabelOnly} {showStorage} {includePunch} includeTaxonAuthorities={propogateIncludeTaxonAuthorities} {authorities} {collectionName}></LabelLayout>
 			</div>
 		{/if}
 	</Modal>

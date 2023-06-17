@@ -5,6 +5,7 @@
   export let showStorage = false
   export let collectionName
   export let detLabel = true
+  export let detLabelOnly = false
   export let includePunch = true
   export let includeTaxonAuthorities = false
   export let authorities
@@ -14,10 +15,10 @@ $: includeTaxonAuthorities, getLabelDet()
 
 $:if(labelRecord) {
   let hasManySSCs = Boolean(labelRecord.seriesSampleCounts)
-  console.log('has many:', hasManySSCs)
 }
 
 const getLabelDet = _ => {
+  //BIG TODO move all this logic to the label mapping funcs, shouldnt be here. 
   //TODO add sensu when we have it
 
   console.log('getting labelDet')
@@ -32,8 +33,10 @@ const getLabelDet = _ => {
 
   if(labelRecord.labelDetName){
     labelDet = labelRecord.labelDetName
-    if(includeTaxonAuthorities && labelRecord.labelDetName == labelRecord.canonicalName && labelRecord.scientificNameAuthorship) {
-      labelDet += ' ' + labelRecord.scientificNameAuthorship
+    if(!labelDet.includes(' sp.') && !labelDet.includes('?')) {
+      if(includeTaxonAuthorities && labelRecord.labelDetName == labelRecord.canonicalName && labelRecord.scientificNameAuthorship) {
+        labelDet += ' ' + labelRecord.scientificNameAuthorship
+      }
     }
   }
   else {
@@ -56,7 +59,7 @@ const getLabelDet = _ => {
             if(questionMark){
               nameParts.push('?')
             }
-            else if(labelRecord.scientificNameAuthorship && includeTaxonAuthorities){
+            else if(labelRecord.scientificNameAuthorship && includeTaxonAuthorities && !nameParts.includes('sp.')){
               nameParts.push(labelRecord.scientificNameAuthorship)
             }
             labelDet = nameParts.join(' ')
@@ -66,7 +69,7 @@ const getLabelDet = _ => {
             if(questionMark){
               labelDet += ' ?'
             }
-            else if (labelRecord.scientificNameAuthorship && includeTaxonAuthorities){
+            else if (labelRecord.scientificNameAuthorship && includeTaxonAuthorities  && !labelDet.includes(' sp.')){
               labelDet += ` ${labelRecord.scientificNameAuthorship}`
             }
           }
@@ -80,7 +83,7 @@ const getLabelDet = _ => {
         if(questionMark) {
           labelDet += ' ?'
         }
-        else if (labelRecord.scientificNameAuthorship && includeTaxonAuthorities){
+        else if (labelRecord.scientificNameAuthorship && includeTaxonAuthorities && !labelDet.includes(' sp.')){
           labelDet += ` ${labelRecord.scientificNameAuthorship}`
         }
       }
@@ -105,124 +108,129 @@ const getLabelDet = _ => {
     {/if}
     <hr class='subdiv' />
   {/if}
-  <div class="label-part">
-    {#if includePunch}
-      <div class="labelpunch">
-        <svg height="10" width="10">
-          <circle cx="5" cy="5" r="2" fill="black" />
-        </svg> 
+  {#if !detLabelOnly}
+    <div class="label-part">
+      {#if includePunch}
+        <div class="labelpunch">
+          <svg height="10" width="10">
+            <circle cx="5" cy="5" r="2" fill="black" />
+          </svg> 
+        </div>
+      {/if}
+      <div class="labeltext">
+        <div>
+          {#if labelRecord.catalogNumber}
+            <span class="floatleft"><strong>{labelRecord.catalogNumber}</strong></span>
+            {#if labelRecord.collectorNumber}
+              <span class="floatright inlineblock padright">CollNo:{labelRecord.collectorNumber}</span>
+            {/if}
+          {:else}
+          <span class="floatright inlineblock padright"><strong>{labelRecord.collectorNumber}</strong></span>
+          {/if}
+        </div>
+        <div class="labelrow clearfloat">
+          {#if labelRecord.fullLocality}
+            {labelRecord.fullLocality}
+          {/if}
+          {#if labelRecord.labelElevation}
+            <span class="inlineblock">{labelRecord.labelElevation}</span>
+          {/if}
+          {#if labelRecord.fullCoordsString}
+            <span class="inlineblock">{labelRecord.fullCoordsString}</span>
+          {/if}    
+        </div>
+        <div class="labelrow">{labelRecord.habitat || ''}</div>
+        <div class="labelrow">
+          {#if labelRecord.collectionDate}
+            <span class='padright'>{labelRecord.collectionDate}</span>
+          {/if}
+          {#if labelRecord.recordedBy && labelRecord.recordedBy.length}
+            {#each labelRecord.recordedBy as coll}
+              <span class="inlineblock padright-sm">{coll}</span>
+            {/each}
+          {/if}
+          {#if labelRecord.permitNumber}
+            <span class="inlineblock padright-sm">Permit:&nbsp;{labelRecord.permitNumber}</span>
+          {/if}  
+          {#if labelRecord.samplingProtocol && !labelRecord.eventRemarks}
+            <span class="inlineblock">{labelRecord.samplingProtocol}</span>
+          {/if}
+        </div>
+        <div class="labelrow">
+          {#if labelRecord.samplingProtocol && labelRecord.eventRemarks}
+            <span class="inlineblock">{labelRecord.samplingProtocol} ({labelRecord.eventRemarks.toLowerCase()})</span>
+          {:else}
+            {labelRecord.eventRemarks || ''}
+          {/if}
+        </div>
+        {#if labelRecord.specimenCount}
+          <div>
+            <span class="padright">Specimens:&nbsp;{labelRecord.specimenCount}</span>
+            {#if labelRecord.specimenStageSex}
+              <span class="inlineblock">({labelRecord.specimenStageSex})</span>
+            {/if}
+          </div>
+        {:else}
+          {#if labelRecord.specimenStageSex}
+            <span class="inlineblock">{labelRecord.specimenStageSex}</span>
+          {/if}
+        {/if}
+        <div>{labelRecord.occurrenceRemarks || ''}</div>
+        {#if labelRecord.typeStatus}
+          <div class="clearfix">
+            <span class="floatleft typestatus">{labelRecord.typeStatus}</span>
+            {#if labelRecord.typeNumber}
+              <span class="floatright">Type No:{labelRecord.typeNumber}</span>
+            {/if}
+          </div>
+        {/if}
+        {#if showInstitution}
+          <div class="museumname">
+            <span>{collectionName}</span>
+          </div>
+        {/if}
+      </div>
+    </div>
+    {#if labelRecord.seriesSampleCounts && Array.isArray(labelRecord.seriesSampleCounts) && labelRecord.seriesSampleCounts.length > 1} <!--this is customized for label data from Arthrobase-->
+      <hr class='subdiv' />
+      <div class="label-part">
+        <div class="labeltext">
+          <div class="inlineblock"><strong>Collecting events:</strong></div>
+          {#if labelRecord.catalogNumber}
+            <div class="floatright inlineblock padright"><strong>{labelRecord.catalogNumber}</strong></div>
+          {:else}
+            {#if labelRecord.collectorNumber}
+              <div class="floatright inlineblock padright"><strong>{labelRecord.collectorNumber}</strong></div>
+            {/if}
+          {/if}
+          {#each labelRecord.seriesSampleCounts as ssc}
+            {#if ssc.collectingDate}
+              <br/>
+              <div>{ssc.collectingDate}</div>
+              {#if ssc.collectors}
+                <div>{ssc.collectors}</div>
+              {/if}
+              {#if ssc.collectMethods}
+                <div>{ssc.collectMethods}</div>
+              {/if}
+              {#if ssc.conditions}
+                <div>{ssc.conditions}</div>
+              {/if}
+              {#if ssc.lifeStageSexCounts}
+                <div>{ssc.lifeStageSexCounts}</div>
+              {/if}
+              <br/>
+            {/if}
+          {/each}
+        </div>
       </div>
     {/if}
-    <div class="labeltext">
-      <div>
-        {#if labelRecord.catalogNumber}
-          <span class="floatleft"><strong>{labelRecord.catalogNumber}</strong></span>
-          {#if labelRecord.collectorNumber}
-            <span class="floatright inlineblock padright">CollNo:{labelRecord.collectorNumber}</span>
-          {/if}
-        {:else}
-        <span class="floatright inlineblock padright"><strong>{labelRecord.collectorNumber}</strong></span>
-        {/if}
-      </div>
-      <div class="labelrow clearfloat">
-        {#if labelRecord.fullLocality}
-          {labelRecord.fullLocality}
-        {/if}
-        {#if labelRecord.labelElevation}
-          <span class="inlineblock">{labelRecord.labelElevation}</span>
-        {/if}
-        {#if labelRecord.fullCoordsString}
-          <span class="inlineblock">{labelRecord.fullCoordsString}</span>
-        {/if}    
-      </div>
-      <div class="labelrow">{labelRecord.habitat || ''}</div>
-      <div class="labelrow">
-        {#if labelRecord.collectionDate}
-          <span class='padright'>{labelRecord.collectionDate}</span>
-        {/if}
-        {#if labelRecord.recordedBy && labelRecord.recordedBy.length}
-          {#each labelRecord.recordedBy as coll}
-            <span class="inlineblock padright-sm">{coll}</span>
-          {/each}
-        {/if}
-        {#if labelRecord.permitNumber}
-          <span class="inlineblock padright-sm">Permit:&nbsp;{labelRecord.permitNumber}</span>
-        {/if}  
-        {#if labelRecord.samplingProtocol && !labelRecord.eventRemarks}
-          <span class="inlineblock">{labelRecord.samplingProtocol}</span>
-        {/if}
-      </div>
-      <div class="labelrow">
-        {#if labelRecord.samplingProtocol && labelRecord.eventRemarks}
-          <span class="inlineblock">{labelRecord.samplingProtocol} ({labelRecord.eventRemarks.toLowerCase()})</span>
-        {:else}
-          {labelRecord.eventRemarks || ''}
-        {/if}
-      </div>
-      {#if labelRecord.specimenCount}
-        <div>
-          <span class="padright">Specimens:&nbsp;{labelRecord.specimenCount}</span>
-          {#if labelRecord.specimenStageSex}
-            <span class="inlineblock">({labelRecord.specimenStageSex})</span>
-          {/if}
-        </div>
-      {:else}
-        {#if labelRecord.specimenStageSex}
-          <span class="inlineblock">{labelRecord.specimenStageSex}</span>
-        {/if}
-      {/if}
-      <div>{labelRecord.occurrenceRemarks || ''}</div>
-      {#if labelRecord.typeStatus}
-        <div class="clearfix">
-          <span class="floatleft typestatus">{labelRecord.typeStatus}</span>
-          {#if labelRecord.typeNumber}
-            <span class="floatright">Type No:{labelRecord.typeNumber}</span>
-          {/if}
-        </div>
-      {/if}
-      {#if showInstitution}
-        <div class="museumname">
-          <span>{collectionName}</span>
-        </div>
-      {/if}
-    </div>
-  </div>
-  {#if labelRecord.seriesSampleCounts && Array.isArray(labelRecord.seriesSampleCounts) && labelRecord.seriesSampleCounts.length > 1} <!--this is customized for label data from Arthrobase-->
-    <hr class='subdiv' />
-    <div class="label-part">
-      <div class="labeltext">
-        <div class="inlineblock"><strong>Collecting events:</strong></div>
-        {#if labelRecord.catalogNumber}
-          <div class="floatright inlineblock padright"><strong>{labelRecord.catalogNumber}</strong></div>
-        {:else}
-          {#if labelRecord.collectorNumber}
-            <div class="floatright inlineblock padright"><strong>{labelRecord.collectorNumber}</strong></div>
-          {/if}
-        {/if}
-        {#each labelRecord.seriesSampleCounts as ssc}
-          {#if ssc.collectingDate}
-            <br/>
-            <div>{ssc.collectingDate}</div>
-            {#if ssc.collectors}
-              <div>{ssc.collectors}</div>
-            {/if}
-            {#if ssc.collectMethods}
-              <div>{ssc.collectMethods}</div>
-            {/if}
-            {#if ssc.conditions}
-              <div>{ssc.conditions}</div>
-            {/if}
-            {#if ssc.lifeStageSexCounts}
-              <div>{ssc.lifeStageSexCounts}</div>
-            {/if}
-            <br/>
-          {/if}
-        {/each}
-      </div>
-    </div>
+
   {/if}
-  {#if detLabel && labelDet} <!-- Apologies to readers for these, detLabel flags whether to add the label, label det is what goes on the label -->
-    <hr class='subdiv' />
+  {#if (detLabel || detLabelOnly) && labelDet} <!-- Apologies to readers for these, detLabel flags whether to add the label, labelDet is what goes on the label -->
+    {#if !detLabelOnly}
+      <hr class='subdiv' />
+    {/if}
     <div class="label-part det-label">
       {#if includePunch}
         <div class="labelpunch">
@@ -335,10 +343,6 @@ span.padright {
 
 span.padright-sm {
   margin-right:0.1em;
-}
-
-span.padleft {
-  margin-left:0.25em;
 }
 
 .floatright {
