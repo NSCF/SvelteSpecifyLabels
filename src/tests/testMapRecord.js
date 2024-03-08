@@ -5,8 +5,8 @@ import csv from 'fast-csv'
 import mapRecord from '../lib/mapRecord.js'
 import getAuthorities from '../lib/getTaxonAuthorities.js'
 
-const filePath = String.raw`C:\Users\Ian Engelbrecht\Downloads`
-const fileName = String.raw`Theraphosid-Engelbrecht-Dets-OpenRefine.csv`
+const filePath = String.raw`C:\devprojects\arthrobaselabeldata`
+const fileName = String.raw`iziko_batch_2.csv`
 
 let data = []
 

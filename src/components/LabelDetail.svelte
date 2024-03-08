@@ -287,82 +287,82 @@ const getLabelDet = _ => {
 <!-- ################################# -->
 
 <style>
-.label {
-  font-family: 'Arial Narrow', 'PT Sans Narrow', Arial, sans-serif;
-  font-size:0.6em;
-  line-height: 95%;
-  width: 5cm;
-  border-bottom: 0.5px solid black;
-  break-inside:avoid;
-}
 
-.label-part {
-  display:flex;
-  flex-direction: row;
-  align-items: center;
-  padding-top:3px;
-  padding-bottom:3px;
-  min-height: 2cm;
-}
+  .label {
+    font-family: 'Arial Narrow', 'PT Sans Narrow', Arial, sans-serif;
+    font-size:0.6em;
+    line-height: 95%;
+    width: 5cm;
+    border-bottom: 0.5px solid black;
+    break-inside:avoid;
+  }
 
-.det-label {
-  min-height: 1cm;
-}
+  .label-part {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    padding-top:3px;
+    padding-bottom:3px;
+    min-height: 2cm;
+  }
 
-.clearfix::after {
-  content: "";
-  clear: both;
-  display: table;
-}
+  .det-label {
+    min-height: 1cm;
+  }
 
-.typestatus {
-  text-transform: capitalize;
-  font-size: 1em;
-  font-weight: bold;
-}
-.labelpunch {
-  width: 10%;
-  text-align: right;
-}
-.labeltext {
-  width: 100%;
-}
+  .clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
 
-.labelrow {
-  margin:0;
-}
+  .typestatus {
+    text-transform: capitalize;
+    font-size: 1em;
+    font-weight: bold;
+  }
+  .labelpunch {
+    width: 10%;
+    text-align: right;
+  }
+  .labeltext {
+    width: 100%;
+  }
 
-.inlineblock {
-  display: inline-block;
-  margin:0;
-}
+  .labelrow {
+    margin:0;
+  }
 
-span.padright {
-  margin-right:0.25em;
-}
+  .inlineblock {
+    display: inline-block;
+    margin:0;
+  }
 
-span.padright-sm {
-  margin-right:0.1em;
-}
+  span.padright {
+    margin-right:0.25em;
+  }
 
-.floatright {
-  float: right;
-}
-.floatleft {
-  float: left;
-}
-.clearfloat {
-  clear:both
-}
-.museumname {
-  text-align:center;
-  font-weight:bold
-}
+  span.padright-sm {
+    margin-right:0.1em;
+  }
 
-hr.subdiv {
-  margin:0;
-  border-top:0.5px dashed black;
-}
+  .floatright {
+    float: right;
+  }
+  .floatleft {
+    float: left;
+  }
+  .clearfloat {
+    clear:both
+  }
+  .museumname {
+    text-align:center;
+    font-weight:bold
+  }
 
+  hr.subdiv {
+    margin:0;
+    border-top:0.5px dashed black;
+  }
 
 </style>

@@ -313,38 +313,39 @@ export default function mapRecord(record) {
 //maps the input fields to the standard set of fields we use to generate the label fields
 function makeStandardFields(record, fieldsMappings) {
   
-  let toReturn = {}
+  let result = {}
 
   for (let [field, candidates] of Object.entries(fieldsMappings)) {
+    // the field name may be the same in dataset
+    result[field] = null
     candidates.unshift(field)
     candidates.unshift(`dwc:${field}`)
     for (let candidate of candidates){
-      if(record[candidate] != null) {
-        if(isNaN(record[candidate])){
-          if(typeof record[candidate] == 'boolean' || Array.isArray(record[candidate])){
-            toReturn[field] = record[candidate]
-            break;
+      if (candidate in record) {
+        if(record[candidate] != null) {
+          if(isNaN(record[candidate])){
+            if(typeof record[candidate] == 'boolean' || Array.isArray(record[candidate])){
+              result[field] = record[candidate]
+              break;
+            }
+            else if (record[candidate].trim()){
+              result[field] = record[candidate].trim()
+              break;
+            }
           }
-          else if (record[candidate].trim()){
-            toReturn[field] = record[candidate].trim()
-            break;
-          }
-        }
-        else {
-          if(typeof record[candidate] == 'string'){
-            toReturn[field] = record[candidate].trim().replace(/\s+/g,' ').replace(/[\.~]+$/,'') //do some cleaning
-            break;
-          }
-          else { //has to be a number
-            toReturn[field] = Number(record[candidate])
-            break;
+          else {
+            if(typeof record[candidate] == 'string'){
+              result[field] = record[candidate].trim().replace(/\s+/g,' ').replace(/[\.~]+$/,'') //do some cleaning
+              break;
+            }
+            else { //has to be a number
+              result[field] = Number(record[candidate])
+              break;
+            }
           }
         }
       }
     }
-    if(!record[field]){
-      toReturn[field] = null
-    }
   }
-  return toReturn
+  return result
 }
