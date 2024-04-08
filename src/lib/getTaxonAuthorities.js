@@ -9,15 +9,17 @@ const getAuthorities = async taxonNames => {
   let noAuthority = []
   let authorities = {}
   for (let name of taxonNames){
-    console.log('fetching authority for', name)
-    const authority = await getAuthority(name)
-    authorities[name] = authority
-    if(authority){
-      console.log('authority for', name,  'is', authority)
-    }
-    else {
-      console.log('no authority for', name)
-      noAuthority.push(name)
+    if (!name in authorities) {
+      console.log('fetching authority for', name)
+      const authority = await getAuthority(name)
+      authorities[name] = authority
+      if(authority){
+        console.log('authority for', name,  'is', authority)
+      }
+      else {
+        console.log('no authority for', name)
+        noAuthority.push(name)
+      }
     }
   }
   console.log('no authorities for', noAuthority.join(', '))

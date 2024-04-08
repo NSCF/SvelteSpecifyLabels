@@ -1,6 +1,6 @@
 export const fieldsMappings = { 
   //this uses DwC, mostly...
-  catalogNumber: ['1.collectionobject.catalogNumber', 'Catalog Number'], 
+  catalogNumber: ['1.collectionobject.catalogNumber', 'Catalog Number', 'CatNum'], 
   collectorNumber:['1.collectionobject.fieldNumber', 'recordNumber', 'Field Number', 'collNum', 'collNo', 'collectorNo'],
   geography: ['1,10,2.locality.text2', 'Orig. Prov'],
   country: ['1,10,2,3.geography.Country', 'Country'],
@@ -38,7 +38,7 @@ export const fieldsMappings = {
   lifeStage: ['stage', 'Stage', 'lifestage', '1,63-preparations.preparation.text2'],
   specimenCount:['1,63-preparations.preparation.countAmt', 'Count'],
   seriesSampleCounts:[], //just for Arthrobase
-  occurrenceRemarks: ['Remarks', 'Collection Object Remarks', '1.collectionobject.remarks', 'Collection Object/Remarks', 'seriesNote'],
+  occurrenceRemarks: ['Remarks', 'Collection Object Remarks', '1.collectionobject.remarks', 'Collection Object/Remarks', 'seriesNote', 'notes'],
 
   //det stuff
   labelDetName: ['verbatimIdentification'], //can be used for verbatimIdentification, if we have that

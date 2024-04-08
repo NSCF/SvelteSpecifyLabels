@@ -10,12 +10,12 @@
   export let includeTaxonAuthorities = false
   export let authorities
 
-let labelDet = null
-$: includeTaxonAuthorities, getLabelDet()
+  let labelDet = null
+  $: includeTaxonAuthorities, getLabelDet()
 
-$:if(labelRecord) {
-  let hasManySSCs = Boolean(labelRecord.seriesSampleCounts)
-}
+  $:if(labelRecord) {
+    let hasManySSCs = Boolean(labelRecord.seriesSampleCounts)
+  }
 
 const getLabelDet = _ => {
   //BIG TODO move all this logic to the label mapping funcs, shouldnt be here. 
@@ -122,7 +122,7 @@ const getLabelDet = _ => {
           {#if labelRecord.catalogNumber}
             <span class="floatleft"><strong>{labelRecord.catalogNumber}</strong></span>
             {#if labelRecord.collectorNumber}
-              <span class="floatright inlineblock padright">CollNo:{labelRecord.collectorNumber}</span>
+              <span class="floatright inlineblock padright">Coll.Num: {labelRecord.collectorNumber}</span>
             {/if}
           {:else}
           <span class="floatright inlineblock padright"><strong>{labelRecord.collectorNumber}</strong></span>
