@@ -1,5 +1,7 @@
 <script>
 
+  import { getContext } from "svelte";
+
   export let labelRecord
   export let showInstitution = false
   export let showStorage = false
@@ -7,17 +9,15 @@
   export let detLabel = true
   export let detLabelOnly = false
   export let includePunch = true
-  export let includeTaxonAuthorities = false
-  export let authorities
+  export let includeTaxonAuthorities
+
+  const labelFontSize = getContext('fontSize')
+  $: fontsizeem = $labelFontSize + 'pt'
 
   let labelDet = null
-  $: includeTaxonAuthorities, getLabelDet()
+  $: labelRecord, getLabelDet()
 
-  $:if(labelRecord) {
-    let hasManySSCs = Boolean(labelRecord.seriesSampleCounts)
-  }
-
-const getLabelDet = _ => {
+  const getLabelDet = _ => {
   //BIG TODO move all this logic to the label mapping funcs, shouldnt be here. 
   //TODO add sensu when we have it
 
@@ -25,7 +25,7 @@ const getLabelDet = _ => {
 
   if(includeTaxonAuthorities) {
     if(!labelRecord.scientificNameAuthorship || !labelRecord.scientificNameAuthorship.trim()){
-      if(authorities[labelRecord.canonicalName]){
+       if(authorities[labelRecord.canonicalName]){
         labelRecord.scientificNameAuthorship = authorities[labelRecord.canonicalName]
       }
     }
@@ -94,12 +94,13 @@ const getLabelDet = _ => {
 
     }
   }
+
 }
 
 </script>
 
 
-<div class="label">
+<div class="label" style="--font-size: {fontsizeem};">
   {#if showStorage}
     {#if labelRecord.storageBox}
       <div style="padding:4px;">Box: {labelRecord.storageBox} -- cut this off label</div>
@@ -290,9 +291,9 @@ const getLabelDet = _ => {
 
   .label {
     font-family: 'Arial Narrow', 'PT Sans Narrow', Arial, sans-serif;
-    font-size:0.6em;
+    font-size: calc(var(--font-size, 10pt) * 0.6);
     line-height: 95%;
-    width: 5cm;
+    width: 100%;
     border-bottom: 0.5px solid black;
     break-inside:avoid;
   }
@@ -318,7 +319,7 @@ const getLabelDet = _ => {
 
   .typestatus {
     text-transform: capitalize;
-    font-size: 1em;
+    font-size: var(--font-size, 1em);
     font-weight: bold;
   }
   .labelpunch {

@@ -201,10 +201,18 @@ export default function mapRecord(record) {
       }
       else {
         mappedRecord.specimenCount = null
+        const nums = mappedRecord.specimenStageSex.match(/\d+/g)
+        if (nums) {
+          mappedRecord.specimenCount = nums.reduce((x, y) => x + y, 0)
+        }
       }
     }
     else {
-      mappedRecord.specimenCount =  null
+      mappedRecord.specimenCount = null
+      const nums = mappedRecord.specimenStageSex.match(/\d+/g)
+      if (nums) {
+        mappedRecord.specimenCount = nums.reduce((x, y) => x + y, 0)
+      }
     }
 
     //change M and F to symbols

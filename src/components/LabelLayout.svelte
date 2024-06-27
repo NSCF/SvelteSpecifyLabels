@@ -1,16 +1,18 @@
 <script>
+  import { getContext } from "svelte";
   import Label from './Label.svelte'
 
 
   export let showInstitution = false
   export let collectionName
-  export let labelPerSpecimen = false
   export let detLabel = true
   export let detLabelOnly = false
   export let showStorage = true
   export let includePunch = true
   export let includeTaxonAuthorities = false
-  export let authorities
+
+  const labelWidth = getContext('labelWidth')
+  $: labelwidthcm = $labelWidth + 'cm'
 
   export let inputData = [
     {
@@ -37,10 +39,10 @@
 </script>
 
 <!-- ################################# -->
-<div class="cols"> 
+<div class="cols" style="--label-width: {labelwidthcm}"> 
   {#if inputData && inputData.length}
     {#each inputData as labelRecord}
-      <Label {labelRecord} {labelPerSpecimen} {showInstitution} {detLabel} {detLabelOnly} {showStorage} {includePunch} {includeTaxonAuthorities} {authorities} {collectionName}/>
+      <Label {labelRecord} {showInstitution} {detLabel} {detLabelOnly} {showStorage} {includePunch} {collectionName} {includeTaxonAuthorities}/>
     {/each}
   {:else}
   No data to show, refresh to start over and choose a different file
@@ -50,8 +52,8 @@
 
 <style>
   .cols {
-    column-width: 5cm;
-    column-gap: 0.1em;
+    column-width: var(--label-width, 5cm);
+    column-gap: 1em;
     break-before: column;
   }
 

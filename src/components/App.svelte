@@ -1,18 +1,16 @@
 <script>
+	import { setContext } from 'svelte'
+	import { writable } from 'svelte/store';
 	import Modal from 'svelte-simple-modal'
 	import ChooseFile from './ChooseFile.svelte'
 	import LabelLayout from './LabelLayout.svelte'
 	import Papa from 'papaparse'
 
 	import mapRecord from '../lib/mapRecord.js'
-
-	import getAuthorities from '../lib/getTaxonAuthorities.js'
 	
 	let toLabels = false
 	let data = []
-	let authorities = {}
-	let propogateIncludeTaxonAuthorities = false //we use this to send the instruction down once we have fetched the authorities
-
+	
 	let showInstitution = false
 	let collectionName
 	let labelPerSpecimen = false
@@ -21,57 +19,31 @@
 	let showStorage = false
 	let includePunch = false
 	let includeTaxonAuthorities = false
-	let showFetchingAuthorites = false
 
-	$: data, authorities, updateTaxonAuthorities()
-	$: includeTaxonAuthorities, updateTaxonAuthorities()
+	let labelCountField = writable()
+	setContext('labelCount', labelCountField)
 
-	const updateTaxonAuthorities = async _ => {
-		console.log('running update authorities')
-		if(data && data.length) {
-			if(includeTaxonAuthorities){
-				//first check if we already have the authorities
-				const taxaWithNoAuthority = new Set()
-				for (const record of data) {
-					if(record.canonicalName && !record.scientificNameAuthorship) {
-						if(authorities.hasOwnProperty(record.canonicalName)) {
-							record.scientificNameAuthorship = authorities[record.canonicalName]
-						}
-						else {
-							taxaWithNoAuthority.add(record.canonicalName)
-						}
-					}
-				}
+	const maxFontSize = 24
+	const minFontSize = 6
+	const defaultFontSize = 12
 
-				if(taxaWithNoAuthority.size){
-					showFetchingAuthorites = true
-					const newAuthorities = await getAuthorities(Array.from(taxaWithNoAuthority))
-					authorities = {...authorities, ...newAuthorities} //this triggers this function to run again...
-					showFetchingAuthorites = false
-					propogateIncludeTaxonAuthorities = true
-				}
-			}
+	const labelFontSize = writable(defaultFontSize)
+	setContext('fontSize', labelFontSize)
 
-			propogateIncludeTaxonAuthorities = includeTaxonAuthorities
-
-			console.log('going to labels')
-
-			toLabels = true;
-
-		} 
-		
-	}
+	const maxLabelWidth = 10
+	const minLabelWidth = 2
+	const defaultLabelWidth = 5
+	
+	const labelWidth = writable(defaultLabelWidth)
+	setContext('labelWidth', labelWidth)
 
 	const handleFileSelected = ev => {
 		let file = ev.detail.file
-		console.log('file type:', file.type)
 		if(file.type.endsWith('json')){
-			console.log('reading json')
 			file.text().then(fileText => {
 				const json = JSON.parse(fileText)
 				if(json && Array.isArray(json) && json.length){
 					data = json.map(x => mapRecord(x))
-					console.log(data[0])
 				}
 				else {
 					console.error(json)
@@ -80,40 +52,42 @@
 			}).catch(err => console.error('error parsing JSON:', err.message))
 		}
 		else {
-			console.log('reading csv')
 			Papa.parse(file, { 
 				header: true,
 				complete: async results => {
-					console.log(`${results.data.length} records read for labels`)
-					console.log('raw data:')
-					console.log(results.data[0])
+					console.log(`${results.data.length} records in file`)
 
-					for (let raw of results.data){
-						data.push(mapRecord(raw))
-					}
+					const fileData = results.data.map(raw => mapRecord(raw))
 
-					console.log('mapped:')
-					console.log(data[0])
-
-					//sort them
-					console.log('sorting records')
-					data.sort((a, b) => {
+					//sort first on storage location, then catalog number, then collector number
+					fileData.sort((a, b) => {
 						if (a.storageBox < b.storageBox){
 							return -1;
 						}
 						if ( a.storageBox > b.storageBox ){
 							return 1;
 						}
-						if (a.catalogNumber < b.catalogNumber){
-							return -1;
-						}
-						if ( a.catalogNumber > b.catalogNumber ){
-							return 1;
+						if ( a.storageBox == b.storageBox ){
+							if (a.catalogNumber < b.catalogNumber){
+								return -1;
+							}
+							if ( a.catalogNumber > b.catalogNumber ){
+								return 1;
+							}
+							if ( a.catalogNumber == b.catalogNumber ){
+								if (a.collectorNumber < b.collectorNumber){
+									return -1;
+								}
+								if ( a.collectorNumber > b.collectorNumber ){
+									return 1;
+								}
+							}
 						}
 						return 0;
 					})
 
-					data = data
+					data = fileData
+					toLabels = true;
 
 				}
 			})
@@ -125,17 +99,52 @@
 		window.print()
 	}
 
+	const handleFontSizeKeyboardInput = event => {
+		
+		if ($labelFontSize > maxFontSize ) {
+			alert(`max font size is ${maxFontSize}`)
+			$labelFontSize = defaultFontSize
+		}
+
+		if ($labelFontSize < minFontSize ) {
+			alert(`min font size is ${minFontSize}`)
+			$labelFontSize = defaultFontSize
+		}
+	}
+
+	const handleLabelWidthKeyboardInput = event => {
+		
+		if ($labelWidth > maxLabelWidth ) {
+			alert(`max label width is ${maxLabelWidth}`)
+			$labelWidth = defaultLabelWidth
+		}
+
+		if ($labelFontSize < minLabelWidth ) {
+			alert(`min label width is ${minLabelWidth}`)
+			$labelWidth = defaultLabelWidth
+		}
+	}
+
 </script>
 
 <main>
 	<Modal>
 		<div id='topstuff'> <!-- apologies to anyone reading this -->
 			<h2>Let's make some labels</h2>
-			<label style="display:inline">
+			<!-- TODO This is not working, need to fix it sometime -->
+			<!-- <label style="display:inline">
 				<input type=checkbox bind:checked={labelPerSpecimen}>
-				Make labels for each specimen
+				Duplicate labels using count
 			</label>
 			<br/>
+			{#if labelPerSpecimen && data.length}
+			<select bind:value={$labelCountField}>
+				<option value=""></option>
+				{#each Object.keys(data[0]).filter(x => x.toLowerCase().endsWith('count') || x.toLowerCase().endsWith('counts')) as key}
+					<option value="{key}">{key}</option>
+				{/each}
+			</select>
+			{/if} -->
 			<label style="display:inline">
 				<input type=checkbox bind:checked={showInstitution}>
 				Add my collection name
@@ -168,9 +177,20 @@
 				<input type=checkbox bind:checked={includeTaxonAuthorities}>
 				Include taxon authorities
 			</label>
-			{#if showFetchingAuthorites}
-				<span>   one moment please, this might take a few minutes (see the console)...</span>
-			{/if}
+			<br/>
+			<div style="display:flex; gap:5px">
+				<div>
+					<label>Font size</label>
+					<input type="number" min={minFontSize} max={maxFontSize} on:keyup={handleFontSizeKeyboardInput} bind:value={$labelFontSize}>
+				</div>
+				<div>
+					<label>Label width</label>
+					<div style="display:flex; align-items: baseline; ">
+						<input type="number" min={minLabelWidth} max={maxLabelWidth} on:keyup={handleLabelWidthKeyboardInput} bind:value={$labelWidth}>
+						<span>cm</span>
+					</div>
+				</div>
+			</div>
 			<br/>
 			<button on:click={showPrint} disabled={!toLabels}>Let's print these babies!!</button>
 			{#if !toLabels}
@@ -180,7 +200,7 @@
 		</div>
 		{#if toLabels}
 			<div>
-				<LabelLayout inputData={data} {labelPerSpecimen} {showInstitution} {detLabel} {detLabelOnly} {showStorage} {includePunch} includeTaxonAuthorities={propogateIncludeTaxonAuthorities} {authorities} {collectionName}></LabelLayout>
+				<LabelLayout inputData={data} {showInstitution} {detLabel} {detLabelOnly} {showStorage} {includePunch} {collectionName} {includeTaxonAuthorities}></LabelLayout>
 			</div>
 		{/if}
 	</Modal>
