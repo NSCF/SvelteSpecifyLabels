@@ -9,25 +9,17 @@
   export let detLabel = true
   export let detLabelOnly = false
   export let includePunch = true
-  export let includeTaxonAuthorities
+  export let includeTaxonAuthorities = false
 
   const labelFontSize = getContext('fontSize')
   $: fontsizeem = $labelFontSize + 'pt'
 
   let labelDet = null
-  $: labelRecord, getLabelDet()
+  $: labelRecord, includeTaxonAuthorities, getLabelDet()
 
   const getLabelDet = _ => {
   //BIG TODO move all this logic to the label mapping funcs, shouldnt be here. 
   //TODO add sensu when we have it
-
-  if(includeTaxonAuthorities) {
-    if(!labelRecord.scientificNameAuthorship || !labelRecord.scientificNameAuthorship.trim()){
-       if(authorities[labelRecord.canonicalName]){
-        labelRecord.scientificNameAuthorship = authorities[labelRecord.canonicalName]
-      }
-    }
-  }
 
   if(labelRecord.labelDetName){
     labelDet = labelRecord.labelDetName
@@ -302,11 +294,11 @@
     align-items: center;
     padding-top:3px;
     padding-bottom:3px;
-    min-height: 2cm;
+    min-height: 0cm;
   }
 
   .det-label {
-    min-height: 1cm;
+    min-height: 0cm;
   }
 
   .clearfix::after {

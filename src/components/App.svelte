@@ -4,9 +4,8 @@
 	import Modal from 'svelte-simple-modal'
 	import ChooseFile from './ChooseFile.svelte'
 	import LabelLayout from './LabelLayout.svelte'
-	import Papa from 'papaparse'
-
-	import mapRecord from '../lib/mapRecord.js'
+	import readCSV from '../lib/readCSVInput'
+	import readJSON from '../lib/readJSONInput'
 	
 	let toLabels = false
 	let data = []
@@ -22,6 +21,9 @@
 
 	let labelCountField = writable()
 	setContext('labelCount', labelCountField)
+	$: if (!labelPerSpecimen) {
+		$labelCountField = null
+	}
 
 	const maxFontSize = 24
 	const minFontSize = 6
@@ -37,62 +39,26 @@
 	const labelWidth = writable(defaultLabelWidth)
 	setContext('labelWidth', labelWidth)
 
-	const handleFileSelected = ev => {
+	const handleFileSelected = async ev => {
 		let file = ev.detail.file
 		if(file.type.endsWith('json')){
-			file.text().then(fileText => {
-				const json = JSON.parse(fileText)
-				if(json && Array.isArray(json) && json.length){
-					data = json.map(x => mapRecord(x))
-				}
-				else {
-					console.error(json)
-					alert('invalid json file, see console')
-				}
-			}).catch(err => console.error('error parsing JSON:', err.message))
+			try {
+				data = await readJSON(file)
+				toLabels = true
+			}
+			catch(err) {
+				alert(err.message)
+			}
 		}
 		else {
-			Papa.parse(file, { 
-				header: true,
-				complete: async results => {
-					console.log(`${results.data.length} records in file`)
-
-					const fileData = results.data.map(raw => mapRecord(raw))
-
-					//sort first on storage location, then catalog number, then collector number
-					fileData.sort((a, b) => {
-						if (a.storageBox < b.storageBox){
-							return -1;
-						}
-						if ( a.storageBox > b.storageBox ){
-							return 1;
-						}
-						if ( a.storageBox == b.storageBox ){
-							if (a.catalogNumber < b.catalogNumber){
-								return -1;
-							}
-							if ( a.catalogNumber > b.catalogNumber ){
-								return 1;
-							}
-							if ( a.catalogNumber == b.catalogNumber ){
-								if (a.collectorNumber < b.collectorNumber){
-									return -1;
-								}
-								if ( a.collectorNumber > b.collectorNumber ){
-									return 1;
-								}
-							}
-						}
-						return 0;
-					})
-
-					data = fileData
-					toLabels = true;
-
-				}
-			})
+			try {
+				data = await readCSV(file)
+				toLabels = true
+			}
+			catch(err) {
+				alert('bugger!')
+			}
 		}
-		
 	}
 
 	const showPrint = _ => {
@@ -131,6 +97,7 @@
 	<Modal>
 		<div id='topstuff'> <!-- apologies to anyone reading this -->
 			<h2>Let's make some labels</h2>
+			{#if toLabels}
 			<label style="display:inline">
 				<input type=checkbox bind:checked={labelPerSpecimen}>
 				Duplicate labels using count
@@ -191,7 +158,11 @@
 				</div>
 			</div>
 			<br/>
-			<button on:click={showPrint} disabled={!toLabels}>Let's print these babies!!</button>
+			<div style="display:flex; justify-content: space-between">
+				<button on:click={showPrint} disabled={!toLabels}>Let's print these babies!!</button>
+				<button style="background-color: transparent; border:none; color:grey" on:click={_ => toLabels = false}>reset</button>
+			</div>
+			{/if}
 			{#if !toLabels}
 			<ChooseFile on:file-selected={handleFileSelected} fileMIMETypes={['text/csv', 'application/vnd.ms-excel', 'text/json', 'application/json']}></ChooseFile>
 			{/if}

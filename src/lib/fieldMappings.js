@@ -4,10 +4,10 @@ export const fieldsMappings = {
   collectorNumber:['1.collectionobject.fieldNumber', 'recordNumber', 'Field Number', 'collNum', 'collNo', 'collectorNo'],
   geography: ['1,10,2.locality.text2', 'Orig. Prov'],
   country: ['1,10,2,3.geography.Country', 'Country'],
-  stateProvince: ['1,10,2,3.geography.State', 'Province'],
-  admin1Type: [], //specific for Arthrobase
-  county: [],
-  admin2Type: [], //specific for Arthrobase
+  stateProvince: ['1,10,2,3.geography.State', 'Province', 'province','state', 'State', 'admin1'],
+  admin1Type: ['stateProvinceType'], //specific for Arthrobase extracts
+  county: ['district', 'municipality', 'County', 'District', 'Municipality', 'admin2'],
+  admin2Type: [], //specific for Arthrobase extracts
   locality: ['1,10,2.locality.localityName', 'Locality Name'],
   fullLocality: [],//empty because searches on the key name only
   fullCoordsString: [], //ditto
@@ -36,7 +36,7 @@ export const fieldsMappings = {
   specimenStageSex: ['1,63-preparations.preparation.text4', 'Stage Sex Count', 'lifeStageSexCounts'],
   sex:['Sex', '1,63-preparations.preparation.text1'],
   lifeStage: ['stage', 'Stage', 'lifestage', '1,63-preparations.preparation.text2'],
-  specimenCount:['1,63-preparations.preparation.countAmt', 'Count'],
+  specimenCount:['1,63-preparations.preparation.countAmt', 'Count', 'count', 'countAmt'],
   seriesSampleCounts:[], //just for Arthrobase
   occurrenceRemarks: ['Remarks', 'Collection Object Remarks', '1.collectionobject.remarks', 'Collection Object/Remarks', 'seriesNote', 'notes'],
 
