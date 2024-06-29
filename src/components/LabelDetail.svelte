@@ -21,8 +21,6 @@
   //BIG TODO move all this logic to the label mapping funcs, shouldnt be here. 
   //TODO add sensu when we have it
 
-  console.log('getting labelDet')
-
   if(includeTaxonAuthorities) {
     if(!labelRecord.scientificNameAuthorship || !labelRecord.scientificNameAuthorship.trim()){
        if(authorities[labelRecord.canonicalName]){

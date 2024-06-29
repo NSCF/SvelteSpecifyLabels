@@ -131,8 +131,7 @@
 	<Modal>
 		<div id='topstuff'> <!-- apologies to anyone reading this -->
 			<h2>Let's make some labels</h2>
-			<!-- TODO This is not working, need to fix it sometime -->
-			<!-- <label style="display:inline">
+			<label style="display:inline">
 				<input type=checkbox bind:checked={labelPerSpecimen}>
 				Duplicate labels using count
 			</label>
@@ -144,7 +143,7 @@
 					<option value="{key}">{key}</option>
 				{/each}
 			</select>
-			{/if} -->
+			{/if}
 			<label style="display:inline">
 				<input type=checkbox bind:checked={showInstitution}>
 				Add my collection name

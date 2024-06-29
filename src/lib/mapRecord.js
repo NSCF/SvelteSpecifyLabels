@@ -203,15 +203,15 @@ export default function mapRecord(record) {
         mappedRecord.specimenCount = null
         const nums = mappedRecord.specimenStageSex.match(/\d+/g)
         if (nums) {
-          mappedRecord.specimenCount = nums.reduce((x, y) => x + y, 0)
+          mappedRecord.specimenCount = nums.reduce((x, y) => x + Number(y), 0)
         }
       }
     }
     else {
       mappedRecord.specimenCount = null
       const nums = mappedRecord.specimenStageSex.match(/\d+/g)
-      if (nums) {
-        mappedRecord.specimenCount = nums.reduce((x, y) => x + y, 0)
+      if (nums && nums.length) {
+        mappedRecord.specimenCount = nums.reduce((x, y) => x + Number(y), 0)
       }
     }
 

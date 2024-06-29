@@ -31,15 +31,17 @@
     labelsPerCount = false
   }
 
+  $: $labelCountField, console.log(labelRecord[$labelCountField])
+
 
 </script>
 
 
 {#if makeLabel}
-  {#if !labelsPerCount || (labelsPerCount && Number(labelRecord[$labelCountField]))}
+  {#if !labelsPerCount || (labelsPerCount && !Number(labelRecord[$labelCountField]))}
     <LabelDetail {labelRecord} {showInstitution} {detLabel} {detLabelOnly} {showStorage} {includePunch} {collectionName} {includeTaxonAuthorities}/>
   {:else}
-    {#each Array(labelRecord[$labelCountField] || 1) as i}
+    {#each Array(labelRecord[$labelCountField]) as i}
       <LabelDetail {labelRecord} {showInstitution} {detLabel} {detLabelOnly} {showStorage} {includePunch} {collectionName} {includeTaxonAuthorities}/>
     {/each}
   {/if}
