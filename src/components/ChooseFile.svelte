@@ -100,7 +100,7 @@ function toEmitOrNotToEmit(file){
     on:click={handleBoxClick}
     ondragover="return false"
   >
-    <p>Drag and drop a CSV file with your label data here or click to select from your hard drive</p>
+    <p >Drag and drop a CSV file with your label data here or click to select from your hard drive</p>
   </div>
 </div>
 <input type="file" bind:this={hiddenInput} style="visibility:hidden" on:change={onFileSelected}>
@@ -129,6 +129,7 @@ function toEmitOrNotToEmit(file){
     margin-bottom: 5em;
     margin-left: 2em;
     margin-right: 2em;
+    pointer-events: none;
   }
 
   .inactive {
