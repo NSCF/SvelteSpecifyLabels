@@ -159,7 +159,7 @@
 			</div>
 			<br/>
 			<div style="display:flex; justify-content: space-between">
-				<button on:click={showPrint} disabled={!toLabels}>Let's print these babies!!</button>
+				<button on:click={showPrint} disabled={!toLabels}>Print labels</button>
 				<button style="background-color: transparent; border:none; color:grey" on:click={_ => toLabels = false}>reset</button>
 			</div>
 			{/if}

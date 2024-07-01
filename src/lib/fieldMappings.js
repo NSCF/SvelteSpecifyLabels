@@ -1,6 +1,6 @@
 export const fieldsMappings = { 
   //this uses DwC, mostly...
-  catalogNumber: ['1.collectionobject.catalogNumber', 'Catalog Number', 'CatNum'], 
+  catalogNumber: ['1.collectionobject.catalogNumber', 'Catalog Number', 'CatNum', 'catnum'], 
   collectorNumber:['1.collectionobject.fieldNumber', 'recordNumber', 'Field Number', 'collNum', 'collNo', 'collectorNo'],
   geography: ['1,10,2.locality.text2', 'Orig. Prov'],
   country: ['1,10,2,3.geography.Country', 'Country'],
