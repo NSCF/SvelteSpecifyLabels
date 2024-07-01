@@ -152,14 +152,14 @@
 				<div>
 					<label>Label width</label>
 					<div style="display:flex; align-items: baseline; ">
-						<input type="number" min={minLabelWidth} max={maxLabelWidth} on:keyup={handleLabelWidthKeyboardInput} bind:value={$labelWidth}>
+						<input type="number" min={minLabelWidth} max={maxLabelWidth} step=".5" on:keyup={handleLabelWidthKeyboardInput} bind:value={$labelWidth}>
 						<span>cm</span>
 					</div>
 				</div>
 			</div>
 			<br/>
 			<div style="display:flex; justify-content: space-between">
-				<button on:click={showPrint} disabled={!toLabels}>Print labels</button>
+				<button on:click={showPrint} disabled={!toLabels}>Print these labels</button>
 				<button style="background-color: transparent; border:none; color:grey" on:click={_ => toLabels = false}>reset</button>
 			</div>
 			{/if}
