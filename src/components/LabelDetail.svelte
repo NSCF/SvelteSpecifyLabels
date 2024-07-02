@@ -100,11 +100,16 @@
         </div>
       {/if}
       <div class="labeltext">
+        {#if $settings.showInstitution}
+          <div class="museumname">
+            <span>{$settings.collectionName}</span>
+          </div>
+        {/if}
         <div>
           {#if labelRecord.catalogNumber}
             <span class="floatleft"><strong>{labelRecord.catalogNumber}</strong></span>
             {#if labelRecord.collectorNumber}
-              <span class="floatright inlineblock padright">Coll.Num: {labelRecord.collectorNumber}</span>
+              <span class="floatright inlineblock padright">{labelRecord.collectorNumber}</span>
             {/if}
           {:else}
           <span class="floatright inlineblock padright"><strong>{labelRecord.collectorNumber}</strong></span>
@@ -146,13 +151,17 @@
           {/if}
         </div>
         {#if labelRecord.specimenCount}
-          <div>
-            <span class="padright">Specimens:&nbsp;{labelRecord.specimenCount}</span>
-            {#if labelRecord.specimenStageSex}
-              <span class="inlineblock">({labelRecord.specimenStageSex})</span>
-            {/if}
-          </div>
-        {:else}
+          {#if labelRecord.specimenStageSex && labelRecord.specimenStageSex.match(/(\d+)/g).reduce((x, y) => x + Number(y), 0) == Number(labelRecord.specimenCount)}
+            <span class="inlineblock">{labelRecord.specimenStageSex}</span>
+          {:else}
+            <div>
+              <span class="padright">Specimens:&nbsp;{labelRecord.specimenCount}</span>
+              {#if labelRecord.specimenStageSex}
+                <span class="inlineblock">({labelRecord.specimenStageSex})</span>
+              {/if}
+            </div>
+          {/if}
+        {:else} 
           {#if labelRecord.specimenStageSex}
             <span class="inlineblock">{labelRecord.specimenStageSex}</span>
           {/if}
@@ -164,11 +173,6 @@
             {#if labelRecord.typeNumber}
               <span class="floatright">Type No:{labelRecord.typeNumber}</span>
             {/if}
-          </div>
-        {/if}
-        {#if $settings.showInstitution}
-          <div class="museumname">
-            <span>{$settings.collectionName}</span>
           </div>
         {/if}
       </div>
@@ -340,7 +344,8 @@
   }
   .museumname {
     text-align:center;
-    font-weight:bold
+    font-weight:bold;
+    margin-bottom:.5em;
   }
 
   hr.subdiv {
