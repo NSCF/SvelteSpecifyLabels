@@ -22,12 +22,12 @@
 
 
 {#if makeLabel}
-  {#if !$settings.labelsPerCount || ($settings.labelsPerCount && !Number(labelRecord[$settings.labelCountField]))}
-    <LabelDetail {labelRecord} />
-  {:else}
+  {#if $settings.labelPerSpecimen && $settings.labelCountField && Number(labelRecord[$settings.labelCountField])}
     {#each Array(labelRecord[$settings.labelCountField]) as i}
       <LabelDetail {labelRecord} />
     {/each}
+  {:else}
+    <LabelDetail {labelRecord} />
   {/if}
 {:else}
   <span>{labelRecord.catalogNumber}: insufficent data to make label...</span>
