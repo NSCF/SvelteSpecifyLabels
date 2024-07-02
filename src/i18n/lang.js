@@ -16,7 +16,7 @@ const en = {
 }
 
 const afr = {
-  header: "Koms os begin - Maak so paar etikette, hier gaan ons nou! Heeha!",
+  header: "Koms ons begin - Maak so paar etikette, hier gaan ons nou! Heeha!",
   count: "Dupliseer etikette gebasseer op telling", 
   collName: "Voegby my versameling",
   dets: "Sluit in determinasie labels",
