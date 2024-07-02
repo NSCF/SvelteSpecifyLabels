@@ -3,95 +3,86 @@
   import { getContext } from "svelte";
 
   export let labelRecord
-  export let showInstitution = false
-  export let showStorage = false
-  export let collectionName
-  export let detLabel = true
-  export let detLabelOnly = false
-  export let includePunch = true
-  export let includeTaxonAuthorities = false
 
-  const labelFontSize = getContext('fontSize')
-  $: fontsizeem = $labelFontSize + 'pt'
+  const settings = getContext('settings')
 
   let labelDet = null
-  $: labelRecord, includeTaxonAuthorities, getLabelDet()
+  $: if (labelRecord || $settings.includeTaxonAuthorities) getLabelDet()
 
   const getLabelDet = _ => {
-  //BIG TODO move all this logic to the label mapping funcs, shouldnt be here. 
-  //TODO add sensu when we have it
+    //BIG TODO move all this logic to the label mapping funcs, shouldnt be here. 
+    //TODO add sensu when we have it
 
-  if(labelRecord.labelDetName){
-    labelDet = labelRecord.labelDetName
-    if(!labelDet.includes(' sp.') && !labelDet.includes('?')) {
-      if(includeTaxonAuthorities && labelRecord.labelDetName == labelRecord.canonicalName && labelRecord.scientificNameAuthorship) {
-        labelDet += ' ' + labelRecord.scientificNameAuthorship
-      }
-    }
-  }
-  else {
-    if(labelRecord.canonicalName && labelRecord.canonicalName.trim()){
-    
-      let questionMark = false
-      if(labelRecord.identificationConfidence){
-        if(labelRecord.identificationConfidence.toLowerCase() != 'high'){
-          questionMark = true
-        }
-      }
-
-      if(labelRecord.identificationQualifier){
-        if(['aff.', 'cf.', 'nr'].includes(labelRecord.identificationQualifier)){
-          let nameParts = labelRecord.canonicalName.split(' ')
-          if(nameParts.length > 1){
-            let lastPart = nameParts.pop()
-            nameParts.push(labelRecord.identificationQualifier)
-            nameParts.push(lastPart)
-            if(questionMark){
-              nameParts.push('?')
-            }
-            else if(labelRecord.scientificNameAuthorship && includeTaxonAuthorities && !nameParts.includes('sp.')){
-              nameParts.push(labelRecord.scientificNameAuthorship)
-            }
-            labelDet = nameParts.join(' ')
-          }
-          else {
-            labelDet = [labelRecord.identificationQualifier, labelRecord.canonicalName].join(' ')
-            if(questionMark){
-              labelDet += ' ?'
-            }
-            else if (labelRecord.scientificNameAuthorship && includeTaxonAuthorities  && !labelDet.includes(' sp.')){
-              labelDet += ` ${labelRecord.scientificNameAuthorship}`
-            }
-          }
-        }
-        else {
-          labelDet = [labelRecord.canonicalName, labelRecord.identificationQualifier].join(' ')
-        } 
-      }
-      else {
-        labelDet = labelRecord.canonicalName
-        if(questionMark) {
-          labelDet += ' ?'
-        }
-        else if (labelRecord.scientificNameAuthorship && includeTaxonAuthorities && !labelDet.includes(' sp.')){
-          labelDet += ` ${labelRecord.scientificNameAuthorship}`
+    if(labelRecord.labelDetName){
+      labelDet = labelRecord.labelDetName
+      if(!labelDet.includes(' sp.') && !labelDet.includes('?')) {
+        if($settings.includeTaxonAuthorities && labelRecord.labelDetName == labelRecord.canonicalName && labelRecord.scientificNameAuthorship) {
+          labelDet += ' ' + labelRecord.scientificNameAuthorship
         }
       }
     }
     else {
+      if(labelRecord.canonicalName && labelRecord.canonicalName.trim()){
+      
+        let questionMark = false
+        if(labelRecord.identificationConfidence){
+          if(labelRecord.identificationConfidence.toLowerCase() != 'high'){
+            questionMark = true
+          }
+        }
 
-      labelDet = labelRecord.labelDetName
+        if(labelRecord.identificationQualifier){
+          if(['aff.', 'cf.', 'nr'].includes(labelRecord.identificationQualifier)){
+            let nameParts = labelRecord.canonicalName.split(' ')
+            if(nameParts.length > 1){
+              let lastPart = nameParts.pop()
+              nameParts.push(labelRecord.identificationQualifier)
+              nameParts.push(lastPart)
+              if(questionMark){
+                nameParts.push('?')
+              }
+              else if(labelRecord.scientificNameAuthorship && $settings.includeTaxonAuthorities && !nameParts.includes('sp.')){
+                nameParts.push(labelRecord.scientificNameAuthorship)
+              }
+              labelDet = nameParts.join(' ')
+            }
+            else {
+              labelDet = [labelRecord.identificationQualifier, labelRecord.canonicalName].join(' ')
+              if(questionMark){
+                labelDet += ' ?'
+              }
+              else if (labelRecord.scientificNameAuthorship && $settings.includeTaxonAuthorities  && !labelDet.includes(' sp.')){
+                labelDet += ` ${labelRecord.scientificNameAuthorship}`
+              }
+            }
+          }
+          else {
+            labelDet = [labelRecord.canonicalName, labelRecord.identificationQualifier].join(' ')
+          } 
+        }
+        else {
+          labelDet = labelRecord.canonicalName
+          if(questionMark) {
+            labelDet += ' ?'
+          }
+          else if (labelRecord.scientificNameAuthorship && $settings.includeTaxonAuthorities && !labelDet.includes(' sp.')){
+            labelDet += ` ${labelRecord.scientificNameAuthorship}`
+          }
+        }
+      }
+      else {
 
+        labelDet = labelRecord.labelDetName
+
+      }
     }
-  }
 
-}
+  }
 
 </script>
 
-
-<div class="label" style="--font-size: {fontsizeem};">
-  {#if showStorage}
+<div class="label" style="--font-size: { $settings.fontSize + 'pt'};">
+  {#if $settings.showStorage}
     {#if labelRecord.storageBox}
       <div style="padding:4px;">Box: {labelRecord.storageBox} -- cut this off label</div>
     {:else}
@@ -99,9 +90,9 @@
     {/if}
     <hr class='subdiv' />
   {/if}
-  {#if !detLabelOnly}
+  {#if !$settings.detLabelOnly}
     <div class="label-part">
-      {#if includePunch}
+      {#if $settings.includePunch}
         <div class="labelpunch">
           <svg height="10" width="10">
             <circle cx="5" cy="5" r="2" fill="black" />
@@ -175,9 +166,9 @@
             {/if}
           </div>
         {/if}
-        {#if showInstitution}
+        {#if $settings.showInstitution}
           <div class="museumname">
-            <span>{collectionName}</span>
+            <span>{$settings.collectionName}</span>
           </div>
         {/if}
       </div>
@@ -218,12 +209,12 @@
     {/if}
 
   {/if}
-  {#if (detLabel || detLabelOnly) && labelDet} <!-- Apologies to readers for these, detLabel flags whether to add the label, labelDet is what goes on the label -->
-    {#if !detLabelOnly}
+  {#if ($settings.detLabel || $settings.detLabelOnly) && labelDet} <!-- Apologies to readers for these, detLabel flags whether to add the label, labelDet is what goes on the label -->
+    {#if !$settings.detLabelOnly}
       <hr class='subdiv' />
     {/if}
     <div class="label-part det-label">
-      {#if includePunch}
+      {#if $settings.includePunch}
         <div class="labelpunch">
           <svg height="10" width="10">
             <circle cx="5" cy="5" r="2" fill="black" />
@@ -274,6 +265,7 @@
     </div>
   {/if}
 </div>
+
 
 <!-- ################################# -->
 

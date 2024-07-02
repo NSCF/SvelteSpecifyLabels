@@ -6,38 +6,41 @@
 	import LabelLayout from './LabelLayout.svelte'
 	import readCSV from '../lib/readCSVInput'
 	import readJSON from '../lib/readJSONInput'
+	import langs from '../i18n/lang'
+
+	let langOptions = ['en', 'afr']
 	
 	let toLabels = false
 	let data = []
-	
-	let showInstitution = false
-	let collectionName
-	let labelPerSpecimen = false
-	let detLabel = true
-	let detLabelOnly = false
-	let showStorage = false
-	let includePunch = false
-	let includeTaxonAuthorities = false
-
-	let labelCountField = writable()
-	setContext('labelCount', labelCountField)
-	$: if (!labelPerSpecimen) {
-		$labelCountField = null
-	}
 
 	const maxFontSize = 24
 	const minFontSize = 6
 	const defaultFontSize = 12
-
-	const labelFontSize = writable(defaultFontSize)
-	setContext('fontSize', labelFontSize)
-
 	const maxLabelWidth = 10
 	const minLabelWidth = 2
 	const defaultLabelWidth = 5
-	
-	const labelWidth = writable(defaultLabelWidth)
-	setContext('labelWidth', labelWidth)
+
+	let settings = writable({
+		lang: 'en',
+		showInstitution: false,
+		collectionName: null,
+		labelPerSpecimen: false,
+		labelCountField: null,
+		detLabel: true,
+		detLabelOnly: false,
+		showStorage: false,
+		includePunch: false,
+		includeTaxonAuthorities: false,
+		fontSize: defaultFontSize,
+		labelWidth: defaultLabelWidth
+	})
+
+	if (localStorage.getItem("labelSettings") != null) {
+		console.log('using saved settings')
+		$settings = JSON.parse(localStorage.getItem("labelSettings"))
+	}
+
+	setContext('settings', settings)
 
 	const handleFileSelected = async ev => {
 		let file = ev.detail.file
@@ -62,33 +65,62 @@
 	}
 
 	const showPrint = _ => {
+		localStorage.setItem('labelSettings', JSON.stringify($settings))
 		window.print()
 	}
 
-	const handleFontSizeKeyboardInput = event => {
+	const handleFontSizeKeyboardInput = _ => {
 		
-		if ($labelFontSize > maxFontSize ) {
+		if (fontSize > maxFontSize ) {
 			alert(`max font size is ${maxFontSize}`)
-			$labelFontSize = defaultFontSize
+			fontSize = defaultFontSize
 		}
 
-		if ($labelFontSize < minFontSize ) {
+		if (fontSize < minFontSize ) {
 			alert(`min font size is ${minFontSize}`)
-			$labelFontSize = defaultFontSize
+			fontSize = defaultFontSize
 		}
 	}
 
-	const handleLabelWidthKeyboardInput = event => {
+	const handleLabelWidthKeyboardInput = _ => {
 		
-		if ($labelWidth > maxLabelWidth ) {
+		if (labelWidth > maxLabelWidth ) {
 			alert(`max label width is ${maxLabelWidth}`)
-			$labelWidth = defaultLabelWidth
+			labelWidth = defaultLabelWidth
 		}
 
-		if ($labelFontSize < minLabelWidth ) {
+		if (labelWidth < minLabelWidth ) {
 			alert(`min label width is ${minLabelWidth}`)
-			$labelWidth = defaultLabelWidth
+			labelWidth = defaultLabelWidth
 		}
+	}
+
+	const handLangButtonClick = ev => {
+		const langIndex = langOptions.indexOf($settings.lang)
+		const nextIndex = langIndex + 1
+		if (langOptions.length > nextIndex) {
+			$settings.lang = langOptions[nextIndex]
+		}
+		else {
+			$settings.lang = langOptions[0]
+		}
+	}
+
+	const reset = _ => {
+		data = []
+		toLabels = false
+		localStorage.removeItem('labelSettings')
+		$settings.showInstitution = false
+		$settings.collectionName = null
+		$settings.labelPerSpecimen = false
+		$settings.labelCountField = null
+		$settings.detLabel = true
+		$settings.detLabelOnly = false
+		$settings.showStorage = false
+		$settings.includePunch = false
+		$settings.includeTaxonAuthorities = false
+		$settings.fontSize = defaultFontSize
+		$settings.labelWidth = defaultLabelWidth
 	}
 
 </script>
@@ -96,15 +128,18 @@
 <main>
 	<Modal>
 		<div id='topstuff'> <!-- apologies to anyone reading this -->
-			<h2>Let's make some labels</h2>
+			<div style="display:flex; justify-content: space-between ">
+				<h2>{langs[$settings.lang]['header']}</h2>
+				<button style="background-color: transparent; border:none; color:grey" on:click={handLangButtonClick}>{$settings.lang}</button>
+			</div>
 			{#if toLabels}
 			<label style="display:inline">
-				<input type=checkbox bind:checked={labelPerSpecimen}>
-				Duplicate labels using count
+				<input type=checkbox bind:checked={$settings.labelPerSpecimen}>
+				{langs[$settings.lang]['count']}
 			</label>
 			<br/>
-			{#if labelPerSpecimen && data.length}
-			<select bind:value={$labelCountField}>
+			{#if $settings.labelPerSpecimen && data.length}
+			<select bind:value={$settings.labelCountField}>
 				<option value=""></option>
 				{#each Object.keys(data[0]).filter(x => x.toLowerCase().endsWith('count') || x.toLowerCase().endsWith('counts')) as key}
 					<option value="{key}">{key}</option>
@@ -112,55 +147,55 @@
 			</select>
 			{/if}
 			<label style="display:inline">
-				<input type=checkbox bind:checked={showInstitution}>
-				Add my collection name
+				<input type=checkbox bind:checked={$settings.showInstitution}>
+				{langs[$settings.lang]['collName']}
 			</label>
-			{#if showInstitution}
-  		<input type="text" name="gender" id="male" bind:value={collectionName} style="display:inline; margin:0;height:10px" placeholder="Add collection..."><br>
+			{#if $settings.showInstitution}
+  		<input type="text" name="gender" id="male" bind:value={$settings.collectionName} style="display:inline; margin:0;height:10px" placeholder="Add collection..."><br>
 			{/if}
 			<br/>
 			<label style="display:inline">
-				<input type=checkbox bind:checked={detLabel}>
-				Include det labels
+				<input type=checkbox bind:checked={$settings.detLabel}>
+				{langs[$settings.lang]['dets']}
 			</label>
 			<br/>
 			<label style="display:inline">
-				<input type=checkbox bind:checked={detLabelOnly}>
-				Make det labels only
+				<input type=checkbox bind:checked={$settings.detLabelOnly}>
+				{langs[$settings.lang]['detsOnly']}
 			</label>
 			<br/>
 			<label style="display:inline">
-				<input type=checkbox bind:checked={includePunch}>
-				Include punch mark
+				<input type=checkbox bind:checked={$settings.includePunch}>
+				{langs[$settings.lang]['punch']}
 			</label>
 			<br/>
 			<label style="display:inline">
-				<input type=checkbox bind:checked={showStorage}>
-				Show storage info
+				<input type=checkbox bind:checked={$settings.showStorage}>
+				{langs[$settings.lang]['storage']}
 			</label>
 			<br/>
 			<label style="display:inline">
-				<input type=checkbox bind:checked={includeTaxonAuthorities}>
-				Include taxon authorities
+				<input type=checkbox bind:checked={$settings.includeTaxonAuthorities}>
+				{langs[$settings.lang]['authors']}
 			</label>
 			<br/>
 			<div style="display:flex; gap:5px">
 				<div>
-					<label>Font size</label>
-					<input type="number" min={minFontSize} max={maxFontSize} on:keyup={handleFontSizeKeyboardInput} bind:value={$labelFontSize}>
+					<label>{langs[$settings.lang]['fontSize']}</label>
+					<input type="number" min={minFontSize} max={maxFontSize} on:keyup={handleFontSizeKeyboardInput} bind:value={$settings.fontSize} >
 				</div>
 				<div>
-					<label>Label width</label>
+					<label>{langs[$settings.lang]['labelWidth']}</label>
 					<div style="display:flex; align-items: baseline; ">
-						<input type="number" min={minLabelWidth} max={maxLabelWidth} step=".5" on:keyup={handleLabelWidthKeyboardInput} bind:value={$labelWidth}>
-						<span>cm</span>
+						<input type="number" min={minLabelWidth} max={maxLabelWidth} step=".5" on:keyup={handleLabelWidthKeyboardInput} bind:value={$settings.labelWidth} >
+						<span>{langs[$settings.lang]['labelWidthUnit']}</span>
 					</div>
 				</div>
 			</div>
 			<br/>
 			<div style="display:flex; justify-content: space-between">
-				<button on:click={showPrint} disabled={!toLabels}>Print these labels</button>
-				<button style="background-color: transparent; border:none; color:grey" on:click={_ => toLabels = false}>reset</button>
+				<button on:click={showPrint} disabled={!toLabels}>{langs[$settings.lang]['printButton']}</button>
+				<button style="background-color: transparent; border:none; color:grey" on:click={reset}>{langs[$settings.lang]['reset']}</button>
 			</div>
 			{/if}
 			{#if !toLabels}
@@ -170,7 +205,7 @@
 		</div>
 		{#if toLabels}
 			<div>
-				<LabelLayout inputData={data} {showInstitution} {detLabel} {detLabelOnly} {showStorage} {includePunch} {collectionName} {includeTaxonAuthorities}></LabelLayout>
+				<LabelLayout inputData={data} />
 			</div>
 		{/if}
 	</Modal>

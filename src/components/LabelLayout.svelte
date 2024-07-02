@@ -2,17 +2,7 @@
   import { getContext } from "svelte";
   import Label from './Label.svelte'
 
-
-  export let showInstitution = false
-  export let collectionName
-  export let detLabel = true
-  export let detLabelOnly = false
-  export let showStorage = true
-  export let includePunch = true
-  export let includeTaxonAuthorities = false
-
-  const labelWidth = getContext('labelWidth')
-  $: labelwidthcm = $labelWidth + 'cm'
+  const settings = getContext('settings')
 
   export let inputData = [
     {
@@ -39,10 +29,10 @@
 </script>
 
 <!-- ################################# -->
-<div class="cols" style="--label-width: {labelwidthcm}"> 
+<div class="cols" style="--label-width: { $settings.labelWidth + 'cm' }"> 
   {#if inputData && inputData.length}
     {#each inputData as labelRecord}
-      <Label {labelRecord} {showInstitution} {detLabel} {detLabelOnly} {showStorage} {includePunch} {collectionName} {includeTaxonAuthorities}/>
+      <Label {labelRecord} />
     {/each}
   {:else}
   No data to show, refresh to start over and choose a different file

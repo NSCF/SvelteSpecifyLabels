@@ -3,13 +3,6 @@
   import LabelDetail from './LabelDetail.svelte'
 
   export let labelRecord
-  export let showInstitution = false
-  export let collectionName
-  export let detLabel = true
-  export let detLabelOnly = false
-  export let showStorage = true
-  export let includePunch = true
-  export let includeTaxonAuthorities = false
 
   let makeLabel
 
@@ -22,31 +15,21 @@
     labelRecord.labelDetName ||
     labelRecord.canonicalName)
 
-  let labelsPerCount = false
-  const labelCountField = getContext('labelCount')
-  $: if ($labelCountField && labelRecord && $labelCountField in labelRecord) {
-    labelsPerCount = true
-  }
-  else {
-    labelsPerCount = false
-  }
-
-  $: $labelCountField, console.log(labelRecord[$labelCountField])
+  const settings = getContext('settings')
 
 
 </script>
 
 
 {#if makeLabel}
-  {#if !labelsPerCount || (labelsPerCount && !Number(labelRecord[$labelCountField]))}
-    <LabelDetail {labelRecord} {showInstitution} {detLabel} {detLabelOnly} {showStorage} {includePunch} {collectionName} {includeTaxonAuthorities}/>
+  {#if !$settings.labelsPerCount || ($settings.labelsPerCount && !Number(labelRecord[$settings.labelCountField]))}
+    <LabelDetail {labelRecord} />
   {:else}
-    {#each Array(labelRecord[$labelCountField]) as i}
-      <LabelDetail {labelRecord} {showInstitution} {detLabel} {detLabelOnly} {showStorage} {includePunch} {collectionName} {includeTaxonAuthorities}/>
+    {#each Array(labelRecord[$settings.labelCountField]) as i}
+      <LabelDetail {labelRecord} />
     {/each}
   {/if}
 {:else}
   <span>{labelRecord.catalogNumber}: insufficent data to make label...</span>
 {/if}
 
-<!-- ################################# -->

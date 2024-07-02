@@ -16,9 +16,7 @@ export default function(file) {
           reject('oooppppssss!!!!')
         }
 
-        console.log(`${results.data.length} records in file`)
         const fileData = results.data.map(raw => mapRecord(raw))
-        console.log(fileData)
         //sort first on storage location, then catalog number, then collector number
         fileData.sort((a, b) => {
           if (a.storageBox < b.storageBox){
