@@ -36,7 +36,6 @@
 	})
 
 	if (localStorage.getItem("labelSettings") != null) {
-		console.log('using saved settings')
 		$settings = JSON.parse(localStorage.getItem("labelSettings"))
 	}
 
