@@ -226,43 +226,34 @@
         </div>
       {/if}
       <div class="labeltext">
-        {#if labelRecord.catalogNumber}
-        <div class="floatright inlineblock padright"><strong>{labelRecord.catalogNumber}</strong></div>
-        {:else}
-          {#if labelRecord.collectorNumber}
-            <div class="floatright inlineblock padright"><strong>{labelRecord.collectorNumber}</strong></div>
+        <div style="display:flex; justify-content:space-between">
+          {#if labelRecord.typeStatus}
+            <div class="typestatus">{labelRecord.typeStatus}</div>
+          {:else if labelRecord.catalogNumber || labelRecord.collectorNumber}
+            <div /> <!-- a placeholder -->
           {/if}
-        {/if}
+          {#if labelRecord.catalogNumber}
+            <div class="padright"><strong>{labelRecord.catalogNumber}</strong></div>
+          {:else if labelRecord.collectorNumber}
+            <div class="padright"><strong>{labelRecord.collectorNumber}</strong></div>            
+          {/if}
+        </div>
         <div class="clearfloat">
-          <!-- TODO if type then original name otherwise preferred name -->
-          <span class="inlineblock">{labelDet}</span>
+          <span class="inlineblock" style="font-weight: bold">{labelDet}</span>
         </div>
         <div>
           {#if labelRecord.identifiedBy || labelRecord.dateIdentified}
-            {#if labelRecord.acceptedName}
-              <span>(accepted name: {labelRecord.acceptedName})</span><br/>
-            {/if}
             <span>det: </span>
             <span >{labelRecord.identifiedBy || ''}</span>
             <span class="inlineblock">{labelRecord.dateIdentified || ''}</span>
-          {:else}
-          <!-- TODO if type then exclude this -->
-            {#if labelRecord.acceptedName}
-              <span>(accepted name: {labelRecord.acceptedName}; orig. det. conf. Jordaan & Steenkamp 2020)</span>
-            {:else}
-              <span>(orig. det. conf. Jordaan & Steenkamp 2020)</span>
-            {/if}
           {/if}
         </div>
         <div>
           {labelRecord.identificationRemarks || ''}
         </div>
-        {#if labelRecord.typeStatus}
+        {#if labelRecord.typeStatus && labelRecord.typeNumber}
           <div class="clearfix">
-            <span class="floatleft typestatus">{labelRecord.typeStatus}</span>
-            {#if labelRecord.typeNumber}
-              <span class="floatright">Type No:{labelRecord.typeNumber}</span>
-            {/if}
+            <span class="floatright">Type No:{labelRecord.typeNumber}</span>
           </div>
         {/if}
       </div>
@@ -278,7 +269,7 @@
   .label {
     font-family: 'Arial Narrow', 'PT Sans Narrow', Arial, sans-serif;
     font-size: calc(var(--font-size, 10pt) * 0.6);
-    line-height: 95%;
+    line-height: 98%;
     width: 100%;
     border-bottom: 0.5px solid black;
     break-inside:avoid;
@@ -304,8 +295,7 @@
   }
 
   .typestatus {
-    text-transform: capitalize;
-    font-size: var(--font-size, 1em);
+    text-transform: uppercase;
     font-weight: bold;
   }
   .labelpunch {

@@ -105,10 +105,13 @@
 		}
 	}
 
-	const reset = _ => {
+	const clear = _ => {
 		data = []
 		toLabels = false
-		localStorage.removeItem('labelSettings')
+	}
+
+	const reset = _ => {
+		
 		$settings.showInstitution = false
 		$settings.collectionName = null
 		$settings.labelPerSpecimen = false
@@ -120,6 +123,8 @@
 		$settings.includeTaxonAuthorities = false
 		$settings.fontSize = defaultFontSize
 		$settings.labelWidth = defaultLabelWidth
+
+		localStorage.removeItem('labelSettings')
 	}
 
 </script>
@@ -194,7 +199,10 @@
 			<br/>
 			<div style="display:flex; justify-content: space-between">
 				<button on:click={showPrint} disabled={!toLabels}>{langs[$settings.lang]['printButton']}</button>
-				<button style="background-color: transparent; border:none; color:grey" on:click={reset}>{langs[$settings.lang]['reset']}</button>
+				<div>
+					<button style="background-color: transparent; border:none; color:grey" on:click={clear}>{langs[$settings.lang]['clear']}</button>
+					<button style="background-color: transparent; border:none; color:grey" on:click={reset}>{langs[$settings.lang]['reset']}</button>
+				</div>
 			</div>
 			{/if}
 			{#if !toLabels}
@@ -229,6 +237,10 @@
 
  @media print
 {    
+		main {
+			margin-top:0;
+		}
+
     #topstuff
     {
         display: none !important;

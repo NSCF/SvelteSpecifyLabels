@@ -1,36 +1,36 @@
 export const fieldsMappings = { 
   //this uses DwC, mostly...
-  catalogNumber: ['1.collectionobject.catalogNumber', 'Catalog Number', 'CatNum', 'catnum'], 
-  collectorNumber:['1.collectionobject.fieldNumber', 'recordNumber', 'Field Number', 'collNum', 'collNo', 'collectorNo'],
+  catalogNumber: ['1.collectionobject.catalogNumber', 'Catalog Number', 'CatNum', 'catnum', 'catalognumber'], 
+  collectorNumber:['1.collectionobject.fieldNumber', 'recordNumber', 'Field Number', 'collNum', 'collNo', 'collectorNo', 'collectornumber'],
   geography: ['1,10,2.locality.text2', 'Orig. Prov'],
-  country: ['1,10,2,3.geography.Country', 'Country'],
-  stateProvince: ['1,10,2,3.geography.State', 'Province', 'province','state', 'State', 'admin1'],
+  country: ['1,10,2,3.geography.Country', 'Country','country'],
+  stateProvince: ['1,10,2,3.geography.State', 'Province', 'province','state', 'State', 'admin1', 'stateprovince'],
   admin1Type: ['stateProvinceType'], //specific for Arthrobase extracts
-  county: ['district', 'municipality', 'County', 'District', 'Municipality', 'admin2'],
+  county: ['district', 'municipality', 'County', 'District', 'Municipality', 'admin2', 'county'],
   admin2Type: [], //specific for Arthrobase extracts
   locality: ['1,10,2.locality.localityName', 'Locality Name'],
   fullLocality: [],//empty because searches on the key name only
   fullCoordsString: [], //ditto
-  verbatimCoordinates: ['1,10,2.locality.relationToNamedPlace', 'Orig. Coord'],
-  verbatimLatitude: ['1,10,2.locality.lat1text', 'Lat1text', 'verbatimLat'],
-  verbatimLongitude: ['1,10,2.locality.long1text', 'Long1text', 'verbatimLong'],
-  decimalLatitude: ['Latitude1', '1,10,2.locality.latitude1', 'ddLat', 'ddlat', 'decimalLat'],
-  decimalLongitude:['Longitude1', '1,10,2.locality.longitude1', 'ddLong', 'ddLon', 'decimalLong', 'decimalLon'],
+  verbatimCoordinates: ['1,10,2.locality.relationToNamedPlace', 'Orig. Coord', 'verbatimCoords', 'original coords', 'verbatimcoordinates'], //odd mapping here due to field usage in Specify
+  verbatimLatitude: ['1,10,2.locality.lat1text', 'Lat1text', 'verbatimLat', 'verbatimlatitude'],
+  verbatimLongitude: ['1,10,2.locality.long1text', 'Long1text', 'verbatimLong', 'verbatimlongitude'],
+  decimalLatitude: ['Latitude1', '1,10,2.locality.latitude1', 'ddLat', 'ddlat', 'decimalLat', 'decimallatitude'],
+  decimalLongitude:['Longitude1', '1,10,2.locality.longitude1', 'ddLong', 'ddLon', 'decimalLong', 'decimalLon', 'decimallongitude'],
   maxUncertainty: ['1,10,2,123-geocoorddetails.geocoorddetail.maxUncertaintyEst', 'Max Uncertainty Est', 'uncertainty'],
-  maxUncertaintyUnit:['1,10,2,123-geocoorddetails.geocoorddetail.maxUncertaintyEstUnit', 'Max Uncertainty Est Unit', 'uncertaintyUnit'],
+  maxUncertaintyUnit:['1,10,2,123-geocoorddetails.geocoorddetail.maxUncertaintyEstUnit', 'Max Uncertainty Est Unit', 'uncertaintyUnit', 'uncertaintyunit'],
   coordsSource: ['1,10,2.locality.latLongMethod', 'Lat/Long Method', 'georeferenceSources', 'georefSource', 'georefSources', 'coordsMethod', 'coordsSource'], //because its should not be a georeference!!
-  verbatimSRS: ['Datum', '1,10,2.locality.datum', 'geodeticDatum'],
+  verbatimSRS: ['Datum', '1,10,2.locality.datum', 'geodeticDatum', 'datum'],
   labelElevation: [],
   verbatimElevation: ['1,10,2.locality.verbatimElevation', 'elevation', 'altitude', 'Verbatim Elev.'],
   minElevationMeters:['Min Elevation in meters', '1,10,2.locality.minElevation', 'minElev'],
   maxElevationMeters:['Max Elevation in meters', '1,10,2.locality.maxElevation', 'maxElev'],
   habitat: [],
-  collectionDate: ['verbatimEventDate','dateCollected', 'eventDate', 'collectingDate'],
-  collectionStartDate: ['Start Date', '1,10.collectingevent.startDate'],
-  collectEndDate: ['End Date', '1,10.collectingevent.endDate'],
+  collectionDate: ['verbatimEventDate','dateCollected', 'eventDate', 'collectingDate', 'date'],
+  collectionStartDate: ['Start Date', '1,10.collectingevent.startDate', 'startdate'],
+  collectEndDate: ['End Date', '1,10.collectingevent.endDate', 'enddate'],
   permitNumber: ['permit', 'permitcode', 'permitCode', 'permitnumber'],
   recordedBy: ['Collectors [Aggregated]', '1,10,30-collectors.collectingevent.collectors', 'collector', 'collectors'],
-  samplingProtocol: ['collectionMethod', '1,10.collectingevent.method', 'Collecting Information/Method', 'collectMethods'],
+  samplingProtocol: ['collectionMethod', '1,10.collectingevent.method', 'Collecting Information/Method', 'collectMethods', 'collectmethod'],
   eventConditions: ['conditions'],
   eventRemarks:[], //TODO add the relevant Specify fields
   specimenStageSex: ['1,63-preparations.preparation.text4', 'Stage Sex Count', 'lifeStageSexCounts'],
@@ -41,7 +41,7 @@ export const fieldsMappings = {
   occurrenceRemarks: ['Remarks', 'Collection Object Remarks', '1.collectionobject.remarks', 'Collection Object/Remarks', 'seriesNote', 'notes'],
 
   //det stuff
-  labelDetName: ['verbatimIdentification'], //can be used for verbatimIdentification, if we have that
+  labelDetName: ['verbatimIdentification', 'verbatimdet'], //can be used for verbatimIdentification, if we have that
   acceptedName: ['1,9-determinations,4-preferredtaxon.taxon.fullName','Preferred Taxon/Full Name', 'acceptedName', 'acceptedNameUsage'],
   canonicalName: ['1,9-determinations,4.taxon.fullName', 'Full Name', 'Taxon/Full Name'], 
   scientificName: [],
@@ -58,9 +58,9 @@ export const fieldsMappings = {
   identificationRemarks: ['1,9-determinations.determination.remarks', 'Determinations/Remarks', 'Determinations Remarks', 'detRemarks', 'detNotes', 'detNote'],
 
   //type data
-  typeStatus: ['Type Status', '1,9-determinations.determination.typeStatusName'], 
-  typeNumber: ['Type Number', '1,9-determinations.determination.text1'],
+  typeStatus: ['Type Status', '1,9-determinations.determination.typeStatusName', 'typestatus'], 
+  typeNumber: ['Type Number', '1,9-determinations.determination.text1', 'typenumber'],
 
   //storage
-  storageBox: ['Box', '1,63-preparations,58.storage.Box']
+  storageBox: ['Box', '1,63-preparations,58.storage.Box', 'storage', 'storageLocation', 'storagelocation']
 }

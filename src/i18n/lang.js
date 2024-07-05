@@ -12,6 +12,7 @@ const en = {
   labelWidthUnit: "cm", 
   printButton: "Let's print these babies...",
   reset: "reset",
+  clear: 'clear',
   saveSettings: "save settings"
 }
 
@@ -28,7 +29,8 @@ const afr = {
   labelWidth: "Etiket wydte",
   labelWidthUnit: "sentimeter", 
   printButton: "Kom ons maak etikette",
-  reset: "begin oor",
+  reset: "herstel",
+  clear: "begin oor",
   saveSettings: "stoor instellings"
 }
 
