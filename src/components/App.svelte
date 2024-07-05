@@ -28,6 +28,7 @@
 		labelCountField: null,
 		detLabel: true,
 		detLabelOnly: false,
+		italicizeNames: false,
 		showStorage: false,
 		includePunch: false,
 		includeTaxonAuthorities: false,
@@ -118,6 +119,7 @@
 		$settings.labelCountField = null
 		$settings.detLabel = true
 		$settings.detLabelOnly = false
+		$settings.italicizeNames = false
 		$settings.showStorage = false
 		$settings.includePunch = false
 		$settings.includeTaxonAuthorities = false

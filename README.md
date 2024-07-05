@@ -2,9 +2,9 @@
 
 A [Svelte](https://svelte.dev/) app for generating specimen labels with a range of options (Svelte is a front end framework for building web apps, it has nothing to do with labels!). 
 
-This tool was originally built for generating labels from Specify database extracts because it was just easier. However, this tool can generate labels from any input csv file with sensible field headings. 
+This tool was originally built as a proof of concept for generating labels from Specify database extracts, because it's just easier. However, this tool can generate labels from any input csv file with sensible field headings. 
 
-To run this tool you need to have the following installed:
+You will need to have the following installed:
 
 - Node.js: [https://nodejs.org/](https://nodejs.org/)
 - git: [https://git-scm.com/download](https://git-scm.com/download)
