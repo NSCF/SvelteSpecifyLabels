@@ -1,7 +1,8 @@
+import getDateTimeRange from 'friendly-iso-datetime-intervals'
 import { fieldsMappings } from "./fieldMappings.js"
 
 //takes a record from the input dataset and returns the object needed by the label
-export default function mapRecord(record) {
+export default function mapRecord(record, useRomanNumeralMonths) {
 
   let mappedRecord = makeStandardFields(record, fieldsMappings)
 
@@ -149,9 +150,20 @@ export default function mapRecord(record) {
 
   if(!mappedRecord.collectionDate) {
     if(mappedRecord.collectionStartDate) {
-      mappedRecord.collectionDate = mappedRecord.collectionStartDate
+      try{
+        mappedRecord.collectionDate = getDateTimeRange(mappedRecord.collectionStartDate, 
+          mappedRecord.collectionEndDate || null, mappedRecord.collectionStartTime || null, mappedRecord.collectionEndTime || null, true, useRomanNumeralMonths)
+      }
+      catch(err) {
+        console.error('error with record', mappedRecord.catalogNumber)
+        console.error(err)
+      }
     }
-    //TODO else if we have an end date. None for KZN Museum herps at this point
+  }
+
+  //we want em dashes instead of en dashes
+  if (mappedRecord.collectionDate.includes('-')){
+    mappedRecord.collectionDate = mappedRecord.collectionDate.replace('-', '–')
   }
 
   if(!mappedRecord.specimenStageSex) {

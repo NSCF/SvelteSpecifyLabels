@@ -1,5 +1,5 @@
 import Papa from 'papaparse'
-import mapRecord from './mapRecord.js'
+
 
 export default function(file) {
   return new Promise((resolve, reject) => {
@@ -16,35 +16,7 @@ export default function(file) {
           reject('oooppppssss!!!!')
         }
 
-        const fileData = results.data.map(raw => mapRecord(raw))
-        //sort first on storage location, then catalog number, then collector number
-        fileData.sort((a, b) => {
-          if (a.storageBox < b.storageBox){
-            return -1;
-          }
-          if ( a.storageBox > b.storageBox ){
-            return 1;
-          }
-          if ( a.storageBox == b.storageBox ){
-            if (a.catalogNumber < b.catalogNumber){
-              return -1;
-            }
-            if ( a.catalogNumber > b.catalogNumber ){
-              return 1;
-            }
-            if ( a.catalogNumber == b.catalogNumber ){
-              if (a.collectorNumber < b.collectorNumber){
-                return -1;
-              }
-              if ( a.collectorNumber > b.collectorNumber ){
-                return 1;
-              }
-            }
-          }
-          return 0;
-        })
-    
-        resolve(fileData)
+        resolve(results.data)
     
       }
     })

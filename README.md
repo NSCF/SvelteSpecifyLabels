@@ -6,6 +6,8 @@ This tool was originally built as a proof of concept for generating labels from 
 
 This project will hopefully find it's way to being a full fledged web app available online somewhere, but in the meantime we need to run it locally.
 
+The label design is opinionated (what the programmer thinks is best) and hence is not customizable. 
+
 ## Installation
 
 You will need to have the following software downloaded AND installed on your machine (downloading and installing are not the same thing):
@@ -17,7 +19,7 @@ Create a folder on your hard drive (name it whatever you like), then open that f
 
 When it's done, type `cd sveltespecifylabels` in the command window and enter, then `npm install` and enter, then `npm run dev` and enter. The command window will show you a URL that you need to copy and paste into your web browser, and press enter.
 
-You only need to do the clone and install once. Then each time you want to make labels, just open the command window in the SvelteSpecifyLabels folder, and run `npm run dev`. Make sure to check the GitHub repo from time to time for updates. If there are updates since you last used the tool, run `git pull` to get the latest updates before `npm run dev`.
+You only need to do the clone and install once. Then each time you want to make labels, just open the command window in the SvelteSpecifyLabels folder, and run `npm run dev`. Make sure to check the GitHub repo from time to time for updates. If there are updates since you last used the tool, run `git pull` and `npm install` to get the latest updates before running `npm run dev`.
 
 ## Usage
 Drag and drop a CSV file with your specimen data onto the grey block on the screen and then use the various options to customize your labels as you would like. When you press print, remember to set the page size and margins in the print window as required (try not to waste label paper).
@@ -30,8 +32,6 @@ Your settings will be saved on the machine for future use (but you will have to 
 The input CSV file must have reasonable field headings in order for the fields to be added to the label. The headings in the file are mapped to Darwin Core fields and some additional specimen/accession specific fields. 
 
 There is an example CSV file in the folder, called example.csv.
-
-_Please note that at this point date ranges with startDate and endDate are not yet implemented. Hopefully they will be soon!_
 
 To see all the fields that are used go to src/lib/fieldMappings.js. This shows you the fields that are included on the labels, and their alternative names (aliases) that they can have in the input file. If you want to map a field in your file to one of the label fields, open the fieldMappings file on your computer in a text editor (e.g. Notepad or Notepad++) and add your field name to the list for that field. For example:
 

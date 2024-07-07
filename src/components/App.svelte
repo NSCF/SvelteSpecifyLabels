@@ -6,12 +6,14 @@
 	import LabelLayout from './LabelLayout.svelte'
 	import readCSV from '../lib/readCSVInput'
 	import readJSON from '../lib/readJSONInput'
+	import mapRecord from '../lib/mapRecord'
 	import langs from '../i18n/lang'
 
 	let langOptions = ['en', 'afr']
 	
 	let toLabels = false
-	let data = []
+	let rawData = []
+	let labelData = []
 
 	const maxFontSize = 24
 	const minFontSize = 6
@@ -26,6 +28,7 @@
 		collectionName: null,
 		labelPerSpecimen: false,
 		labelCountField: null,
+		useRomanNumeralMonths: false,
 		detLabel: true,
 		detLabelOnly: false,
 		italicizeNames: false,
@@ -37,16 +40,61 @@
 	})
 
 	if (localStorage.getItem("labelSettings") != null) {
-		$settings = JSON.parse(localStorage.getItem("labelSettings"))
+		// so we can handle evolution of settings...
+		const savedSettigs = JSON.parse(localStorage.getItem("labelSettings"))
+		for (const [key, val] of Object.entries(savedSettigs)) {
+			if (key in $settings) {
+				$settings[key] = val
+			}
+		}
 	}
 
 	setContext('settings', settings)
+	
+	$: $settings.useRomanNumeralMonths, rawData.length? mapAndSortRawData() : null
+
+	const mapAndSortRawData = _ => {
+		if (rawData.length) {
+
+			const mappedAndSorted = rawData.map(raw => mapRecord(raw, $settings.useRomanNumeralMonths))
+			//sort first on storage location, then catalog number, then collector number
+			mappedAndSorted.sort((a, b) => {
+				if (a.storageBox < b.storageBox){
+					return -1;
+				}
+				if ( a.storageBox > b.storageBox ){
+					return 1;
+				}
+				if ( a.storageBox == b.storageBox ){
+					if (a.catalogNumber < b.catalogNumber){
+						return -1;
+					}
+					if ( a.catalogNumber > b.catalogNumber ){
+						return 1;
+					}
+					if ( a.catalogNumber == b.catalogNumber ){
+						if (a.collectorNumber < b.collectorNumber){
+							return -1;
+						}
+						if ( a.collectorNumber > b.collectorNumber ){
+							return 1;
+						}
+					}
+				}
+				return 0;
+			})
+
+			labelData = mappedAndSorted
+
+		}
+	}
 
 	const handleFileSelected = async ev => {
 		let file = ev.detail.file
 		if(file.type.endsWith('json')){
 			try {
-				data = await readJSON(file)
+				rawData = await readJSON(file)
+				mapAndSortRawData()
 				toLabels = true
 			}
 			catch(err) {
@@ -55,7 +103,8 @@
 		}
 		else {
 			try {
-				data = await readCSV(file)
+				rawData = await readCSV(file)
+				mapAndSortRawData()
 				toLabels = true
 			}
 			catch(err) {
@@ -107,7 +156,8 @@
 	}
 
 	const clear = _ => {
-		data = []
+		rawData = []
+		labelData = []
 		toLabels = false
 	}
 
@@ -117,6 +167,7 @@
 		$settings.collectionName = null
 		$settings.labelPerSpecimen = false
 		$settings.labelCountField = null
+		$settings.useRomanNumeralMonths = false
 		$settings.detLabel = true
 		$settings.detLabelOnly = false
 		$settings.italicizeNames = false
@@ -144,14 +195,18 @@
 				{langs[$settings.lang]['count']}
 			</label>
 			<br/>
-			{#if $settings.labelPerSpecimen && data.length}
+			{#if $settings.labelPerSpecimen && labelData.length}
 			<select bind:value={$settings.labelCountField}>
 				<option value=""></option>
-				{#each Object.keys(data[0]).filter(x => x.toLowerCase().endsWith('count') || x.toLowerCase().endsWith('counts')) as key}
+				{#each Object.keys(labelData[0]).filter(x => x.toLowerCase().endsWith('count') || x.toLowerCase().endsWith('counts')) as key}
 					<option value="{key}">{key}</option>
 				{/each}
 			</select>
 			{/if}
+			<label style="display:inline">
+				<input type=checkbox bind:checked={$settings.useRomanNumeralMonths}>
+				{langs[$settings.lang]['romanNums']}
+			</label>
 			<label style="display:inline">
 				<input type=checkbox bind:checked={$settings.showInstitution}>
 				{langs[$settings.lang]['collName']}
@@ -214,7 +269,7 @@
 		</div>
 		{#if toLabels}
 			<div>
-				<LabelLayout inputData={data} />
+				<LabelLayout inputData={labelData} />
 			</div>
 		{/if}
 	</Modal>

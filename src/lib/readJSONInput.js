@@ -6,12 +6,11 @@ export default function(file) {
     file.text().then(fileText => {
       const json = JSON.parse(fileText)
       if(json && Array.isArray(json) && json.length){
-        data = json.map(x => mapRecord(x))
-        resolve(data)
+        resolve(json)
       }
       else {
-        console.error(json)
-        reject('invalid json file, see console')
+
+        reject('invalid json file')
       }
     }).catch(err => reject('error parsing JSON: ' + err.message))
   })

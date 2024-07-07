@@ -1,6 +1,7 @@
 const en = {
   header: "Let's make some labels",
   count: "Duplicate labels using count", 
+  romanNums: 'Use Roman numerals for months',
   collName: "Add my collection name",
   dets: "Include det labels",
   detsOnly: "Make det labels only",
@@ -19,6 +20,7 @@ const en = {
 const afr = {
   header: "Koms ons begin - Maak so paar etikette, hier gaan ons nou! Heeha!",
   count: "Dupliseer etikette gebasseer op telling", 
+  romanNums: 'Gebruik Romeinse syfers vir maande',
   collName: "Voegby my versameling",
   dets: "Sluit in determinasie labels",
   detsOnly: "Maaks slegs determinasie labels",
