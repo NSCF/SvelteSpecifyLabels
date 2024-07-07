@@ -39,7 +39,7 @@ To see all the fields that are used go to src/lib/fieldMappings.js. This shows y
 
 Note that field names in the list must be in quotes and are separated from each other by a comma. 
 
-It's best to make these changes while the app is running. Once you've made the changes save the fieldMappings file. If there are no problems then your command window will show a little message about a bundle and 'say waiting for changes'. If there is a problem there will be a whole lot of stuff about syntax errors, parsers, etc. You don't need to know what it means, you just need to make sure you have the commas and quotes correct in the mappings file. Try again and save until it works.
+It's best to make these changes while the app is running. Once you've made the changes save the fieldMappings file. If there are no problems then your command window will show a little message about a bundle and 'say waiting for changes'. If there is a problem there will be a whole lot of stuff about syntax errors, parsers, etc. Don't worry about that, you just need to make sure you have the commas and quotes correct in the mappings file. Try again and save until it works.
 
 If you have a field in your dataset that appears on your labels but you don't want it to, simply rename the field in the file so that the field mappings won't recognize it.
 
