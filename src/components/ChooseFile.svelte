@@ -1,9 +1,11 @@
 <script>
 import {getContext, createEventDispatcher } from 'svelte';
 import Alert from './Alert.svelte'
+import langs from '../i18n/lang';
 
 const dispatch = createEventDispatcher();
 const { open } = getContext('simple-modal');
+const settings = getContext('settings')
 
 //PROPS
 export let fileMIMETypes
@@ -100,7 +102,7 @@ function toEmitOrNotToEmit(file){
     on:click={handleBoxClick}
     ondragover="return false"
   >
-    <p >Drag and drop a CSV file with your label data here or click to select from your hard drive</p>
+    <p>{langs[$settings.lang]['box']}</p>
   </div>
 </div>
 <input type="file" bind:this={hiddenInput} style="visibility:hidden" on:change={onFileSelected}>

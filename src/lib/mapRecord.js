@@ -1,10 +1,12 @@
 import getDateTimeRange from 'friendly-iso-datetime-intervals'
-import { fieldsMappings } from "./fieldMappings.js"
 
 //takes a record from the input dataset and returns the object needed by the label
-export default function mapRecord(record, useRomanNumeralMonths) {
+export default function mapRecord(record, fieldMappings, useRomanNumeralMonths) {
 
-  let mappedRecord = makeStandardFields(record, fieldsMappings)
+  let mappedRecord = {}
+  for (const [labelfield, recordField] of Object.entries(fieldMappings)){
+    mappedRecord[labelfield] = record[recordField]
+  }
 
   if(mappedRecord.catalogNumber){
 
@@ -22,6 +24,17 @@ export default function mapRecord(record, useRomanNumeralMonths) {
   }
   else {
     let i = 0
+  }
+
+  if (mappedRecord.recordNumber) {
+    if(!isNaN(mappedRecord.recordNumber)) {
+      if (mappedRecord.primaryCollectorLastName) {
+        mappedRecord.recordNumber = mappedRecord.primaryCollectorLastName + ' ' + mappedRecord.recordNumber
+      }
+      else {
+        mappedRecord.recordNumber = 'coll. no. ' + mappedRecord.recordNumber
+      }
+    }
   }
   
   if(mappedRecord.geography == null){
@@ -59,8 +72,8 @@ export default function mapRecord(record, useRomanNumeralMonths) {
       coords = mappedRecord.verbatimCoordinates
     }
     
-    if(coords && mappedRecord.maxUncertainty != null && mappedRecord.maxUncertaintyUnit) {
-      let uncertainty = `${mappedRecord.maxUncertainty}${mappedRecord.maxUncertaintyUnit}`
+    if(coords && mappedRecord.coordsUncertainty != null && mappedRecord.coordsUncertaintyUnit) {
+      let uncertainty = `${mappedRecord.coordsUncertainty}${mappedRecord.coordsUncertaintyUnit}`
       coords = coords + '±' + uncertainty
     }
     
@@ -232,69 +245,14 @@ export default function mapRecord(record, useRomanNumeralMonths) {
   }
 
   //det stuff
-  if(mappedRecord.acceptedName == mappedRecord.canonicalName){
-    mappedRecord.acceptedName = null
-  }
-
+ 
   //canonicalname takes precedence
   if (mappedRecord.scientificName && !mappedRecord.canonicalName) {
     if (mappedRecord.scientificNameAuthorship && mappedRecord.scientificName.includes(mappedRecord.scientificNameAuthorship)){
-      mappedRecord.canonicalName = mappedRecord.scientificName.replace(mappedRecord.scientificNameAuthorship).trim()
+      mappedRecord.canonicalName = mappedRecord.scientificName.replace(mappedRecord.scientificNameAuthorship, '').trim()
     }
     else {
       mappedRecord.canonicalName = mappedRecord.scientificName
-    }
-  }
-
-  if(!mappedRecord.identifiedBy){
-    //TODO Specify has an Initials field as well as middle initial, need to reconcile those
-    if(mappedRecord.detByLast) {
-      mappedRecord.identifiedBy = mappedRecord.detByLast
-      if(mappedRecord.detByFirst){
-        if(/^[A-Z\.\s]+$/.test(mappedRecord.detByFirst)){ //its initials
-          mappedRecord.identifiedBy += `, ${Array.from(mappedRecord.detByFirst).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')}`
-        }
-        else {//its a name
-          mappedRecord.identifiedBy += `, ${mappedRecord.detByFirst[0].toUpperCase() + '.'}`
-          if(mappedRecord.detByMiddleInitial) {
-            if(/^[A-Z\.\s]+$/.test(mappedRecord.detByMiddleInitial)){ //its initials
-              mappedRecord.identifiedBy += Array.from(mappedRecord.detByMiddleInitial).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')
-            }
-            else {//its a name
-              mappedRecord.identifiedBy += mappedRecord.detByMiddleInitial[0].toUpperCase() + '.'
-            }
-          }
-        }
-      }
-      else if (mappedRecord.detByMiddleInitial){
-        if(/^[A-Z\.\s]+$/.test(mappedRecord.detByMiddleInitial)){ //its initials
-          mappedRecord.identifiedBy += `, ${Array.from(mappedRecord.detByMiddleInitial).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')}`
-        }
-        else {
-          mappedRecord.identifiedBy += mappedRecord.detByMiddleInitial[0].toUpperCase() + '.'
-        }
-      }
-    }
-    else {
-      if(mappedRecord.detByFirst){
-        if(/^[A-Z\.\s]+$/.test(mappedRecord.detByFirst)){ //its initials
-          mappedRecord.identifiedBy = Array.from(mappedRecord.detByFirst).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')
-        }
-        else {//its a name
-          mappedRecord.identifiedBy = mappedRecord.detByFirst
-          if(mappedRecord.detByMiddleInitial) {
-            if(/^[A-Z\.\s]+$/.test(mappedRecord.detByMiddleInitial)){ //its initials
-              mappedRecord.identifiedBy += ` ${Array.from(mappedRecord.detByMiddleInitial).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')}`
-            }
-            else {//its a name
-              mappedRecord.identifiedBy += ` ${mappedRecord.detByMiddleInitial}`
-            }
-          }
-        }
-      }
-      else if (mappedRecord.detByMiddleInitial){
-        mappedRecord.identifiedBy = mappedRecord.detByMiddleInitial
-      }
     }
   }
 
@@ -330,42 +288,3 @@ export default function mapRecord(record, useRomanNumeralMonths) {
 }
 
 
-//maps the input fields to the standard set of fields we use to generate the label fields
-function makeStandardFields(record, fieldsMappings) {
-  
-  let result = {}
-
-  for (let [field, candidates] of Object.entries(fieldsMappings)) {
-    // the field name may be the same in dataset
-    result[field] = null
-    candidates.unshift(field)
-    candidates.unshift(`dwc:${field}`)
-    for (let candidate of candidates){
-      if (candidate in record) {
-        if(record[candidate] != null) {
-          if(isNaN(record[candidate])){
-            if(typeof record[candidate] == 'boolean' || Array.isArray(record[candidate])){
-              result[field] = record[candidate]
-              break;
-            }
-            else if (record[candidate].trim()){
-              result[field] = record[candidate].trim()
-              break;
-            }
-          }
-          else {
-            if(typeof record[candidate] == 'string'){
-              result[field] = record[candidate].trim().replace(/\s+/g,' ').replace(/[\.~]+$/,'') //do some cleaning
-              break;
-            }
-            else { //has to be a number
-              result[field] = Number(record[candidate])
-              break;
-            }
-          }
-        }
-      }
-    }
-  }
-  return result
-}

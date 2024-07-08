@@ -13,10 +13,10 @@
     //BIG TODO move all this logic to the label mapping funcs, shouldnt be here. 
     //TODO add sensu when we have it
 
-    if(labelRecord.labelDetName){
-      labelDet = labelRecord.labelDetName
+    if(labelRecord.verbatimIdentification){
+      labelDet = labelRecord.verbatimIdentification
       if(!labelDet.includes(' sp.') && !labelDet.includes('?')) {
-        if($settings.includeTaxonAuthorities && labelRecord.labelDetName == labelRecord.canonicalName && labelRecord.scientificNameAuthorship) {
+        if($settings.includeTaxonAuthorities && labelRecord.verbatimIdentification == labelRecord.canonicalName && labelRecord.scientificNameAuthorship) {
           labelDet += ' ' + labelRecord.scientificNameAuthorship
         }
       }
@@ -72,7 +72,7 @@
       }
       else {
 
-        labelDet = labelRecord.labelDetName
+        labelDet = labelRecord.verbatimIdentification
 
       }
     }
@@ -108,11 +108,11 @@
         <div>
           {#if labelRecord.catalogNumber}
             <span class="floatleft"><strong>{labelRecord.catalogNumber}</strong></span>
-            {#if labelRecord.collectorNumber}
-              <span class="floatright inlineblock padright">{labelRecord.collectorNumber}</span>
+            {#if labelRecord.recordNumber}
+              <span class="floatright inlineblock padright">{labelRecord.recordNumber}</span>
             {/if}
           {:else}
-          <span class="floatright inlineblock padright"><strong>{labelRecord.collectorNumber}</strong></span>
+          <span class="floatright inlineblock padright"><strong>{labelRecord.recordNumber}</strong></span>
           {/if}
         </div>
         <div class="labelrow clearfloat">
@@ -185,8 +185,8 @@
           {#if labelRecord.catalogNumber}
             <div class="floatright inlineblock padright"><strong>{labelRecord.catalogNumber}</strong></div>
           {:else}
-            {#if labelRecord.collectorNumber}
-              <div class="floatright inlineblock padright"><strong>{labelRecord.collectorNumber}</strong></div>
+            {#if labelRecord.recordNumber}
+              <div class="floatright inlineblock padright"><strong>{labelRecord.recordNumber}</strong></div>
             {/if}
           {/if}
           {#each labelRecord.seriesSampleCounts as ssc}
@@ -229,13 +229,13 @@
         <div style="display:flex; justify-content:space-between">
           {#if labelRecord.typeStatus}
             <div class="typestatus">{labelRecord.typeStatus}</div>
-          {:else if labelRecord.catalogNumber || labelRecord.collectorNumber}
+          {:else if labelRecord.catalogNumber || labelRecord.recordNumber}
             <div /> <!-- a placeholder -->
           {/if}
           {#if labelRecord.catalogNumber}
             <div class="padright"><strong>{labelRecord.catalogNumber}</strong></div>
-          {:else if labelRecord.collectorNumber}
-            <div class="padright"><strong>{labelRecord.collectorNumber}</strong></div>            
+          {:else if labelRecord.recordNumber}
+            <div class="padright"><strong>{labelRecord.recordNumber}</strong></div>            
           {/if}
         </div>
         <div class="clearfloat">

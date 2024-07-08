@@ -12,7 +12,7 @@
     labelRecord.collectionDate ||
     labelRecord.recordedBy ||
     labelRecord.occurrenceRemarks ||
-    labelRecord.labelDetName ||
+    labelRecord.verbatimIdentification ||
     labelRecord.canonicalName)
 
   const settings = getContext('settings')

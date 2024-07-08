@@ -4,14 +4,18 @@
 	import Modal from 'svelte-simple-modal'
 	import ChooseFile from './ChooseFile.svelte'
 	import LabelLayout from './LabelLayout.svelte'
+	import FieldMappings from './FieldMappings.svelte';
 	import readCSV from '../lib/readCSVInput'
 	import readJSON from '../lib/readJSONInput'
+	import getFieldMappings from '../lib/getFieldMappings'
 	import mapRecord from '../lib/mapRecord'
 	import langs from '../i18n/lang'
 
 	let langOptions = ['en', 'afr']
 	
+	let toFieldMappings = false
 	let toLabels = false
+
 	let rawData = []
 	let labelData = []
 
@@ -35,14 +39,15 @@
 		showStorage: false,
 		includePunch: false,
 		includeTaxonAuthorities: false,
+		excludeNoCatnums: false,
 		fontSize: defaultFontSize,
 		labelWidth: defaultLabelWidth
 	})
 
 	if (localStorage.getItem("labelSettings") != null) {
 		// so we can handle evolution of settings...
-		const savedSettigs = JSON.parse(localStorage.getItem("labelSettings"))
-		for (const [key, val] of Object.entries(savedSettigs)) {
+		const savedSettings = JSON.parse(localStorage.getItem("labelSettings"))
+		for (const [key, val] of Object.entries(savedSettings)) {
 			if (key in $settings) {
 				$settings[key] = val
 			}
@@ -53,10 +58,23 @@
 	
 	$: $settings.useRomanNumeralMonths, rawData.length? mapAndSortRawData() : null
 
+	let fieldMappings
+
+	if (localStorage.getItem("fieldMappings") != null) {
+		// so we can handle evolution of settings...
+		const savedFieldMappings = JSON.parse(localStorage.getItem("fieldMappings"))
+		fieldMappings = writable(savedFieldMappings)
+	}
+	else {
+		fieldMappings = writable({})
+	}
+
+	setContext('mappings', fieldMappings)
+
 	const mapAndSortRawData = _ => {
 		if (rawData.length) {
 
-			const mappedAndSorted = rawData.map(raw => mapRecord(raw, $settings.useRomanNumeralMonths))
+			const mappedAndSorted = rawData.map(raw => mapRecord(raw, $fieldMappings, $settings.useRomanNumeralMonths))
 			//sort first on storage location, then catalog number, then collector number
 			mappedAndSorted.sort((a, b) => {
 				if (a.storageBox < b.storageBox){
@@ -94,8 +112,7 @@
 		if(file.type.endsWith('json')){
 			try {
 				rawData = await readJSON(file)
-				mapAndSortRawData()
-				toLabels = true
+				
 			}
 			catch(err) {
 				alert(err.message)
@@ -104,13 +121,34 @@
 		else {
 			try {
 				rawData = await readCSV(file)
-				mapAndSortRawData()
-				toLabels = true
 			}
 			catch(err) {
-				alert('bugger!')
+				alert('Oops! Something went wrong...')
 			}
 		}
+
+		const datasetFieldMappings = getFieldMappings(rawData[0])
+		if (Object.keys($fieldMappings).length == 0) {
+			$fieldMappings = datasetFieldMappings
+		}
+		else {
+
+			//here we need to check if any previously mapped fields are still in the fieldMapping
+			for (const [labelField, mappedDatasetField] of Object.entries($fieldMappings)) {
+				if (mappedDatasetField == null || mappedDatasetField in rawData[0]) {
+					continue
+				}
+				else {
+					$fieldMappings[labelField] = null
+				}
+			}
+
+			// there might be fields added in the new dataset but the user will have to fix that manually
+			
+		}
+
+		mapAndSortRawData()
+		toLabels = true
 	}
 
 	const showPrint = _ => {
@@ -174,6 +212,7 @@
 		$settings.showStorage = false
 		$settings.includePunch = false
 		$settings.includeTaxonAuthorities = false
+		$settings.excludeNoCatnums = false
 		$settings.fontSize = defaultFontSize
 		$settings.labelWidth = defaultLabelWidth
 
@@ -185,10 +224,12 @@
 <main>
 	<Modal>
 		<div id='topstuff'> <!-- apologies to anyone reading this -->
+			{#if !toFieldMappings}
 			<div style="display:flex; justify-content: space-between ">
 				<h2>{langs[$settings.lang]['header']}</h2>
 				<button style="background-color: transparent; border:none; color:grey" on:click={handLangButtonClick}>{$settings.lang}</button>
 			</div>
+			{/if}
 			{#if toLabels}
 			<label style="display:inline">
 				<input type=checkbox bind:checked={$settings.labelPerSpecimen}>
@@ -207,14 +248,16 @@
 				<input type=checkbox bind:checked={$settings.useRomanNumeralMonths}>
 				{langs[$settings.lang]['romanNums']}
 			</label>
+			<br/>
 			<label style="display:inline">
 				<input type=checkbox bind:checked={$settings.showInstitution}>
 				{langs[$settings.lang]['collName']}
 			</label>
-			{#if $settings.showInstitution}
-  		<input type="text" name="gender" id="male" bind:value={$settings.collectionName} style="display:inline; margin:0;height:10px" placeholder="Add collection..."><br>
-			{/if}
 			<br/>
+			{#if $settings.showInstitution}
+  		<input type="text" name="gender" id="male" bind:value={$settings.collectionName} style="display:inline; margin:0;height:10px" placeholder="Collection name..."><br>
+			<br/>
+			{/if}
 			<label style="display:inline">
 				<input type=checkbox bind:checked={$settings.detLabel}>
 				{langs[$settings.lang]['dets']}
@@ -240,6 +283,11 @@
 				{langs[$settings.lang]['authors']}
 			</label>
 			<br/>
+			<label style="display:inline">
+				<input type=checkbox bind:checked={$settings.excludeNoCatnums}>
+				{langs[$settings.lang]['excludeCatNums']}
+			</label>
+			<br/>
 			<div style="display:flex; gap:5px">
 				<div>
 					<label>{langs[$settings.lang]['fontSize']}</label>
@@ -259,14 +307,18 @@
 				<div>
 					<button style="background-color: transparent; border:none; color:grey" on:click={clear}>{langs[$settings.lang]['clear']}</button>
 					<button style="background-color: transparent; border:none; color:grey" on:click={reset}>{langs[$settings.lang]['reset']}</button>
+					<button style="background-color: transparent; border:none; color:grey" on:click={_ => {toLabels=false; toFieldMappings=true}}>{langs[$settings.lang]['mappings'].toLowerCase()}</button>
 				</div>
 			</div>
 			{/if}
-			{#if !toLabels}
+			{#if !toLabels && !toFieldMappings}
 			<ChooseFile on:file-selected={handleFileSelected} fileMIMETypes={['text/csv', 'application/vnd.ms-excel', 'text/json', 'application/json']}></ChooseFile>
 			{/if}
 			<hr/>
 		</div>
+		{#if toFieldMappings}
+		<FieldMappings record={rawData[0]} on:settings-saved={_ => {toFieldMappings = false; toLabels = true}}/>
+		{/if}
 		{#if toLabels}
 			<div>
 				<LabelLayout inputData={labelData} />
