@@ -162,7 +162,7 @@ export default function mapRecord(record, useRomanNumeralMonths) {
   }
 
   //we want em dashes instead of en dashes
-  if (mappedRecord.collectionDate.includes('-')){
+  if (mappedRecord.collectionDate && mappedRecord.collectionDate.includes('-')){
     mappedRecord.collectionDate = mappedRecord.collectionDate.replace('-', '–')
   }
 
