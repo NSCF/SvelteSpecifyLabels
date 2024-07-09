@@ -30,6 +30,6 @@
     <LabelDetail {labelRecord} />
   {/if}
 {:else}
-  <span>{labelRecord.catalogNumber}: insufficent data to make label...</span>
+  <span>insufficent data to make label...</span>
 {/if}
 

@@ -15,11 +15,13 @@ const en = {
   labelWidthUnit: "cm", 
   printButton: "Let's print these babies...",
   reset: "reset",
-  clear: 'clear',
+  clear: 'clear labels',
   mappings: 'Field mappings',
   mappingHelp: 'Not all these fields are required, just map your dataset fields to those that make sense and see how they appear on the label',
-  saveMappings: "Save mappings",
-  back: 'back'
+  refreshMappings: "Refresh mappings",
+  back: 'back',
+  exampleData: 'example data',
+  exampleLabels: "example labels"
 }
 
 const afr = {
@@ -34,16 +36,18 @@ const afr = {
   storage: "Wys my jou storage",
   authors: "Sluit in taksonomiese autoriteite",
   excludeCatNums: "Sluit etikette sonder rekordnommers uit",
-  fontSize: "Skrif Groote",
-  labelWidth: "Etiket wydte",
+  fontSize: "Skrif groote",
+  labelWidth: "Etiket breedte",
   labelWidthUnit: "sentimeter", 
   printButton: "Kom ons druk uit etikette",
   reset: "herstel",
   clear: "begin oor",
   mappings: 'Veld passings',
   mappingHelp: 'Net sekere velde word vereis, pas net daai wat sin maak en kyk hoe lyk hulle oppie etiket',
-  saveMappings: "stoor passings",
-  back: 'terug'
+  refreshMappings: "herhaal passings",
+  back: 'terug',
+  exampleData: 'voorbeeld data',
+  exampleLabels: "voorbeeld etikette"
 }
 
 const langs = {

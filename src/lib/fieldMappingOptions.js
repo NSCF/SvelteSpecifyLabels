@@ -1,7 +1,7 @@
 export const fieldsMappings = { 
   //this uses DwC, mostly...
-  catalogNumber: ['Catalog Number', 'CatNum', 'catnum', 'catalognumber'], 
-  recordNumber:['Field Number', 'collNum', 'collNo', 'collectorNo', 'collectornumber'],
+  catalogNumber: ['Catalog Number', 'CatNum', 'catnum',], 
+  recordNumber:['Field Number', 'collNum', 'collNo', 'collectorNo', 'collectornumber', 'collectorCode'],
   geography: ['Orig. Prov', 'countryprovince'],
   country: [],
   stateProvince: ['province','state', 'admin1'],
@@ -32,16 +32,16 @@ export const fieldsMappings = {
   collectionEndTime: ['endtime', 'collectingendtime'],
   permitNumber: ['permit', 'permitcode', 'permitnumber', 'permitno'],
   recordedBy: ['Collectors [Aggregated]', 'collector', 'collectors', 'collectedby'],
-  primaryCollectorLastName: [],
+  primaryCollectorLastName: ['primaryCollector'],
   samplingProtocol: ['collectionMethod', 'Collecting Information/Method', 'collectMethods', 'collectmethod', 'method'],
   eventConditions: ['conditions'],
   eventRemarks:['collectingeventremarks'],
   specimenStageSex: ['Stage Sex Count', 'lifeStageSexCounts'],
   sex:['Sex'],
   lifeStage: ['stage'],
-  specimenCount:['count', 'countamt', 'countamount'],
+  specimenCount:['count', 'counts', 'countamt', 'countamount',],
   seriesSampleCounts:[], //just for Arthrobase
-  occurrenceRemarks: ['Remarks', 'Collection Object Remarks', 'Collection Object/Remarks', 'seriesNote', 'notes', 'note'],
+  occurrenceRemarks: ['Remarks', 'Collection Object Remarks', 'Collection Object/Remarks', 'seriesNote', 'notes', 'note', 'specimenNotes', 'specimenNote'],
 
   //det stuff
   verbatimIdentification: ['labelDetName', 'verbatimdet', 'verbatimdetermination'], //can be used for verbatimIdentification, if we have that

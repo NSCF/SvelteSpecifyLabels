@@ -48,6 +48,7 @@ export default function getFieldMappings(record) {
   }
     
   return mapping
+  
 }
 
 

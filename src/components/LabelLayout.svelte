@@ -42,6 +42,7 @@
 
 <style>
   .cols {
+    width: 100%;
     column-width: var(--label-width, 5cm);
     column-gap: 1em;
     break-before: column;

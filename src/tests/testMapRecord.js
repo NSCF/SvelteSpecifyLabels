@@ -5,8 +5,8 @@ import csv from 'fast-csv'
 import getFieldMappings from '../lib/getFieldMappings.js'
 import mapRecord from '../lib/mapRecord.js'
 
-const filePath = String.raw`C:\devprojects\SvelteSpecifyLabels`
-const fileName = String.raw`example.csv`
+const filePath = String.raw`C:\Users\Ian Engelbrecht\Downloads`
+const fileName = String.raw`Label data template.csv`
 
 let data = []
 
@@ -21,7 +21,7 @@ fs.createReadStream(path.join(filePath, fileName))
     const mappedRecords = []
     const fieldMappings = getFieldMappings(data[0])
     for (let record of data){
-      const mappedRecord = mapRecord(record, fieldMappings)
+      const mappedRecord = mapRecord(record, fieldMappings, true)
       mappedRecords.push(mappedRecord)
     }
   });

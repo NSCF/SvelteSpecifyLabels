@@ -4,6 +4,7 @@
   import mapRecord from "../lib/mapRecord";
   import LabelDetail from "./LabelDetail.svelte";
   import LinkIcon from "./LinkIcon.svelte";
+  import getFieldMappings from "../lib/getFieldMappings";
 
   import langs from "../i18n/lang";
 
@@ -18,20 +19,22 @@
   $: if ($settings && record) mappedRecord = mapRecord(record, $fieldMappings)
   $: if ($fieldMappings && record) mappedRecord = mapRecord(record, $fieldMappings)
 
-  const saveMappings = _ => {
-    localStorage.setItem('fieldMappings', JSON.stringify($fieldMappings))
-    dispatch('settings-saved')
+  const refreshMappings = _ => {
+    $fieldMappings = {}
+    localStorage.removeItem('fieldMappings')
+    $fieldMappings = getFieldMappings(record)
+    dispatch('mappings-refreshed')
   }
 </script>
 
 <h2>{langs[$settings.lang]['mappings']}</h2>
 <p>{langs[$settings.lang]['mappingHelp']}</p>
 <div style="display: flex; justify-content:space-between">
-  <button id="back-button" on:click={_ => dispatch('settings-saved')}>{langs[$settings.lang]['back']}</button>
-  <button on:click={saveMappings}>{langs[$settings.lang]['saveMappings']}</button>
+  <button id="back-button" on:click={_ => dispatch('close-mappings')}>{langs[$settings.lang]['back']}</button>
+  <button on:click={refreshMappings}>{langs[$settings.lang]['refreshMappings']}</button>
 </div>
 <div style="width: 100%; display:flex; justify-content:center; margin-bottom:2em">
-  <div style="width:30%; padding:4px; border:1px solid black; border-radius: 4px;">
+  <div class="label-preview" >
     <LabelDetail labelRecord={mappedRecord} />
   </div>
 </div>
@@ -55,6 +58,13 @@
 </div>
 
 <style>
+
+  .label-preview {
+    width:fit-content; 
+    padding:4px; 
+    border:1px solid gray; 
+    border-radius: 4px;
+  }
 
   a > svg, a {
     fill: #617E3E;

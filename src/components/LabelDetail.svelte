@@ -1,94 +1,27 @@
 <script>
-
+  import CutMarks from "./CutMarks.svelte";
   import { getContext } from "svelte";
+  import getLabelDet from '../lib/getLabelDet'
 
   export let labelRecord
+
 
   const settings = getContext('settings')
 
   let labelDet = null
-  $: if (labelRecord || $settings.includeTaxonAuthorities) getLabelDet()
 
-  const getLabelDet = _ => {
-    //BIG TODO move all this logic to the label mapping funcs, shouldnt be here. 
-    //TODO add sensu when we have it
-
-    if(labelRecord.verbatimIdentification){
-      labelDet = labelRecord.verbatimIdentification
-      if(!labelDet.includes(' sp.') && !labelDet.includes('?')) {
-        if($settings.includeTaxonAuthorities && labelRecord.verbatimIdentification == labelRecord.canonicalName && labelRecord.scientificNameAuthorship) {
-          labelDet += ' ' + labelRecord.scientificNameAuthorship
-        }
-      }
-    }
-    else {
-      if(labelRecord.canonicalName && labelRecord.canonicalName.trim()){
-      
-        let questionMark = false
-        if(labelRecord.identificationConfidence){
-          if(labelRecord.identificationConfidence.toLowerCase() != 'high'){
-            questionMark = true
-          }
-        }
-
-        if(labelRecord.identificationQualifier){
-          if(['aff.', 'cf.', 'nr'].includes(labelRecord.identificationQualifier)){
-            let nameParts = labelRecord.canonicalName.split(' ')
-            if(nameParts.length > 1){
-              let lastPart = nameParts.pop()
-              nameParts.push(labelRecord.identificationQualifier)
-              nameParts.push(lastPart)
-              if(questionMark){
-                nameParts.push('?')
-              }
-              else if(labelRecord.scientificNameAuthorship && $settings.includeTaxonAuthorities && !nameParts.includes('sp.')){
-                nameParts.push(labelRecord.scientificNameAuthorship)
-              }
-              labelDet = nameParts.join(' ')
-            }
-            else {
-              labelDet = [labelRecord.identificationQualifier, labelRecord.canonicalName].join(' ')
-              if(questionMark){
-                labelDet += ' ?'
-              }
-              else if (labelRecord.scientificNameAuthorship && $settings.includeTaxonAuthorities  && !labelDet.includes(' sp.')){
-                labelDet += ` ${labelRecord.scientificNameAuthorship}`
-              }
-            }
-          }
-          else {
-            labelDet = [labelRecord.canonicalName, labelRecord.identificationQualifier].join(' ')
-          } 
-        }
-        else {
-          labelDet = labelRecord.canonicalName
-          if(questionMark) {
-            labelDet += ' ?'
-          }
-          else if (labelRecord.scientificNameAuthorship && $settings.includeTaxonAuthorities && !labelDet.includes(' sp.')){
-            labelDet += ` ${labelRecord.scientificNameAuthorship}`
-          }
-        }
-      }
-      else {
-
-        labelDet = labelRecord.verbatimIdentification
-
-      }
-    }
-
-  }
+  $: if (labelRecord || $settings.includeTaxonAuthorities) labelDet =  getLabelDet(labelRecord, $settings.includeTaxonAuthorities)
 
 </script>
 
-<div class="label" style="--font-size: { $settings.fontSize + 'pt'};">
+<div class="label" style="--font-size: { $settings.fontSize + 'pt'}; --label-width: { $settings.labelWidth + 'cm' };" >
   {#if $settings.showStorage}
     {#if labelRecord.storageBox}
       <div style="padding:4px;">Box: {labelRecord.storageBox} -- cut this off label</div>
     {:else}
       <div style="padding:4px;">No storage recorded -- cut this off label</div>
     {/if}
-    <hr class='subdiv' />
+    <CutMarks char={'-'}/>
   {/if}
   {#if !$settings.detLabelOnly}
     <div class="label-part">
@@ -107,12 +40,12 @@
         {/if}
         <div>
           {#if labelRecord.catalogNumber}
-            <span class="floatleft"><strong>{labelRecord.catalogNumber}</strong></span>
+            <span class="floatleft" style="font-weight:bolder">{labelRecord.catalogNumber}</span>
             {#if labelRecord.recordNumber}
-              <span class="floatright inlineblock padright">{labelRecord.recordNumber}</span>
+              <span class="floatright inlineblock padright" >{labelRecord.recordNumber}</span>
             {/if}
-          {:else}
-          <span class="floatright inlineblock padright"><strong>{labelRecord.recordNumber}</strong></span>
+          {:else if labelRecord.recordNumber}
+            <span class="floatright inlineblock padright" style="font-weight:bolder">{labelRecord.recordNumber}</span>
           {/if}
         </div>
         <div class="labelrow clearfloat">
@@ -178,15 +111,15 @@
       </div>
     </div>
     {#if labelRecord.seriesSampleCounts && Array.isArray(labelRecord.seriesSampleCounts) && labelRecord.seriesSampleCounts.length > 1} <!--this is customized for label data from Arthrobase-->
-      <hr class='subdiv' />
+      <CutMarks char={'-'} />
       <div class="label-part">
         <div class="labeltext">
-          <div class="inlineblock"><strong>Collecting events:</strong></div>
+          <div class="inlineblock" style="font-weight:bolder">Collecting events:</div>
           {#if labelRecord.catalogNumber}
-            <div class="floatright inlineblock padright"><strong>{labelRecord.catalogNumber}</strong></div>
+            <div class="floatright inlineblock padright" style="font-weight:bolder">{labelRecord.catalogNumber}</div>
           {:else}
             {#if labelRecord.recordNumber}
-              <div class="floatright inlineblock padright"><strong>{labelRecord.recordNumber}</strong></div>
+              <div class="floatright inlineblock padright" style="font-weight:bolder">{labelRecord.recordNumber}</div>
             {/if}
           {/if}
           {#each labelRecord.seriesSampleCounts as ssc}
@@ -215,7 +148,7 @@
   {/if}
   {#if ($settings.detLabel || $settings.detLabelOnly) && labelDet} <!-- Apologies to readers for these, detLabel flags whether to add the label, labelDet is what goes on the label -->
     {#if !$settings.detLabelOnly}
-      <hr class='subdiv' />
+    <CutMarks char={'-'}/>
     {/if}
     <div class="label-part det-label">
       {#if $settings.includePunch}
@@ -233,13 +166,13 @@
             <div /> <!-- a placeholder -->
           {/if}
           {#if labelRecord.catalogNumber}
-            <div class="padright"><strong>{labelRecord.catalogNumber}</strong></div>
+            <div class="padright" style="font-weight:bolder">{labelRecord.catalogNumber}</div>
           {:else if labelRecord.recordNumber}
-            <div class="padright"><strong>{labelRecord.recordNumber}</strong></div>            
+            <div class="padright" style="font-weight:bolder">{labelRecord.recordNumber}</div>            
           {/if}
         </div>
         <div class="clearfloat">
-          <span class="inlineblock" style="font-weight: bold">{labelDet}</span>
+          <span class="inlineblock" style="font-weight: bolder">{labelDet}</span>
         </div>
         <div>
           {#if labelRecord.identifiedBy || labelRecord.dateIdentified}
@@ -259,6 +192,7 @@
       </div>
     </div>
   {/if}
+  <CutMarks char={'—'}/>
 </div>
 
 
@@ -267,11 +201,13 @@
 <style>
 
   .label {
-    font-family: 'Arial Narrow', 'PT Sans Narrow', Arial, sans-serif;
+    position: relative;
+    font-family: "Roboto Condensed", 'Arial Narrow', 'PT Sans Narrow', Arial, sans-serif;
     font-size: calc(var(--font-size, 10pt) * 0.6);
+    font-weight: 200;
     line-height: 98%;
-    width: 100%;
-    border-bottom: 0.5px solid black;
+    width: var(--label-width, 5cm);
+    /* border-bottom: 0.5px solid black; */
     break-inside:avoid;
   }
 
@@ -296,12 +232,14 @@
 
   .typestatus {
     text-transform: uppercase;
-    font-weight: bold;
+    font-weight: bolder;
   }
+
   .labelpunch {
     width: 10%;
     text-align: right;
   }
+
   .labeltext {
     width: 100%;
   }
@@ -326,21 +264,19 @@
   .floatright {
     float: right;
   }
+
   .floatleft {
     float: left;
   }
+
   .clearfloat {
     clear:both
   }
+
   .museumname {
     text-align:center;
-    font-weight:bold;
+    font-weight:bolder;
     margin-bottom:.5em;
-  }
-
-  hr.subdiv {
-    margin:0;
-    border-top:0.5px dashed black;
   }
 
 </style>

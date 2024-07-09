@@ -1,4 +1,6 @@
 import getDateTimeRange from 'friendly-iso-datetime-intervals'
+import addRomanNumeralDates from './addRomanNumeralDates.js'
+
 
 //takes a record from the input dataset and returns the object needed by the label
 export default function mapRecord(record, fieldMappings, useRomanNumeralMonths) {
@@ -173,6 +175,12 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths) 
       }
     }
   }
+  else {
+    if (useRomanNumeralMonths){
+      mappedRecord.collectionDate = addRomanNumeralDates(mappedRecord.collectionDate)
+      
+    }
+  }
 
   //we want em dashes instead of en dashes
   if (mappedRecord.collectionDate && mappedRecord.collectionDate.includes('-')){
@@ -254,6 +262,10 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths) 
     else {
       mappedRecord.canonicalName = mappedRecord.scientificName
     }
+  }
+
+  if (mappedRecord.dateIdentified && useRomanNumeralMonths) {
+    mappedRecord.dateIdentified = addRomanNumeralDates(mappedRecord.dateIdentified)
   }
 
   //Add method, refs and remarks together to one value
