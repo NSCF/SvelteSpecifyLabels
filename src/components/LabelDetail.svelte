@@ -53,12 +53,12 @@
         {/if}
         <div>
           {#if labelRecord.catalogNumber}
-            <span class="floatleft" style="font-weight:bolder">{labelRecord.catalogNumber}</span>
+            <span class="floatleft" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</span>
             {#if labelRecord.recordNumber}
               <span class="floatright inlineblock padright" >{labelRecord.recordNumber}</span>
             {/if}
           {:else if labelRecord.recordNumber}
-            <span class="floatright inlineblock padright" style="font-weight:bolder">{labelRecord.recordNumber}</span>
+            <span class="floatright inlineblock padright" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.recordNumber}</span>
           {/if}
         </div>
         <div class="labelrow clearfloat">
@@ -115,14 +115,14 @@
         <div>{labelRecord.occurrenceRemarks || ''}</div>
         {#if labelRecord.typeStatus}
           <div class="clearfix">
-            <span class="floatleft typestatus">{labelRecord.typeStatus}</span>
+            <span class="floatleft uppercase">{labelRecord.typeStatus}</span>
             {#if labelRecord.typeNumber}
               <span class="floatright">Type No:{labelRecord.typeNumber}</span>
             {/if}
           </div>
         {/if}
-        {#if $settings.addPrintedDate && $settings.printerModel}
-        <div style="font-weight: bolder;">Printed on {$settings.printerModel} {getPrintDateString()}</div>
+        {#if $settings.addPrintedDate}
+        <div class:bolder={!$settings.underline} class:underline={$settings.underline} >Printed on {$settings.printerModel ? $settings.printerModel : ''} {getPrintDateString()}</div>
         {/if}
       </div>
     </div>
@@ -131,12 +131,12 @@
       <CutMarks char={'-'} />
       <div class="label-part">
         <div class="labeltext">
-          <div class="inlineblock" style="font-weight:bolder">Collecting events:</div>
+          <div class="inlineblock" class:bolder={!$settings.underline} class:underline={$settings.underline}>Collecting events:</div>
           {#if labelRecord.catalogNumber}
-            <div class="floatright inlineblock padright" style="font-weight:bolder">{labelRecord.catalogNumber}</div>
+            <div class="floatright inlineblock padright" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</div>
           {:else}
             {#if labelRecord.recordNumber}
-              <div class="floatright inlineblock padright" style="font-weight:bolder">{labelRecord.recordNumber}</div>
+              <div class="floatright inlineblock padright" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.recordNumber}</div>
             {/if}
           {/if}
           {#each labelRecord.seriesSampleCounts as ssc}
@@ -177,18 +177,18 @@
       <div class="labeltext">
         <div style="display:flex; justify-content:space-between">
           {#if labelRecord.typeStatus}
-            <div class="typestatus">{labelRecord.typeStatus}</div>
+            <div class="uppercase">{labelRecord.typeStatus}</div>
           {:else if labelRecord.catalogNumber || labelRecord.recordNumber}
             <div /> <!-- a placeholder -->
           {/if}
           {#if labelRecord.catalogNumber}
-            <div class="padright" style="font-weight:bolder">{labelRecord.catalogNumber}</div>
+            <div class="padright" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</div>
           {:else if labelRecord.recordNumber}
-            <div class="padright" style="font-weight:bolder">{labelRecord.recordNumber}</div>            
+            <div class="padright" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.recordNumber}</div>            
           {/if}
         </div>
         <div class="clearfloat">
-          <span class="inlineblock" style="font-weight: bolder">{labelDet}</span>
+          <span class="inlineblock" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelDet}</span>
         </div>
         <div>
           {#if labelRecord.identifiedBy || labelRecord.dateIdentified}
@@ -246,9 +246,16 @@
     display: table;
   }
 
-  .typestatus {
-    text-transform: uppercase;
+  .underline {
+    text-decoration: underline;
+  }
+
+  .bolder {
     font-weight: bolder;
+  }
+
+  .uppercase {
+    text-transform: uppercase;
   }
 
   .labelpunch {
@@ -291,7 +298,6 @@
 
   .museumname {
     text-align:center;
-    font-weight:bolder;
     margin-bottom:.5em;
   }
 

@@ -10,6 +10,7 @@ const en = {
   storage: "Show storage info",
   authors: "Include taxon authorities",
   excludeCatNums: "Exclude records with no catalog or collector numbers",
+  underline: "Underline, not bold",
   printDate: 'Include printer model and date',
   font: 'Font',
   fontSize: "Font size",
@@ -17,7 +18,7 @@ const en = {
   fontWeight: 'Font weight',
   labelWidth: "Label width",
   labelWidthUnit: "cm", 
-  saveSettings: "Your settings will be saved when you print",
+  saveSettings: "Settings are saved when you print",
   printButton: "Let's print these babies...",
   reset: "reset",
   clear: 'clear labels',
@@ -26,7 +27,8 @@ const en = {
   refreshMappings: "Refresh mappings",
   back: 'back',
   exampleData: 'example data',
-  exampleLabels: "example labels"
+  exampleLabels: "example labels",
+  remove: 'remove'
 }
 
 const afr = {
@@ -41,6 +43,7 @@ const afr = {
   storage: "Wys my jou storage",
   authors: "Sluit in taksonomiese autoriteite",
   excludeCatNums: "Sluit etikette sonder rekordnommers uit",
+  underline: 'Onderstreep ipv vetdruk',
   printDate: 'Sluit in drukkermodel en datum',
   font: 'Skrif',
   fontSize: "Skrif groote",
@@ -48,7 +51,7 @@ const afr = {
   lineHeight: 'Lyn hoogte',
   labelWidth: "Etiket breedte",
   labelWidthUnit: "sentimeter", 
-  saveSettings: "Jou stellings sal getstoor word as jy uitdruk",
+  saveSettings: "Stellings is getstoor as jy uitdruk",
   printButton: "Lat ons druk etikette",
   reset: "herstel",
   clear: "begin oor",
@@ -57,7 +60,8 @@ const afr = {
   refreshMappings: "herhaal passings",
   back: 'terug',
   exampleData: 'voorbeeld data',
-  exampleLabels: "voorbeeld etikette"
+  exampleLabels: "voorbeeld etikette",
+  remove: 'vat hom weg'
 }
 
 const langs = {

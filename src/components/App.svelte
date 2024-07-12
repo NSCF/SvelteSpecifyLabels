@@ -29,7 +29,7 @@
 			default: 12
 		},
 		lineHeight: {
-			min: 95,
+			min: 90,
 			max: 120,
 			default: 100
 		},
@@ -54,6 +54,7 @@
 		includePunch: false,
 		includeTaxonAuthorities: false,
 		excludeNoCatnums: false,
+		underline: false,
 		addPrintedDate: false,
 		font: 'Roboto Condensed',
 		fontSize: numberInputSettings.fontSize.default,
@@ -280,6 +281,7 @@
 		$settings.includePunch = false
 		$settings.includeTaxonAuthorities = false
 		$settings.excludeNoCatnums = false
+		$settings.underline = false
 		$settings.addPrintedDate = false
 		$settings.printerModel = null
 		$settings.font = "Roboto Condensed"
@@ -379,6 +381,11 @@
 			</label>
 			<br/>
 			<label style="display:inline">
+				<input type=checkbox bind:checked={$settings.underline}>
+				{langs[$settings.lang]['underline']}
+			</label>
+			<br/>
+			<label style="display:inline">
 				<input type=checkbox bind:checked={$settings.addPrintedDate}>
 				{langs[$settings.lang]['printDate']}
 			</label>
@@ -445,7 +452,7 @@
 		</div>
 		
 		{#if toFieldMappings}
-		<FieldMappings record={rawData[0]} on:mappings-refreshed={makeLabelData} on:close-mappings={closeMappings}/>
+		<FieldMappings record={rawData[1]} on:mappings-updated={makeLabelData} on:close-mappings={closeMappings}/>
 		{/if}
 		{#if toLabels}
 			<div class="label-section">
@@ -484,14 +491,14 @@
 
 @media print
 {    
-		main {
-			margin-top:0;
-		}
+	main {
+		margin-top:0;
+	}
 
-    #topstuff
-    {
-      display: none !important;
-    }
+	#topstuff
+	{
+		display: none !important;
+	}
 
 }
 
