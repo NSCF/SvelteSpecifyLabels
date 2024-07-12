@@ -12,9 +12,22 @@
 
   $: if (labelRecord || $settings.includeTaxonAuthorities) labelDet =  getLabelDet(labelRecord, $settings.includeTaxonAuthorities)
 
+  const getPrintDateString = _ => {
+    const now = new Date()
+    const month = now.toLocaleString('default', { month: 'short' });
+    const year = now.getFullYear()
+    return `${month}, ${year}`
+  }
+
 </script>
 
-<div class="label" style="--font-size: { $settings.fontSize + 'pt'}; --label-width: { $settings.labelWidth + 'cm' };" >
+<div class="label" 
+  style="--font: {$settings.font}; 
+  --font-weight: {$settings.fontWeight};
+  --font-size: { $settings.fontSize + 'pt'}; 
+  --line-height: {$settings.lineHeight + '%'};
+  --label-width: { $settings.labelWidth + 'cm' };
+  " >
   {#if $settings.showStorage}
     {#if labelRecord.storageBox}
       <div style="padding:4px;">Box: {labelRecord.storageBox} -- cut this off label</div>
@@ -108,8 +121,12 @@
             {/if}
           </div>
         {/if}
+        {#if $settings.addPrintedDate && $settings.printerModel}
+        <div style="font-weight: bolder;">Printed on {$settings.printerModel} {getPrintDateString()}</div>
+        {/if}
       </div>
     </div>
+    {/if}
     {#if labelRecord.seriesSampleCounts && Array.isArray(labelRecord.seriesSampleCounts) && labelRecord.seriesSampleCounts.length > 1} <!--this is customized for label data from Arthrobase-->
       <CutMarks char={'-'} />
       <div class="label-part">
@@ -143,8 +160,7 @@
           {/each}
         </div>
       </div>
-    {/if}
-
+    
   {/if}
   {#if ($settings.detLabel || $settings.detLabelOnly) && labelDet} <!-- Apologies to readers for these, detLabel flags whether to add the label, labelDet is what goes on the label -->
     {#if !$settings.detLabelOnly}
@@ -202,10 +218,10 @@
 
   .label {
     position: relative;
-    font-family: "Roboto Condensed", 'Arial Narrow', 'PT Sans Narrow', Arial, sans-serif;
-    font-size: calc(var(--font-size, 10pt) * 0.6);
-    font-weight: 200;
-    line-height: 98%;
+    font-family: var(--font, sans-serif);
+    font-size: calc(var(--font-size, 10pt));
+    font-weight: var(--font-weight, 400);
+    line-height: var(--line-height, 105%);
     width: var(--label-width, 5cm);
     /* border-bottom: 0.5px solid black; */
     break-inside:avoid;
