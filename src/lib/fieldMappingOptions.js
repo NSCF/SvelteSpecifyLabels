@@ -53,6 +53,9 @@ export const fieldsMappings = {
   identificationMethod:['Determinations/Method', 'detMethod', 'idmethod'],
   identificationReferences: ['detReferences', 'detrefs'],
   identifiedBy:['detBy'],
+  detByLast:['lastname'],
+  detByFirst: ['firstname'],
+  detByInitials: ['inital', 'initials', 'middleinitial'],
   dateIdentified: ['Determined Date', 'detdate'],
   identificationRemarks: ['Determinations/Remarks', 'Determinations Remarks', 'detRemarks', 'detNotes', 'detNote'],
 

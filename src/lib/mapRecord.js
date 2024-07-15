@@ -268,6 +268,58 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths) 
     mappedRecord.dateIdentified = addRomanNumeralDates(mappedRecord.dateIdentified)
   }
 
+  if(!mappedRecord.identifiedBy){
+    //TODO Specify has an Initials field as well as middle initial, need to reconcile those
+    if(mappedRecord.detByLast) {
+      mappedRecord.identifiedBy = mappedRecord.detByLast
+      if(mappedRecord.detByFirst){
+        if(/^[A-Z\.\s]+$/.test(mappedRecord.detByFirst)){ //its initials
+          mappedRecord.identifiedBy += `, ${Array.from(mappedRecord.detByFirst).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')}`
+        }
+        else {//its a name
+          mappedRecord.identifiedBy += `, ${mappedRecord.detByFirst[0].toUpperCase() + '.'}`
+          if(mappedRecord.detByInitials) {
+            if(/^[A-Z\.\s]+$/.test(mappedRecord.detByInitials)){ //its initials
+              mappedRecord.identifiedBy += Array.from(mappedRecord.detByInitials).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')
+            }
+            else {//its a name
+              mappedRecord.identifiedBy += mappedRecord.detByInitials[0].toUpperCase() + '.'
+            }
+          }
+        }
+      }
+      else if (mappedRecord.detByInitials){
+        if(/^[A-Z\.\s]+$/.test(mappedRecord.detByInitials)){ //its initials
+          mappedRecord.identifiedBy += `, ${Array.from(mappedRecord.detByInitials).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')}`
+        }
+        else {
+          mappedRecord.identifiedBy += mappedRecord.detByInitials[0].toUpperCase() + '.'
+        }
+      }
+    }
+    else {
+      if(mappedRecord.detByFirst){
+        if(/^[A-Z\.\s]+$/.test(mappedRecord.detByFirst)){ //its initials
+          mappedRecord.identifiedBy = Array.from(mappedRecord.detByFirst).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')
+        }
+        else {//its a name
+          mappedRecord.identifiedBy = mappedRecord.detByFirst
+          if(mappedRecord.detByInitials) {
+            if(/^[A-Z\.\s]+$/.test(mappedRecord.detByInitials)){ //its initials
+              mappedRecord.identifiedBy += ` ${Array.from(mappedRecord.detByInitials).filter(x => x && /[a-zA-Z]+/.test(x)).map(x => x.toUpperCase()).join('.')}`
+            }
+            else {//its a name
+              mappedRecord.identifiedBy += ` ${mappedRecord.detByInitials}`
+            }
+          }
+        }
+      }
+      else if (mappedRecord.detByMiddleInitial){
+        mappedRecord.identifiedBy = mappedRecord.detByMiddleInitial
+      }
+    }
+  }
+
   //Add method, refs and remarks together to one value
   if(mappedRecord.identificationMethod) {
 

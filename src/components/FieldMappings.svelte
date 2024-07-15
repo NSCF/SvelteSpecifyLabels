@@ -17,6 +17,9 @@
   let labelFieldToMap = ""
   let mappedDatasetField = ""
 
+  // basically deprecated fields
+  const excludeFromMappings = ['detByLast', 'detByFirst', 'detByInitials']
+
   const settings = getContext('settings')
   const fieldMappings = getContext('mappings')
 
@@ -58,7 +61,9 @@
   <select class:placeholder-option={!labelFieldToMap} style="margin:0; margin-left:1em;" bind:value={labelFieldToMap}>
     <option value="">Choose a label field</option>
     {#each Object.keys($fieldMappings).filter(labelField => !$fieldMappings[labelField]) as labelField}
+    {#if !excludeFromMappings.includes(labelField) }
     <option style="color: black;" value={labelField}>{labelField}</option>
+    {/if}
     {/each}
   </select>
   {#if darwinCoreFields.includes(labelFieldToMap)}
@@ -73,7 +78,7 @@
 </div>
 <div style="display: flex; width: 100%; flex-wrap: wrap;">
   {#each Object.keys($fieldMappings) as labelField}
-  {#if $fieldMappings[labelField]}
+  {#if $fieldMappings[labelField] && !excludeFromMappings.includes(labelField)}
   <label style="margin: auto; margin-bottom:1em; color: grey; display:flex; align-items:center">
     { darwinCoreFields.includes(labelField) ? 'dwc:' + labelField : labelField}
     {#if darwinCoreFields.includes(labelField)}
