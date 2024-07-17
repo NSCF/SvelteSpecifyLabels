@@ -8,6 +8,7 @@ export default function(labelRecord, includeAuthority, addItalics) {
   if(labelRecord.verbatimIdentification){
     labelDet = labelRecord.verbatimIdentification
     if(!labelDet.includes(' sp.') && !labelDet.includes('?')) {
+      // TODO fix this for when we don't have canonicalName
       if(includeAuthority && labelRecord.verbatimIdentification == labelRecord.canonicalName && labelRecord.scientificNameAuthorship) {
         labelDet += ' ' + labelRecord.scientificNameAuthorship
       }
@@ -15,6 +16,7 @@ export default function(labelRecord, includeAuthority, addItalics) {
   }
   else if(labelRecord.canonicalName && labelRecord.canonicalName.trim()){
     
+    //TODO add italics
     
     let questionMark = false
     if(labelRecord.identificationConfidence){
@@ -67,6 +69,15 @@ export default function(labelRecord, includeAuthority, addItalics) {
   }
   else if (labelRecord.scientificName) {
     labelDet = labelRecord.scientificName
+
+    //TODO add qualifier and certainty
+    
+    if (addItalics) {
+      let nameParts = labelDet.split(" ").map(x => x.trim()).filter(x => x)
+      if (nameParts.length > 1) {
+        labelDet = '<em>' + labelDet + '</em>'
+      }
+    }
     if (includeAuthority) {
       if (labelRecord.scientificNameAuthorship && !labelRecord.scientificName.includes(labelRecord.scientificNameAuthorship)){
         labelDet += ' ' + labelRecord.scientificNameAuthorship
