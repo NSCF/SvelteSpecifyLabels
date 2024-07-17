@@ -19,29 +19,22 @@ Create a folder on your hard drive (name it whatever you like), then open that f
 
 When it's done, type `cd sveltespecifylabels` in the command window and enter, then `npm install` and enter, then `npm run dev` and enter. The command window will show you a URL that you need to copy and paste into your web browser, and press enter.
 
-You only need to do the clone and install once. Then each time you want to make labels, just open the command window in the SvelteSpecifyLabels folder, and run `npm run dev`. Make sure to check the GitHub repo from time to time for updates. If there are updates since you last used the tool, run `git pull` and `npm install` to get the latest updates before running `npm run dev`.
+You only need to do the clone and install once. Then each time you want to make labels, just open the command window in the SvelteSpecifyLabels folder, and run `npm run dev`. Make sure to check the GitHub repo from time to time for updates. If there are updates since you last used the tool, run `git pull` and `npm install` to before running `npm run dev`.
 
 ## Usage
-Drag and drop a CSV file with your specimen data onto the grey block on the screen and then use the various options to customize your labels as you would like. When you press print, remember to set the page size and margins in the print window as required (try not to waste label paper).
+Drag and drop a CSV file with your specimen data onto the grey block on the screen and then use the various options to customize your labels as you would like. Your settings will be saved on the machine for future use (but you will have to set everything again if you make labels on a different computer). When you press print, remember to set the page size and margins in the print window as required (try not to waste label paper).
 
-Your settings will be saved on the machine for future use (but you will have to set everything again if you make labels on a different computer).
 
 ***Rest assured that none of your data is saved anywhere or sent over the internet. You (or someone who knows Javascript) are welcome to check the code in this repo to confirm this.***
 
-### Field headings
+### Field headings/mappings
 The input CSV file must have reasonable field headings in order for the fields to be added to the label. The headings in the file are mapped to Darwin Core fields and some additional specimen/accession specific fields. 
 
-There is an example CSV file in the folder, called example.csv.
+There is a link on the home page to an example CSV file, which includes comments in the field headings with more information. 
 
-To see all the fields that are used go to src/lib/fieldMappings.js. This shows you the fields that are included on the labels, and their alternative names (aliases) that they can have in the input file. If you want to map a field in your file to one of the label fields, open the fieldMappings file on your computer in a text editor (e.g. Notepad or Notepad++) and add your field name to the list for that field. For example:
+Your field headings don't have to match these headings perfectly. You can use the field mappings section to map your dataset fields to the label fields. These mappings will also be saved.
 
-```catalogNumber: ['1.collectionobject.catalogNumber', 'Catalog Number', 'CatNum', 'catnum', 'catalognumber', 'My Catalog Number Field'], ```
-
-Note that field names in the list must be in quotes and are separated from each other by a comma. 
-
-It's best to make these changes while the app is running. Once you've made the changes save the fieldMappings file. If there are no problems then your command window will show a little message about a bundle and 'say waiting for changes'. If there is a problem there will be a whole lot of stuff about syntax errors, parsers, etc. Don't worry about that, you just need to make sure you have the commas and quotes correct in the mappings file. Try again and save until it works.
-
-If you have a field in your dataset that appears on your labels but you don't want it to, simply rename the field in the file so that the field mappings won't recognize it.
+To see all the fields that are used you can go to the src/lib/ folder and fieldMappings.js in a text editor. This shows you the fields that are included on the labels and their alternative names (aliases) that they can have in the input file. 
 
 ## Feedback
 
