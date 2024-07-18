@@ -55,6 +55,7 @@
 		includeTaxonAuthorities: false,
 		excludeNoCatnums: false,
 		underline: false,
+    italics: false,
 		addPrintedDate: false,
 		font: 'Roboto Condensed',
 		fontSize: numberInputSettings.fontSize.default,
@@ -164,8 +165,6 @@
 				}
 			})
 
-			console.log(labelData)
-
 		}
 	}
 
@@ -234,7 +233,6 @@
 	}
 
 	const handleNumberInputKeyboardInput = input => {
-		console.log(input)
 		if ($settings[input] > numberInputSettings[input].max ) {
 			$settings[input] = numberInputSettings[input].max
 		}
@@ -282,6 +280,7 @@
 		$settings.includeTaxonAuthorities = false
 		$settings.excludeNoCatnums = false
 		$settings.underline = false
+    $settings.italics = false
 		$settings.addPrintedDate = false
 		$settings.printerModel = null
 		$settings.font = "Roboto Condensed"
@@ -383,6 +382,11 @@
 			<label style="display:inline">
 				<input type=checkbox bind:checked={$settings.underline}>
 				{langs[$settings.lang]['underline']}
+			</label>
+			<br/>
+      <label style="display:inline">
+				<input type=checkbox bind:checked={$settings.italics}>
+				italics for scientific names
 			</label>
 			<br/>
 			<label style="display:inline">

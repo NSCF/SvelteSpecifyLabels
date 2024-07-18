@@ -10,7 +10,7 @@
 
   let labelDet = null
 
-  $: if (labelRecord || $settings.includeTaxonAuthorities) labelDet =  getLabelDet(labelRecord, $settings.includeTaxonAuthorities)
+  $: if (labelRecord || $settings.includeTaxonAuthorities || $settings.italics) labelDet =  getLabelDet(labelRecord, $settings.includeTaxonAuthorities, false, $settings.italics)
 
   const getPrintDateString = _ => {
     const now = new Date()
@@ -188,7 +188,7 @@
           {/if}
         </div>
         <div class="clearfloat">
-          <span class="inlineblock" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelDet}</span>
+          <span class="inlineblock" class:bolder={!$settings.underline} class:underline={$settings.underline}>{@html labelDet}</span>
         </div>
         <div>
           {#if labelRecord.identifiedBy || labelRecord.dateIdentified}

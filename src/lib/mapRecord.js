@@ -253,16 +253,6 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths) 
   }
 
   //det stuff
- 
-  //canonicalname takes precedence
-  if (mappedRecord.scientificName && !mappedRecord.canonicalName) {
-    if (mappedRecord.scientificNameAuthorship && mappedRecord.scientificName.includes(mappedRecord.scientificNameAuthorship)){
-      mappedRecord.canonicalName = mappedRecord.scientificName.replace(mappedRecord.scientificNameAuthorship, '').trim()
-    }
-    else {
-      mappedRecord.canonicalName = mappedRecord.scientificName
-    }
-  }
 
   if (mappedRecord.dateIdentified && useRomanNumeralMonths) {
     mappedRecord.dateIdentified = addRomanNumeralDates(mappedRecord.dateIdentified)

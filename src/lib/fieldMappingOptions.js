@@ -45,10 +45,24 @@ export const fieldsMappings = {
 
   //det stuff
   verbatimIdentification: ['labelDetName', 'verbatimdet', 'verbatimdetermination'], //can be used for verbatimIdentification, if we have that
-  canonicalName: ['Full Name', 'Taxon/Full Name', 'taxonname', 'taxon'], 
-  scientificName: [],
+  scientificName: ['Full Name', 'Taxon/Full Name', 'taxonname', 'taxon', 'canonicalName'], //because people use scientificName however they like...
   scientificNameAuthorship: ['author', 'authority', 'taxonauthor', 'taxonomicauthor', 'taxonAuthority', 'taxonomicAuthority', 'nameAuthority', 'nameAuthor'],
-  identificationQualifier:['qualifier'],
+  taxonRank: ['rank'],
+  
+  // we just use ranks here, because Darwin Core taxon fields are a mess...
+  order: [],
+  superfamily: [],
+  family: [],
+  tribe: [],
+  subtribe: [],
+  genus: [],
+  species: ['specificEpithet'],
+  subspecies:[],
+  variety: ['var'],
+  form: ['forma'],
+
+  identificationQualifier:['qualifier', 'prefix', 'prefixQualifier', 'taxonNamePrefix'],
+  suffixQualifier: ['suffix', 'taxonNameSuffix'], //not a dwc term, but should be 
   identificationConfidence:['confidence', 'detconfidence', 'detcertainty'],
   identificationMethod:['Determinations/Method', 'detMethod', 'idmethod'],
   identificationReferences: ['detReferences', 'detrefs'],

@@ -35,7 +35,6 @@
 
   const handleAddMapping = _ => {
     if (labelFieldToMap) {
-      console.log('running handleAddMapping')
       $fieldMappings[labelFieldToMap] = mappedDatasetField
       labelFieldToMap = ""
       mappedDatasetField = ""
