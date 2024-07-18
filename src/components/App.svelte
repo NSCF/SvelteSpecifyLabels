@@ -54,6 +54,7 @@
 		includePunch: false,
 		includeTaxonAuthorities: false,
 		excludeNoCatnums: false,
+    includeFieldNumber: false,
 		underline: false,
     italics: false,
 		addPrintedDate: false,
@@ -279,6 +280,7 @@
 		$settings.includePunch = false
 		$settings.includeTaxonAuthorities = false
 		$settings.excludeNoCatnums = false
+    $settings.includeFieldNumber = false
 		$settings.underline = false
     $settings.italics = false
 		$settings.addPrintedDate = false
@@ -379,6 +381,11 @@
 				{langs[$settings.lang]['excludeCatNums']}
 			</label>
 			<br/>
+      <label style="display:inline">
+				<input type=checkbox bind:checked={$settings.includeFieldNumber}>
+				Include field number
+			</label>
+			<br/>
 			<label style="display:inline">
 				<input type=checkbox bind:checked={$settings.underline}>
 				{langs[$settings.lang]['underline']}
@@ -433,8 +440,7 @@
 					</div>
 				</div>
 			</div>
-			<p style="margin:0">{langs[$settings.lang]['saveSettings']}</p>
-			<br/>
+			<p style="position:relative; margin:0; top:-1em; font-size:.7em">{langs[$settings.lang]['saveSettings']}</p>
 			<div style="display:flex; justify-content: space-between">
 				<div style="display:flex; flex-direction:row;">
 					<!-- <button class="secondary-button" on:click={showData}>show data</button> -->

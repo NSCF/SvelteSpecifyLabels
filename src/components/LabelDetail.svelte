@@ -51,16 +51,21 @@
             <span>{$settings.collectionName}</span>
           </div>
         {/if}
-        <div>
-          {#if labelRecord.catalogNumber}
-            <span class="floatleft" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</span>
-            {#if labelRecord.recordNumber}
-              <span class="floatright inlineblock padright" >{labelRecord.recordNumber}</span>
+        {#if labelRecord.catalogNumber || labelRecord.recordNumber || labelRecord.fieldNumber}
+        <div style="display:flex; flex-direction:row-reverse; justify-content:space-between;margin-right:1em">
+          {#if labelRecord.recordNumber || labelRecord.fieldNumber}
+          <div class:bolder={!labelRecord.catalogNumber && !$settings.underline} class:underline={!labelRecord.catalogNumber && $settings.underline}>
+            {#if $settings.includeFieldNumber && labelRecord.fieldNumber}
+            <span>{labelRecord.fieldNumber}{labelRecord.recordNumber? ' / ' : ''}</span>
             {/if}
-          {:else if labelRecord.recordNumber}
-            <span class="floatright inlineblock padright" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.recordNumber}</span>
+            <span>{labelRecord.recordNumber}</span>
+          </div>
+          {/if}
+          {#if labelRecord.catalogNumber}
+          <div class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</div>
           {/if}
         </div>
+        {/if}
         <div class="labelrow clearfloat">
           {#if labelRecord.fullLocality}
             {labelRecord.fullLocality}
@@ -75,7 +80,7 @@
         <div class="labelrow">{labelRecord.habitat || ''}</div>
         <div class="labelrow">
           {#if labelRecord.collectionDate}
-            <span class='padright'>{labelRecord.collectionDate}</span>
+            <span class="padright-sm">{labelRecord.collectionDate}</span>
           {/if}
           {#if labelRecord.recordedBy && labelRecord.recordedBy.length}
             {#each labelRecord.recordedBy as coll}
@@ -132,12 +137,20 @@
       <div class="label-part">
         <div class="labeltext">
           <div class="inlineblock" class:bolder={!$settings.underline} class:underline={$settings.underline}>Collecting events:</div>
-          {#if labelRecord.catalogNumber}
-            <div class="floatright inlineblock padright" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</div>
-          {:else}
+          {#if labelRecord.catalogNumber || labelRecord.recordNumber || labelRecord.fieldNumber}
+          <div style="display:flex; flex-direction:row-reverse; justify-content:space-between;margin-right:1em">
             {#if labelRecord.recordNumber}
-              <div class="floatright inlineblock padright" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.recordNumber}</div>
+            <div class:bolder={!labelRecord.catalogNumber && !$settings.underline} class:underline={!labelRecord.catalogNumber && $settings.underline}>
+              {#if $settings.includeFieldNumber && labelRecord.fieldNumber}
+              <span>{labelRecord.fieldNumber}{labelRecord.recordNumber? ' / ' : ''}</span>
+              {/if}
+              <span>{labelRecord.recordNumber}</span>
+            </div>
             {/if}
+            {#if labelRecord.catalogNumber}
+            <div class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</div>
+            {/if}
+          </div>
           {/if}
           {#each labelRecord.seriesSampleCounts as ssc}
             {#if ssc.collectingDate}
@@ -175,16 +188,21 @@
         </div>
       {/if}
       <div class="labeltext">
-        <div style="display:flex; justify-content:space-between">
+        <div style="display:flex; justify-content:space-between;margin-right:1em">
           {#if labelRecord.typeStatus}
             <div class="uppercase">{labelRecord.typeStatus}</div>
           {:else if labelRecord.catalogNumber || labelRecord.recordNumber}
             <div /> <!-- a placeholder -->
           {/if}
           {#if labelRecord.catalogNumber}
-            <div class="padright" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</div>
-          {:else if labelRecord.recordNumber}
-            <div class="padright" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.recordNumber}</div>            
+            <div class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</div>
+          {:else if labelRecord.recordNumber || labelRecord.fieldNumber}
+            <div class:bolder={!$settings.underline} class:underline={$settings.underline}>
+              {#if $settings.includeFieldNumber && labelRecord.fieldNumber}
+              <span>{labelRecord.fieldNumber}{labelRecord.recordNumber ? ' / ' : ''}</span>
+              {/if}
+              <span>{labelRecord.recordNumber}</span>
+            </div>            
           {/if}
         </div>
         <div class="clearfloat">
@@ -277,7 +295,7 @@
   }
 
   span.padright {
-    margin-right:0.25em;
+    margin-right:1em;
   }
 
   span.padright-sm {

@@ -15,6 +15,7 @@ const darwinCoreFields = [
   'verbatimSRS',
   'verbatimElevation',
   'habitat',
+  'fieldNumber',
   'recordedBy',
   'samplingProtocol',
   'eventRemarks',

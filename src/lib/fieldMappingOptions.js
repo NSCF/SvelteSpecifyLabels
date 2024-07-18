@@ -25,6 +25,7 @@ export const fieldsMappings = {
   minElevationMeters:['Min Elevation in meters', 'minElev'],
   maxElevationMeters:['Max Elevation in meters', 'maxElev'],
   habitat: [],
+  fieldNumber: ['eventcode', 'sitecode', 'eventnumber', 'sitenumber', 'site/eventcode', 'site/eventnumber'],
   collectionDate: ['verbatimEventDate','dateCollected', 'eventDate', 'collectingDate', 'date'],
   collectionStartDate: ['startdate','collectingstartdate'],
   collectionEndDate: ['enddate', 'collectingenddate'],
