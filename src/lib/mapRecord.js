@@ -24,9 +24,6 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths) 
       mappedRecord.catalogNumber = mappedRecord.catalogNumber.replace('-zzz', '-Her')
     }
   }
-  else {
-    let i = 0
-  }
 
   if (mappedRecord.recordNumber) {
     if(!isNaN(mappedRecord.recordNumber)) {
