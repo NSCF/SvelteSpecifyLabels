@@ -1,20 +1,18 @@
 <script>
   import {getContext, createEventDispatcher } from 'svelte';
-  import Alert from './Alert.svelte'
   import CloseIcon from './CloseIcon.svelte';
   import langs from '../i18n/lang';
 	import readCSV from '../lib/readCSVInput'
 	import readJSON from '../lib/readJSONInput'
 
   const dispatch = createEventDispatcher();
-  const { open } = getContext('simple-modal');
   const settings = getContext('settings')
 
   const fileMIMETypes = ['text/csv', 'application/vnd.ms-excel', 'text/json', 'application/json']
 
   let hiddenInput
   let dialog
-  let dialogMessage
+  let dialogMessage = "This is a default message"
   let hovering = false
 
   function isHovering(evt) {
@@ -45,13 +43,15 @@
   }
 
   async function readDataFromFile(file) {
-		if(file.type.endsWith('json')){
+		
+    let rawData
+    
+    if(file.type.endsWith('json')){
 			try {
 				rawData = await readJSON(file)
 			}
 			catch(err) {
-				alert(err.message)
-				return
+				throw(err)
 			}
 		}
 		else {
@@ -59,8 +59,7 @@
 				rawData = await readCSV(file)
 			}
 			catch(err) {
-				alert('Oops! Something went wrong...')
-				return
+				throw(err)
 			}
 		}
 
@@ -79,7 +78,7 @@
     if(file && (fileMIMETypes.includes(file.type))){
       try {
         const dataAndTitle = await readDataFromFile(file)
-        dispatch('data', { dataAndTitle });
+        dispatch('data', dataAndTitle);
       }
       catch(err) {
         showDialogMessage("Oops! Something went wrong: " + err.message)
@@ -92,7 +91,9 @@
   }
 
   const showDialogMessage = message => {
-    dialogMessage = message
+    if (message) {
+      dialogMessage = message
+    }
     dialog.showModal()
   }
 
@@ -117,9 +118,9 @@
   </div>
 </div>
 <input type="file" bind:this={hiddenInput} style="visibility:hidden" on:change={handleFileSelected}>
-<dialog bind:this={dialog}>
+<dialog style="background-color: #FFCC66;" bind:this={dialog}>
   <div style="display:flex; width:100%; justify-content:flex-end;">
-    <button on:click={_ => dialog.close()}><CloseIcon /></button>
+    <button style="background-color: transparent; border:none; padding:0; margin:0" on:click={_ => dialog.close()}><CloseIcon /></button>
   </div>
   <div>
     {dialogMessage}

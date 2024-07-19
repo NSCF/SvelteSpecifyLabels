@@ -1,4 +1,5 @@
 <script>
+  import { getContext } from "svelte";
   import darwinCoreFields from "../lib/dwcFields";
   import LinkIcon from "./LinkIcon.svelte";
 

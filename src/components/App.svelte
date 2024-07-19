@@ -67,7 +67,7 @@
 
 			labelData = rawData.map(raw => mapRecord(raw, $fieldMappings, $settings.useRomanNumeralMonths))
 			
-			sortLabelData()
+			sortLabelData(labelData, $settings.showStorage)
 
 			if ($settings.excludeNoCatnums) {
 				labelData = labelData.filter(x => x.catalogNumber || x.recordNumber)
@@ -77,7 +77,7 @@
 
 	const handleFileDataAndTitle = async ev => {
 		
-		let payload = ev.data 
+		let payload = ev.detail 
 		rawData = payload.data
 		title = payload.title
 		makeLabelData()
@@ -132,42 +132,42 @@
 	<title>{title}</title>
 </svelte:head>
 <main>
-	<Modal>
-		<div id='topstuff'> <!-- apologies to anyone reading this -->
-			{#if !toFieldMappings}
-			<div style="display:flex; justify-content: space-between ">
-				<h2>{langs[$settings.lang]['header']}</h2>
-				<button class="secondary-button" on:click={handLangButtonClick}>{$settings.lang}</button>
-			</div>
-			{/if}
-			{#if toFieldMappings}
-			<FieldMappings record={rawData[1]} on:mappings-updated={makeLabelData} on:close-mappings={closeMappings}/>
-			{/if}
-			{#if !toLabels && !toFieldMappings}
-			<ChooseFile on:data={handleFileDataAndTitle} />
-			<div style="width:100%; display: flex; justify-content:flex-end">
-				<button class="secondary-button" on:click={gotoExampleData}>{langs[$settings.lang]['exampleData']}</button>
-				<button class="secondary-button" on:click={addExampleLabels}>{langs[$settings.lang]['exampleLabels']}</button>
-			</div>
-			{/if}
-			{#if toLabels}
-			<Settings />
-			<div style="display:flex; justify-content: space-between">
-				<div style="display:flex; flex-direction:row;">
-					<!-- <button class="secondary-button" on:click={showData}>show data</button> -->
-					<button class="secondary-button" on:click={clear}>{langs[$settings.lang]['clear']}</button>
-					<!-- <button class="secondary-button" on:click={reset}>{langs[$settings.lang]['reset']}</button> -->
-					<button class="secondary-button" on:click={_ => {toLabels=false; toFieldMappings=true}}>{langs[$settings.lang]['mappings'].toLowerCase()}</button>
-				</div>
-				<button on:click={showPrint} disabled={!toLabels}>{langs[$settings.lang]['printButton']}</button>
-			</div>
-			<hr/>
-			<div class="label-section">
-				<LabelLayout inputData={labelData} />
-			</div>
-			{/if}
+	<div id='topstuff'> <!-- apologies to anyone reading this -->
+		{#if !toFieldMappings}
+		<div style="display:flex; justify-content: space-between ">
+			<h2>{langs[$settings.lang]['header']}</h2>
+			<button class="secondary-button" on:click={handLangButtonClick}>{$settings.lang}</button>
 		</div>
-	</Modal>
+		{/if}
+		{#if toFieldMappings}
+		<FieldMappings record={rawData[1]} on:mappings-updated={makeLabelData} on:close-mappings={closeMappings}/>
+		{/if}
+		{#if !toLabels && !toFieldMappings}
+		<ChooseFile on:data={handleFileDataAndTitle} />
+		<div style="width:100%; display: flex; justify-content:flex-end">
+			<button class="secondary-button" on:click={gotoExampleData}>{langs[$settings.lang]['exampleData']}</button>
+			<button class="secondary-button" on:click={addExampleLabels}>{langs[$settings.lang]['exampleLabels']}</button>
+		</div>
+		{/if}
+		{#if toLabels}
+		<Settings />
+		<div style="display:flex; justify-content: space-between">
+			<div style="display:flex; flex-direction:row;">
+				<!-- <button class="secondary-button" on:click={showData}>show data</button> -->
+				<button class="secondary-button" on:click={clear}>{langs[$settings.lang]['clear']}</button>
+				<!-- <button class="secondary-button" on:click={reset}>{langs[$settings.lang]['reset']}</button> -->
+				<button class="secondary-button" on:click={_ => {toLabels=false; toFieldMappings=true}}>{langs[$settings.lang]['mappings'].toLowerCase()}</button>
+			</div>
+			<button on:click={showPrint} disabled={!toLabels}>{langs[$settings.lang]['printButton']}</button>
+		</div>
+		<hr/>
+		{/if}
+	</div>
+	{#if toLabels}
+	<div class="label-section">
+		<LabelLayout inputData={labelData} />
+	</div>
+	{/if}
 </main>
 
 <style>

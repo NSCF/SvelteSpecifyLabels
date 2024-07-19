@@ -144,5 +144,5 @@
     </div>
   </div>
 </div>
-<p style="margin:0">{langs[$settings.lang]['saveSettings']}</p>
+<p style="position:relative; margin:0; top:-1em; font-size:0.7em">{langs[$settings.lang]['saveSettings']}</p>
 <br/>

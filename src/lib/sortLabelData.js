@@ -30,12 +30,12 @@ function sortOnLabelFields(a,b) {
 
 }
 
-export default function sortLabelData(labelData) {
+export default function sortLabelData(labelData, sortOnStorage) {
   if (labelData && Array.isArray(labelData) && labelData.length) {
 
     //sort first on storage location, then catalog number, then collector number
     labelData.sort((a, b) => {
-      if ($settings.showStorage) {
+      if (sortOnStorage) {
         if (a.storageBox < b.storageBox){
           return -1;
         }
