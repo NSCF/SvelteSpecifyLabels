@@ -15,7 +15,7 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths) 
     //remove prefixed zeros from number
     let patt = /\d+$/
     let matches = mappedRecord.catalogNumber.match(patt)
-    if(matches.length){
+    if(matches && matches.length){
       let number = Number(matches[0])
       mappedRecord.catalogNumber = mappedRecord.catalogNumber.replace(matches[0], number.toString())
     }
