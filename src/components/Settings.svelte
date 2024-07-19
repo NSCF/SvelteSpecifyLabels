@@ -61,6 +61,11 @@
 </label>
 <br/>
 <label style="display:inline">
+  <input type=checkbox bind:checked={$settings.includeQRCode}>
+  Include QR code
+</label>
+<br/>
+<label style="display:inline">
   <input type=checkbox bind:checked={$settings.showStorage}>
   {langs[$settings.lang]['storage']}
 </label>
@@ -76,8 +81,23 @@
 </label>
 <br/>
 <label style="display:inline">
+  <input type=checkbox bind:checked={$settings.includeFieldNumber}>
+  Include field number
+</label>
+<br/>
+<label style="display:inline">
+  <input type=checkbox bind:checked={$settings.includeProject}>
+  Include project name
+</label>
+<br/>
+<label style="display:inline">
   <input type=checkbox bind:checked={$settings.underline}>
   {langs[$settings.lang]['underline']}
+</label>
+<br/>
+<label style="display:inline">
+  <input type=checkbox bind:checked={$settings.italics}>
+  italics for scientific names
 </label>
 <br/>
 <label style="display:inline">
