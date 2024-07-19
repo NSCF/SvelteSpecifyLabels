@@ -1,6 +1,7 @@
 <script>
   import { getContext } from "svelte";
   import LabelDetail from './LabelDetail.svelte'
+  import getLabelDet from "../lib/getLabelDet";
 
   export let labelRecord
 
@@ -11,7 +12,9 @@
     labelRecord.recordedBy ||
     labelRecord.occurrenceRemarks ||
     labelRecord.verbatimIdentification ||
-    labelRecord.scientificName)
+    labelRecord.scientificName ||
+    getLabelDet(labelRecord)
+  )
   } 
 
   const settings = getContext('settings')
