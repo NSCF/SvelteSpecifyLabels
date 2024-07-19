@@ -13,6 +13,7 @@ export default {
 		showStorage: false,
 		includePunch: false,
     includeQRCode: false,
+		qrCodeErrorLevel: 'Q',
 		includeTaxonAuthorities: false,
 		excludeNoCatnums: false,
     includeFieldNumber: false,

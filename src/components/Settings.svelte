@@ -187,6 +187,15 @@
     on:keyup={handleKeyboardInput} 
     on:wheel={handleMouseWheel} bind:value={$settings.qrCodeDims} >
   </div>
+  <div>
+    <label>Robustness</label>
+    <select bind:value={$settings.qrCodeErrorLevel}>
+      <option value="L">Low</option>
+      <option value="M">Medium</option>
+      <option value="Q">Quartile</option>
+      <option value="H">High</option>
+    </select>
+  </div>
   {/if}
 </div>
 <p style="position:relative; margin:0; top:-1em; font-size:0.7em">{langs[$settings.lang]['saveSettings']}</p>

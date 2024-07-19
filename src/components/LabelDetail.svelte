@@ -15,8 +15,8 @@
 
   $: if (labelRecord || $settings.includeTaxonAuthorities || $settings.italics) labelDet =  getLabelDet(labelRecord, $settings.includeTaxonAuthorities, false, $settings.italics)
 
-  $: if($settings.includeQRCode && img && labelRecord && labelRecord.catalogNumber) {
-    QRCode.toDataURL(labelRecord.catalogNumber, { margin: 0 }, function (error, url) {
+  $: if($settings.includeQRCode && $settings.qrCodeErrorLevel && img && labelRecord && labelRecord.catalogNumber) {
+    QRCode.toDataURL(labelRecord.catalogNumber, { margin: 0, errorCorrectionLevel: $settings.qrCodeErrorLevel }, function (error, url) {
       if (error) console.error(error)
       if (url) img.src = url
     })
