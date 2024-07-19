@@ -58,6 +58,7 @@
 		underline: false,
     italics: false,
 		addPrintedDate: false,
+    includeProject: false,
 		font: 'Roboto Condensed',
 		fontSize: numberInputSettings.fontSize.default,
 		fontWeight: 400,
@@ -284,6 +285,7 @@
 		$settings.underline = false
     $settings.italics = false
 		$settings.addPrintedDate = false
+    $settings.includeProject = false
 		$settings.printerModel = null
 		$settings.font = "Roboto Condensed"
 		$settings.fontSize = numberInputSettings.fontSize.default
@@ -384,6 +386,11 @@
       <label style="display:inline">
 				<input type=checkbox bind:checked={$settings.includeFieldNumber}>
 				Include field number
+			</label>
+			<br/>
+      <label style="display:inline">
+				<input type=checkbox bind:checked={$settings.includeProject}>
+				Include project name
 			</label>
 			<br/>
 			<label style="display:inline">

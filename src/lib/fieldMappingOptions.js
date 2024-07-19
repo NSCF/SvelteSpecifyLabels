@@ -2,6 +2,7 @@ export const fieldsMappings = {
   //this uses DwC, mostly...
   catalogNumber: ['Catalog Number', 'CatNum', 'catnum',], 
   recordNumber:['Field Number', 'collNum', 'collNo', 'collectorNo', 'collectornumber', 'collectorCode'],
+  project: ['projectname', 'survey', 'fieldtrip', 'trip'],
   geography: ['Orig. Prov', 'countryprovince'],
   country: [],
   stateProvince: ['province','state', 'admin1'],
@@ -59,7 +60,7 @@ export const fieldsMappings = {
   subtribe: [],
   genus: [],
   species: ['specificEpithet'],
-  subspecies:[],
+  subspecies:['infraspecificEpithet'],
   variety: ['var'],
   form: ['forma'],
 

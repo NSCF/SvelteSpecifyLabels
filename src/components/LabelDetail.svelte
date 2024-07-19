@@ -129,6 +129,9 @@
         {#if $settings.addPrintedDate}
         <div class:bolder={!$settings.underline} class:underline={$settings.underline} >Printed on {$settings.printerModel ? $settings.printerModel : ''} {getPrintDateString()}</div>
         {/if}
+        {#if labelRecord.project && $settings.includeProject}
+        <div class:bolder={!$settings.underline} class:underline={$settings.underline} >{labelRecord.project}</div>
+        {/if}
       </div>
     </div>
     {/if}
