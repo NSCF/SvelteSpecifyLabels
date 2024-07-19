@@ -92,7 +92,7 @@ const exampleData = [
     "detNote": "Confirmed after topotypes collected at Hanover"
   },
   {
-    "catnum": "",
+    "catnum": "LAC NKW 328NP29B",
     "collectorNo": "IE15-018",
     "typestatus": "paratype",
     "country": "South Africa",

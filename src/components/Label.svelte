@@ -4,19 +4,17 @@
 
   export let labelRecord
 
-  let makeLabel
-
-  // only make a label if we have some data
-  $: labelRecord, makeLabel = (labelRecord.fullLocality || 
+  const makeLabel = _ => {
+    return labelRecord && (labelRecord.fullLocality || 
     labelRecord.fullCoordsString ||
     labelRecord.collectionDate ||
     labelRecord.recordedBy ||
     labelRecord.occurrenceRemarks ||
     labelRecord.verbatimIdentification ||
-    labelRecord.canonicalName)
+    labelRecord.scientificName)
+  } 
 
   const settings = getContext('settings')
-
 
 </script>
 

@@ -5,8 +5,8 @@ import csv from 'fast-csv'
 import getFieldMappings from '../lib/getFieldMappings.js'
 import mapRecord from '../lib/mapRecord.js'
 
-const filePath = String.raw`C:\Users\Ian Engelbrecht\Downloads`
-const fileName = String.raw`Label data template.csv`
+const filePath = String.raw`C:\Users\ianic\Downloads`
+const fileName = String.raw`Skukuza_Biological_Reference_Collection_TEST.csv`
 
 let data = []
 
