@@ -52,6 +52,7 @@
 		italicizeNames: false,
 		showStorage: false,
 		includePunch: false,
+    includeQRCode: false,
 		includeTaxonAuthorities: false,
 		excludeNoCatnums: false,
     includeFieldNumber: false,
@@ -279,6 +280,7 @@
 		$settings.italicizeNames = false
 		$settings.showStorage = false
 		$settings.includePunch = false
+    $settings.includeQRCode = false
 		$settings.includeTaxonAuthorities = false
 		$settings.excludeNoCatnums = false
     $settings.includeFieldNumber = false
@@ -366,6 +368,11 @@
 			<label style="display:inline">
 				<input type=checkbox bind:checked={$settings.includePunch}>
 				{langs[$settings.lang]['punch']}
+			</label>
+			<br/>
+      <label style="display:inline">
+				<input type=checkbox bind:checked={$settings.includeQRCode}>
+				Include QR code
 			</label>
 			<br/>
 			<label style="display:inline">

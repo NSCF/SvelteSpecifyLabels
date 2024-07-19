@@ -2,6 +2,7 @@
   import CutMarks from "./CutMarks.svelte";
   import { getContext } from "svelte";
   import getLabelDet from '../lib/getLabelDet'
+  import QRCode from 'qrcode'
 
   export let labelRecord
 
@@ -9,8 +10,17 @@
   const settings = getContext('settings')
 
   let labelDet = null
+  let canvas
+  let img
 
   $: if (labelRecord || $settings.includeTaxonAuthorities || $settings.italics) labelDet =  getLabelDet(labelRecord, $settings.includeTaxonAuthorities, false, $settings.italics)
+
+  $: if($settings.includeQRCode && img && labelRecord && labelRecord.catalogNumber) {
+    QRCode.toDataURL(labelRecord.catalogNumber, { margin: 0 }, function (error, url) {
+      if (error) console.error(error)
+      if (url) img.src = url
+    })
+  }
 
   const getPrintDateString = _ => {
     const now = new Date()
@@ -133,6 +143,11 @@
         <div class:bolder={!$settings.underline} class:underline={$settings.underline} >{labelRecord.project}</div>
         {/if}
       </div>
+      {#if $settings.includeQRCode && labelRecord.catalogNumber}
+        <div style="margin:.25em;">
+          <img width="35" height="35" bind:this={img} alt="QR code"/>
+        </div>
+      {/if}
     </div>
     {/if}
     {#if labelRecord.seriesSampleCounts && Array.isArray(labelRecord.seriesSampleCounts) && labelRecord.seriesSampleCounts.length > 1} <!--this is customized for label data from Arthrobase-->

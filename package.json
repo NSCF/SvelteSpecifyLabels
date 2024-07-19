@@ -23,6 +23,7 @@
     "install": "^0.13.0",
     "npm": "^10.8.1",
     "papaparse": "^5.2.0",
+    "qrcode": "^1.5.3",
     "sirv-cli": "^0.4.4",
     "svelte-simple-modal": "^0.4.2"
   }
