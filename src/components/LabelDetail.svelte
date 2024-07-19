@@ -145,7 +145,7 @@
       </div>
       {#if $settings.includeQRCode && labelRecord.catalogNumber}
         <div style="margin:.25em;">
-          <img width="35" height="35" bind:this={img} alt="QR code"/>
+          <img width="30" height="30" bind:this={img} alt="QR code"/>
         </div>
       {/if}
     </div>
