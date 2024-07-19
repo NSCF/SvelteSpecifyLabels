@@ -47,6 +47,11 @@
     <CutMarks char={'-'}/>
   {/if}
   {#if !$settings.detLabelOnly}
+    {#if $settings.showInstitution}
+    <div style="width:100%; text-align:center;margin-bottom:.5em;" class:bolder={!$settings.underline} class:underline={$settings.underline}>
+      {$settings.collectionName || ''}
+    </div>
+    {/if}
     <div class="label-part">
       {#if $settings.includePunch}
         <div class="labelpunch">
@@ -56,11 +61,6 @@
         </div>
       {/if}
       <div class="labeltext">
-        {#if $settings.showInstitution}
-          <div class="museumname">
-            <span>{$settings.collectionName}</span>
-          </div>
-        {/if}
         {#if labelRecord.catalogNumber || labelRecord.recordNumber || labelRecord.fieldNumber}
         <div style="display:flex; flex-direction:row-reverse; justify-content:space-between;margin-right:1em">
           {#if labelRecord.recordNumber || labelRecord.fieldNumber}
@@ -145,7 +145,7 @@
       </div>
       {#if $settings.includeQRCode && labelRecord.catalogNumber}
         <div style="margin:.25em;">
-          <img width="30" height="30" bind:this={img} alt="QR code"/>
+          <img width={$settings.qrCodeDims} height={$settings.qrCodeDims} bind:this={img} alt="QR code"/>
         </div>
       {/if}
     </div>
@@ -330,11 +330,6 @@
 
   .clearfloat {
     clear:both
-  }
-
-  .museumname {
-    text-align:center;
-    margin-bottom:.5em;
   }
 
 </style>

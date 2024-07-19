@@ -1,7 +1,6 @@
 <script>
 	import { setContext } from 'svelte'
 	import { writable } from 'svelte/store';
-	import Modal from 'svelte-simple-modal'
 	import ChooseFile from './ChooseFile.svelte'
 	import Settings from './Settings.svelte';
 	import LabelLayout from './LabelLayout.svelte'
@@ -23,6 +22,11 @@
 	let rawData = []
 	let labelData = []
 
+	const defaultSettingsCopy = {} //because it changes
+	for (const [key, val] of Object.entries(defaultSettings)){
+		defaultSettingsCopy[key] = val
+	}
+
 	let settings = writable(defaultSettings)
 
 	if (localStorage.getItem("labelSettings") != null) {
@@ -41,8 +45,6 @@
 
 	let fieldMappings = writable({})
 	setContext('mappings', fieldMappings)
-
-
 
 	//This runs when new raw data are added
 	const makeLabelData = _ => {
@@ -105,6 +107,22 @@
 		console.log(labelData)
 	}
 
+	const reset = _ => {
+		if (localStorage.getItem("labelSettings") != null) {
+			const savedSettings = JSON.parse(localStorage.getItem("labelSettings"))
+			for (const [key, val] of Object.entries(savedSettings)) {
+				if (key in $settings) {
+					$settings[key] = val
+				}
+			}
+		}
+		else {
+			for (const [key, val] of Object.entries(defaultSettingsCopy)) {
+				$settings[key] = val
+			}
+		}
+	}
+
 	const clear = _ => {
 		rawData = []
 		labelData = []
@@ -153,9 +171,8 @@
 		<Settings />
 		<div style="display:flex; justify-content: space-between">
 			<div style="display:flex; flex-direction:row;">
-				<!-- <button class="secondary-button" on:click={showData}>show data</button> -->
+				<button class="secondary-button" on:click={reset}>{langs[$settings.lang]['reset']}</button>
 				<button class="secondary-button" on:click={clear}>{langs[$settings.lang]['clear']}</button>
-				<!-- <button class="secondary-button" on:click={reset}>{langs[$settings.lang]['reset']}</button> -->
 				<button class="secondary-button" on:click={_ => {toLabels=false; toFieldMappings=true}}>{langs[$settings.lang]['mappings'].toLowerCase()}</button>
 			</div>
 			<button on:click={showPrint} disabled={!toLabels}>{langs[$settings.lang]['printButton']}</button>

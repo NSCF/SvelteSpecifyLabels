@@ -13,16 +13,35 @@
 
 	$: if( !($settings.font in fontWeights) ) $settings.fontWeight = 400
 
-	const handleNumberInputKeyboardInput = input => {
-		console.log(input)
-		if ($settings[input] > numberInputSettings[input].max ) {
-			$settings[input] = numberInputSettings[input].max
+	const handleKeyboardInput = ev => {
+    const field = ev.target.name
+		if ($settings[field] > numberInputSettings[field].max ) {
+			$settings[field] = numberInputSettings[field].max
 		}
-
-		if ($settings[input] < numberInputSettings[input].min ) {
-			$settings[input] = numberInputSettings[input].min
+		if ($settings[field] < numberInputSettings[field].min ) {
+			$settings[field] = numberInputSettings[field].min
 		}
 	}
+
+  const handleMouseWheel = ev => {
+    if (document.activeElement === ev.target) {
+      ev.preventDefault()
+      const field = ev.target.name
+      let step = numberInputSettings[field].step || 1
+      let currentValue = Number(ev.target.value)
+      if (ev.deltaY < 0) {
+        if (currentValue + step <= numberInputSettings[field].max) {
+          $settings[field] = currentValue + step
+        }
+      }
+      if (ev.deltaY > 0) {
+        if (currentValue - step >= numberInputSettings[field].min) {
+          $settings[field] = currentValue - step
+        }
+      }
+    }
+
+  }
 
 </script>
 
@@ -130,19 +149,45 @@
   {/if}
   <div>
     <label>{langs[$settings.lang]['fontSize']}</label>
-    <input type="number" min={numberInputSettings.fontSize.min} max={numberInputSettings.fontSize.max} on:keyup={_ => handleNumberInputKeyboardInput('fontSize')} on:mousewheel|preventDefault bind:value={$settings.fontSize} >
+    <input type="number" name="fontSize" 
+    min={numberInputSettings.fontSize.min} 
+    max={numberInputSettings.fontSize.max} 
+    step={numberInputSettings.fontSize.step || 1}
+    on:keyup={handleKeyboardInput} 
+    on:wheel={handleMouseWheel} bind:value={$settings.fontSize} >
   </div>
   <div>
     <label>{langs[$settings.lang]['lineHeight']}</label>
-    <input type="number" min={numberInputSettings.lineHeight.min} max={numberInputSettings.lineHeight.max} step="5"  on:keyup={_ => handleNumberInputKeyboardInput('lineHeight')} on:mousewheel|preventDefault bind:value={$settings.lineHeight} >
+    <input type="number" name="lineHeight" 
+    min={numberInputSettings.lineHeight.min} 
+    max={numberInputSettings.lineHeight.max} 
+    step={numberInputSettings.lineHeight.step || 1}
+    on:keyup={handleKeyboardInput} 
+    on:wheel={handleMouseWheel} bind:value={$settings.lineHeight} >
   </div>
   <div>
     <label>{langs[$settings.lang]['labelWidth']}</label>
     <div style="display:flex; align-items: baseline; ">
-      <input type="number" min={numberInputSettings.labelWidth.min} max={numberInputSettings.labelWidth.max} step=".5" on:keyup={_ => handleNumberInputKeyboardInput('labelWidth')} on:mousewheel|preventDefault bind:value={$settings.labelWidth} >
+      <input type="number" name="labelWidth" 
+      min={numberInputSettings.labelWidth.min} 
+      max={numberInputSettings.labelWidth.max} 
+      step={numberInputSettings.labelWidth.step || 1}
+      on:keyup={handleKeyboardInput} 
+      on:wheel={handleMouseWheel} bind:value={$settings.labelWidth} >
       <span>{langs[$settings.lang]['labelWidthUnit']}</span>
     </div>
   </div>
+  {#if $settings.includeQRCode}
+  <div>
+    <label>QR Code size</label>
+    <input type="number" name="qrCodeDims" 
+    min={numberInputSettings.qrCodeDims.min} 
+    max={numberInputSettings.qrCodeDims.max} 
+    step={numberInputSettings.qrCodeDims.step || 1}
+    on:keyup={handleKeyboardInput} 
+    on:wheel={handleMouseWheel} bind:value={$settings.qrCodeDims} >
+  </div>
+  {/if}
 </div>
 <p style="position:relative; margin:0; top:-1em; font-size:0.7em">{langs[$settings.lang]['saveSettings']}</p>
 <br/>

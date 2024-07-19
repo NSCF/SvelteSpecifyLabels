@@ -1,7 +1,7 @@
 import numberInputSettings from './numberInputSettings.js'
 
 export default {
-  lang: 'en',
+  	lang: 'en',
 		showInstitution: false,
 		collectionName: null,
 		labelPerSpecimen: false,
@@ -24,5 +24,6 @@ export default {
 		fontSize: numberInputSettings.fontSize.default,
 		fontWeight: 400,
 		lineHeight: numberInputSettings.lineHeight.default,
-		labelWidth: numberInputSettings.labelWidth.default
+		labelWidth: numberInputSettings.labelWidth.default,
+		qrCodeDims: numberInputSettings.qrCodeDims.default
 }
