@@ -3,11 +3,11 @@ import addRomanNumeralDates from './addRomanNumeralDates.js'
 
 
 //takes a record from the input dataset and returns the object needed by the label
-export default function mapRecord(record, fieldMappings, useRomanNumeralMonths) {
+export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, appendGridRefToCoordsString) {
 
   let mappedRecord = {}
   for (const [labelfield, recordField] of Object.entries(fieldMappings)){
-    mappedRecord[labelfield] = record[recordField]
+    mappedRecord[labelfield] = record[recordField] && record[recordField].trim? record[recordField].trim() : record[recordField]
   }
 
   if(mappedRecord.catalogNumber){
@@ -85,6 +85,15 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths) 
     }
 
     mappedRecord.fullCoordsString = coords
+  }
+
+  if (mappedRecord.gridReference && appendGridRefToCoordsString) {
+    if (mappedRecord.fullCoordsString) {
+      mappedRecord.fullCoordsString += ' '  + mappedRecord.gridReference
+    }
+    else {
+      mappedRecord.fullCoordsString = mappedRecord.gridReference
+    }
   }
 
   if (!mappedRecord.labelElevation){

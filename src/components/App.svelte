@@ -143,7 +143,7 @@
 	const mapAndSortRawData = _ => {
 		if (rawData.length) {
 
-			labelData = rawData.map(raw => mapRecord(raw, $fieldMappings, $settings.useRomanNumeralMonths))
+			labelData = rawData.map(raw => mapRecord(raw, $fieldMappings, $settings.useRomanNumeralMonths, true))
 			if ($settings.excludeNoCatnums) {
 				labelData = labelData.filter(x => x.catalogNumber || x.recordNumber)
 			}

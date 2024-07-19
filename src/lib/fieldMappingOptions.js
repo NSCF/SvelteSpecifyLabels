@@ -20,6 +20,7 @@ export const fieldsMappings = {
   coordsUncertaintyUnit:['Max Uncertainty Est Unit',  'uncertaintyunit'],
   coordsSource: ['Lat/Long Method', 'georeferenceSources', 'georefSource', 'georefSources', 'coordsMethod', 'coordsSource'], //because its should not be a georeference!!
   verbatimSRS: ['Datum', 'geodeticDatum'],
+  gridReference:['grid', 'qds', 'gridref', 'qdgs'],
   labelElevation: [],
   verbatimElevation: ['elevation', 'altitude', 'Verbatim Elev'],
   minElevationMeters:['Min Elevation in meters', 'minElev'],
