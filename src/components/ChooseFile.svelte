@@ -1,113 +1,131 @@
 <script>
-import {getContext, createEventDispatcher } from 'svelte';
-import Alert from './Alert.svelte'
-import langs from '../i18n/lang';
+  import {getContext, createEventDispatcher } from 'svelte';
+  import Alert from './Alert.svelte'
+  import CloseIcon from './CloseIcon.svelte';
+  import langs from '../i18n/lang';
+	import readCSV from '../lib/readCSVInput'
+	import readJSON from '../lib/readJSONInput'
 
-const dispatch = createEventDispatcher();
-const { open } = getContext('simple-modal');
-const settings = getContext('settings')
+  const dispatch = createEventDispatcher();
+  const { open } = getContext('simple-modal');
+  const settings = getContext('settings')
 
-//PROPS
-export let fileMIMETypes
+  const fileMIMETypes = ['text/csv', 'application/vnd.ms-excel', 'text/json', 'application/json']
 
-//LOCALS
-let hiddenInput
-let hovering = false
+  let hiddenInput
+  let dialog
+  let dialogMessage
+  let hovering = false
 
-//COMPUTED
-
-//WATCHERS
-
-//METHODS
-function handleMouseOver(evt){
-  evt.stopPropagation(); // Do not allow the dragover event to bubble.
-  evt.preventDefault(); // Prevent default dragover event behavior.
-  hovering = true
-}
-
-function handleMouseout(evt){
-  evt.stopPropagation(); // Do not allow the dragover event to bubble.
-  evt.preventDefault(); // Prevent default dragover event behavior.
-  hovering = false
-}
-
-function handleDragEnter(evt){
-  evt.stopPropagation(); // Do not allow the dragover event to bubble.
-  evt.preventDefault(); // Prevent default dragover event behavior.
-  hovering = true
-}
-
-function handleDragLeave(evt){
-  evt.stopPropagation(); // Do not allow the dragover event to bubble.
-  evt.preventDefault(); // Prevent default dragover event behavior.
-  hovering = false
-}
-
-function handleBoxClick(evt){
-  hiddenInput.click()
-}
-
-function onFileSelected() {
-  let targetFile = hiddenInput.files[0];
-  hovering = false
-  toEmitOrNotToEmit(targetFile)
-  hiddenInput.value = null
-}
-
-function handleDragDrop(evt){
-  evt.stopPropagation(); // Do not allow the drop event to bubble.
-  evt.preventDefault(); // Prevent default drop event behavior.
-  hovering = false
-  let targetFile = evt.dataTransfer.files[0];
-  toEmitOrNotToEmit(targetFile)
-}
-
-//HELPERS
-function toEmitOrNotToEmit(file){
-  if(file && (fileMIMETypes.includes(file.type))){
-    dispatch('file-selected', {
-      file
-    });
+  function isHovering(evt) {
+    evt.stopPropagation(); // Do not allow the dragover event to bubble.
+    evt.preventDefault(); // Prevent default dragover event behavior.
+    hovering = true
   }
-  else {
-    open(Alert, 
-    { message: "Please select a valid CSV file" }, 
-    {
-      closeButton:false,
-      styleWindow: { 
-        backgroundColor:'#f2dede', 
-        'border-color': 'blue'
+
+  function isNotHovering(evt) {
+    evt.stopPropagation(); // Do not allow the dragover event to bubble.
+    evt.preventDefault(); // Prevent default dragover event behavior.
+    hovering = false
+  }
+
+  function handleFileSelected() {
+    let targetFile = hiddenInput.files[0];
+    hovering = false
+    toEmitOrNotToEmit(targetFile)
+    hiddenInput.value = null
+  }
+
+  function handleDragDrop(evt){
+    evt.stopPropagation(); // Do not allow the drop event to bubble.
+    evt.preventDefault(); // Prevent default drop event behavior.
+    hovering = false
+    let targetFile = evt.dataTransfer.files[0];
+    toEmitOrNotToEmit(targetFile)
+  }
+
+  async function readDataFromFile(file) {
+		if(file.type.endsWith('json')){
+			try {
+				rawData = await readJSON(file)
+			}
+			catch(err) {
+				alert(err.message)
+				return
+			}
+		}
+		else {
+			try {
+				rawData = await readCSV(file)
+			}
+			catch(err) {
+				alert('Oops! Something went wrong...')
+				return
+			}
+		}
+
+    let title = file.name.replace(/\.[a-z]+$/i, '').trim()
+		if (!title.toLowerCase().includes('label')) {
+			title += ' labels'
+		}
+
+    return {
+      data: rawData,
+      title
+    }
+  }
+
+  async function toEmitOrNotToEmit(file){
+    if(file && (fileMIMETypes.includes(file.type))){
+      try {
+        const dataAndTitle = await readDataFromFile(file)
+        dispatch('data', { dataAndTitle });
       }
-    });
+      catch(err) {
+        showDialogMessage("Oops! Something went wrong: " + err.message)
+      }
+      
+    }
+    else {
+      showDialogMessage("Please select a valid CSV file")
+    }
   }
-}
+
+  const showDialogMessage = message => {
+    dialogMessage = message
+    dialog.showModal()
+  }
 
 </script>
 
-<!--##############################################-->
-<!--
-  based on https://codepen.io/MSEdgeDev/pen/KzzNaZ
--->
+<!-- based on https://codepen.io/MSEdgeDev/pen/KzzNaZ -->
 <div id="wrapper" class="wrapper">
   <div 
     id="fileDropBox"
     class="fileDropBox"
     class:active={hovering}
     class:inactive={!hovering}
-    on:mouseenter={handleMouseOver}
-    on:mouseleave={handleMouseout}
-    on:dragenter={handleDragEnter} 
-    on:dragleave={handleDragLeave}  
+    on:mouseenter={isHovering}
+    on:mouseleave={isNotHovering}
+    on:dragenter={isHovering} 
+    on:dragleave={isNotHovering}  
     on:drop={handleDragDrop} 
-    on:click={handleBoxClick}
+    on:click={_ => hiddenInput.click()}
     ondragover="return false"
   >
     <p>{langs[$settings.lang]['box']}</p>
   </div>
 </div>
-<input type="file" bind:this={hiddenInput} style="visibility:hidden" on:change={onFileSelected}>
+<input type="file" bind:this={hiddenInput} style="visibility:hidden" on:change={handleFileSelected}>
+<dialog bind:this={dialog}>
+  <div style="display:flex; width:100%; justify-content:flex-end;">
+    <button on:click={_ => dialog.close()}><CloseIcon /></button>
+  </div>
+  <div>
+    {dialogMessage}
+  </div>
+</dialog>
 
-<!--##############################################-->
 <style>
 * {
     font-family: segoe, sans-serif;
@@ -118,6 +136,7 @@ function toEmitOrNotToEmit(file){
     margin:0 auto;
     margin-top:40px;
   }
+
   .fileDropBox {
     margin-left:100px;
     width: 20em;
