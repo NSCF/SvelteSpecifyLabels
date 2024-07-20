@@ -144,9 +144,9 @@
         {/if}
       </div>
       {#if $settings.includeQRCode && labelRecord.catalogNumber}
-        <div style="margin:.25em;">
-          <img width={$settings.qrCodeDims} height={$settings.qrCodeDims} bind:this={img} alt="QR code"/>
-        </div>
+      <div style="margin:.25em;">
+        <img width={$settings.qrCodeDims} height={$settings.qrCodeDims} bind:this={img} alt="QR code"/>
+      </div>
       {/if}
     </div>
     {/if}
@@ -242,6 +242,11 @@
           </div>
         {/if}
       </div>
+      {#if $settings.includeQRCode && $settings.detLabelOnly && labelRecord.catalogNumber}
+      <div style="margin:.25em;">
+        <img width={$settings.qrCodeDims} height={$settings.qrCodeDims} bind:this={img} alt="QR code"/>
+      </div>
+      {/if}
     </div>
   {/if}
   <CutMarks char={'—'}/>
