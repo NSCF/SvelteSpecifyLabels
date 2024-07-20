@@ -84,6 +84,13 @@
   Include QR code
 </label>
 <br/>
+{#if $settings.includeQRCode && !$settings.detLabelOnly}
+<label style="display:inline">
+  <input type=checkbox style="margin-left:2em;" bind:checked={$settings.qrCodeOnDetLabels}>
+  Add it on det labels
+</label>
+<br/>
+{/if}
 <label style="display:inline">
   <input type=checkbox bind:checked={$settings.showStorage}>
   {langs[$settings.lang]['storage']}
@@ -116,7 +123,7 @@
 <br/>
 <label style="display:inline">
   <input type=checkbox bind:checked={$settings.italics}>
-  italics for scientific names
+  Italics for scientific names
 </label>
 <br/>
 <label style="display:inline">

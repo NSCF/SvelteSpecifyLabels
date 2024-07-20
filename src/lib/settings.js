@@ -14,6 +14,7 @@ export default {
 		includePunch: false,
     includeQRCode: false,
 		qrCodeErrorLevel: 'Q',
+		qrCodeOnDetLabels: false,
 		includeTaxonAuthorities: false,
 		excludeNoCatnums: false,
     includeFieldNumber: false,

@@ -145,7 +145,7 @@
           <div class:bolder={!$settings.underline} class:underline={$settings.underline} >{labelRecord.project}</div>
         {/if}
       </div>
-      {#if $settings.includeQRCode && labelRecord.catalogNumber}
+      {#if labelRecord.catalogNumber && $settings.includeQRCode && !($settings.detLabelOnly || $settings.qrCodeOnDetLabels)}
         <div style="margin:.25em;">
           <img width={$settings.qrCodeDims} height={$settings.qrCodeDims} bind:this={img} alt="QR code"/>
         </div>
@@ -245,7 +245,7 @@
           </div>
         {/if}
       </div>
-      {#if $settings.includeQRCode && $settings.detLabelOnly && labelRecord.catalogNumber}
+      {#if labelRecord.catalogNumber && $settings.includeQRCode && ($settings.detLabelOnly || $settings.qrCodeOnDetLabels) }
         <div style="margin:.25em;">
           <img width={$settings.qrCodeDims} height={$settings.qrCodeDims} bind:this={img} alt="QR code"/>
         </div>
