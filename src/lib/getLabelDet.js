@@ -1,110 +1,49 @@
 export default function getLabelDet(labelRecord, includeAuthority, includeInfraspecificRanks, addItalics) { 
-  //TODO add sensu and other suffixes when we have it
 
   let labelDet
 
   // we prioritize verbatimDet, although we can't have italics
   // we assume that verbatim det will have the qualifiers, etc included, because that's what a verbatim det is
   if(labelRecord.verbatimIdentification) {
-    //TODO try to work out if this is a species or genus name, add sp. if needed, etc
+    // too complicated to italicize verbatim identifications with qualifiers, authors etc, just print as is
     labelDet = labelRecord.verbatimIdentification
-    return labelDet
+  }
+  else {
+
+    //we prioritize rank fields over scientificName
+    labelDet = getDetStringFromRanks(labelRecord, includeAuthority, includeInfraspecificRanks, addItalics)
+
+    if (!labelDet && labelRecord.scientificName) {
+      labelDet = getDetStringFromScientificName(labelRecord, includeAuthority, addItalics)
+    }
   }
 
-  // otherwise rank fields
-  labelDet = getDetStringFromRanks(labelRecord, includeAuthority, includeInfraspecificRanks, addItalics)
-  if (labelDet) {
-    return labelDet
-  }
-
-  //otherwise build it from scientificName
-  if (labelRecord.scientificName) {
-
-    labelDet = labelRecord.scientificName
-
-    //let's just simplify things here
-    if (labelRecord.scientificNameAuthorship && labelDet.includes(labelRecord.scientificNameAuthorship)) {
-      labelDet = labelDet.replace(labelRecord.scientificNameAuthorship).trim()
-    }
-
-    let nameParts = labelDet.split(' ').map(x => x.trim()).filter(x => x)
-
-    // labelDet might include the author, so let's assume authors will always have a capital letter somewhere, and that we only have authors for species and below
-    let lastEpithetIndex = 0
-    for (let i = 1; i < nameParts.length; i++) { //we start after the first name part, which will always be titlecase
-      
-      if (/^sp\.?$/i.test(nameParts[i])) {
-        break
-      }
-      
-      if (nameParts[i] == nameParts[i].toLowerCase()){
-        lastEpithetIndex = i
-      }
-      else { //we might have reached an author name
-        if (!nameParts[i].includes('(')){ //it might be a subgenus
-          break
-        }
-      }
-    }
-
-    //attempting to add italics here
-    if (addItalics) {
-      for (let i = 0; i <= lastEpithetIndex; i++) {
-        nameParts[i] = '<i>' + nameParts[i] + '</i>'
-      }
-    }
-
-    if(labelRecord.identificationQualifier) {
-      addQualifierToNamePartsArray(nameParts, labelRecord.identificationQualifier, lastEpithetIndex)
-      
-      //we only have scientificname if it's a prefix qualifier
-      if(includeAuthority && labelRecord.scientificNameAuthorship && ['aff.', 'cf.', 'nr'].includes(labelRecord.identificationQualifier)) {
-        nameParts.push(labelRecord.scientificNameAuthorship)
-      }
-    }
-    else if (labelRecord.taxonRank && labelRecord.taxonRank == 'genus' || labelRecord.taxonRank == 'subgenus') {
-      if (!nameParts.includes('sp.')) {
-        nameParts.push('sp.')
-      }
-    }
-
-    let questionMark = false
-    if(labelRecord.identificationConfidence){
-      if(labelRecord.identificationConfidence.toLowerCase() != 'high'){
-        questionMark = true
-      }
-    }
-
-    //we only want the author if we don't have suffixes or question marks
-    // remember authors for dets with prefix qualifiers are already added above
-    if (includeAuthority && !labelRecord.identificationQualifier && !questionMark ) {
-      if (labelRecord.scientificNameAuthorship) {
-        nameParts.push(labelRecord.scientificNameAuthorship)
-      }
-    }
-
-    if (questionMark) {
-      nameParts.push('?')
-    }
-    
-    labelDet = nameParts.join(' ')
-    return labelDet
-
-  }
-
-  return null
+  return labelDet
 
 }
 
 const infraSpecificRanks = {
   subspecies: 'subsp.',
   variety: 'var.',
-  form: 'f.'
+  subvariety: 'subvar.',
+  form: 'f.',
+  subform: 'subf.'
 }
 
-export function getDetStringFromRanks(record, includeAuthority, includeInfraspecificRanks, makeItalics) {
+//this is used differently to above
+const rankParts = ['subsp', 'var', 'subvar', 'f', 'subf']
+
+function isRankPart(namePart) {
+  return rankParts.some(rank => {
+    const re = new RegExp("^" + rank + "\.?$")
+    return re.test(namePart)
+  })
+}
+
+
+function getDetStringFromRanks(record, includeAuthority, includeInfraspecificRanks, makeItalics) {
   //we need to walk up from the bottom and collect the necessary values
-  const fields = ['order', 'superfamily', 'family', 'tribe', 'subtribe', 'genus', 'species', 'subspecies', 'variety', 'form']
+  const fields = ['order', 'superfamily', 'family', 'tribe', 'subtribe', 'genus', 'species', 'subspecies', 'variety', 'subvariety', 'forma', 'subforma']
   fields.reverse()
 
   let taxonRank
@@ -149,8 +88,6 @@ export function getDetStringFromRanks(record, includeAuthority, includeInfraspec
 
   fullNameParts.reverse()
 
-  
-
   let questionMark = false
   if(record.identificationConfidence){
     if(record.identificationConfidence.toLowerCase() != 'high') {
@@ -160,6 +97,7 @@ export function getDetStringFromRanks(record, includeAuthority, includeInfraspec
 
   if(record.identificationQualifier) {
     addQualifierToNamePartsArray(fullNameParts, record.identificationQualifier, fullNameParts.length - 1)
+    
     //we only have author if it's a prefix qualifier
     if(includeAuthority && record.scientificNameAuthorship && ['aff.', 'cf.', 'nr'].includes(record.identificationQualifier)) {
       fullNameParts.push(record.scientificNameAuthorship)
@@ -171,7 +109,7 @@ export function getDetStringFromRanks(record, includeAuthority, includeInfraspec
 
   //we only want the author if we don't have qualifiers or question marks
   if (includeAuthority && !record.identificationQualifier && !questionMark ) {
-    if (record.scientificNameAuthorship) {
+    if (record.scientificNameAuthorship && !fullNameParts.includes(record.scientificNameAuthorship)) {
       fullNameParts.push(record.scientificNameAuthorship)
     }
   }
@@ -195,4 +133,107 @@ function addQualifierToNamePartsArray(nameParts, qualifier, insertionIndex) {
   else {
     nameParts.push(qualifier)
   }
+}
+
+function getDetStringFromScientificName(labelRecord, includeAuthority, addItalics) {
+
+  let detString = labelRecord.scientificName
+
+  //let's just simplify things here
+  if (labelRecord.scientificNameAuthorship && detString.includes(labelRecord.scientificNameAuthorship)) {
+    detString = detString.replace(labelRecord.scientificNameAuthorship).trim()
+  }
+
+  let nameParts = detString.split(' ').map(x => x.trim()).filter(x => x)
+
+  // might still include the author, so let's assume authors will always have a capital letter somewhere, and that we only have authors for species and below
+  let lastEpithetIndex = 0
+  for (let i = 1; i < nameParts.length; i++) { //we start after the first name part, which (should) always be titlecase
+    
+    if (/^sp\.?$/i.test(nameParts[i])) {
+      break
+    }
+    
+    if (nameParts[i] == nameParts[i].toLowerCase()){
+      lastEpithetIndex = i
+    }
+    else { //we might have reached an author name
+      if (!nameParts[i].includes('(')){ // or it might be a subgenus
+        break
+      }
+    }
+  }
+
+  // attempting to add italics here
+  if (addItalics) {
+
+    if (nameParts.length == 1) {
+      // we need to know if it's a genus in order it italicize
+      if (labelRecord.taxonRank && labelRecord.taxonRank == 'genus') {
+        nameParts[0] = '<i>' + nameParts[0] + '</i>'
+      }
+    }
+    else {
+      //it might be [something] sp., in which case we need taxonRank to know if it's a genus or not
+      if (/^sp\.?$/.test(nameParts[lastEpithetIndex])) {
+        if (labelRecord.taxonRank && ['genus', 'subgenus'].includes(labelRecord.taxonRank)) {
+          // let's iterate because the rank might not be correct
+          for (let i = 0; i <= lastEpithetIndex; i++) {
+            nameParts[i] = '<i>' + nameParts[i] + '</i>'
+          }
+        }
+      }
+      else if (lastEpithetIndex > 0) { // species, subspecies, etc
+        for (let i = 0; i <= lastEpithetIndex; i++) {
+          if (!isRankPart(nameParts[i])) {
+            nameParts[i] = '<i>' + nameParts[i] + '</i>'
+          }
+        }
+      }
+      else { //this should only only have two parts, which can be genus subgenus or genus author
+
+      }
+    }
+  }
+
+  //check whether the previous part is a rank
+  if (isRankPart(nameParts[lastEpithetIndex -1])) {
+    lastEpithetIndex -= 1
+  }
+
+  if(labelRecord.identificationQualifier) {
+    addQualifierToNamePartsArray(nameParts, labelRecord.identificationQualifier, lastEpithetIndex)
+    
+    //we only add authors if it's a prefix qualifier
+    if(includeAuthority && labelRecord.scientificNameAuthorship && ['aff.', 'cf.', 'nr'].includes(labelRecord.identificationQualifier)) {
+      nameParts.push(labelRecord.scientificNameAuthorship)
+    }
+  }
+  else if (labelRecord.taxonRank && labelRecord.taxonRank == 'genus' || labelRecord.taxonRank == 'subgenus') {
+    if (!nameParts.includes('sp.')) {
+      nameParts.push('sp.')
+    }
+  }
+
+  let questionMark = false
+  if(labelRecord.identificationConfidence){
+    if(labelRecord.identificationConfidence.toLowerCase() != 'high'){
+      questionMark = true
+    }
+  }
+
+  // we only want the author if we don't have suffixes or question marks
+  // remember authors for dets with prefix qualifiers are already added above
+  if (includeAuthority && !labelRecord.identificationQualifier && !questionMark && !nameParts.includes('sp.') ) {
+    if (labelRecord.scientificNameAuthorship) {
+      nameParts.push(labelRecord.scientificNameAuthorship)
+    }
+  }
+
+  if (questionMark) {
+    nameParts.push('?')
+  }
+  
+  detString = nameParts.join(' ')
+  return detString
 }

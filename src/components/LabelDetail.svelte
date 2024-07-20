@@ -6,11 +6,9 @@
 
   export let labelRecord
 
-
   const settings = getContext('settings')
 
   let labelDet = null
-  let canvas
   let img
 
   $: if (labelRecord || $settings.includeTaxonAuthorities || $settings.italics) labelDet =  getLabelDet(labelRecord, $settings.includeTaxonAuthorities, false, $settings.italics)

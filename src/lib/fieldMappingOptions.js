@@ -62,7 +62,9 @@ export const fieldsMappings = {
   species: ['specificEpithet'],
   subspecies:['infraspecificEpithet'],
   variety: ['var'],
-  form: ['forma'],
+  subvariety: ['subvar'],
+  forma: ['form'],
+  subforma: ['subform', 'subf'],
 
   identificationQualifier:['qualifier', 'prefix', 'prefixQualifier', 'taxonNamePrefix'],
   suffixQualifier: ['suffix', 'taxonNameSuffix'], //not a dwc term, but should be 
