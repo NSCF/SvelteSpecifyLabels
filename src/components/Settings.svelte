@@ -44,97 +44,101 @@
   }
 
 </script>
+<div class="cols">
 
-<label style="display:inline">
-  <input type=checkbox bind:checked={$settings.labelPerSpecimen}>
-  {langs[$settings.lang]['count']}
-</label>
-<br/>
-<label style="display:inline">
-  <input type=checkbox bind:checked={$settings.useRomanNumeralMonths}>
-  {langs[$settings.lang]['romanNums']}
-</label>
-<br/>
-<label style="display:inline">
-  <input type=checkbox bind:checked={$settings.showInstitution}>
-  {langs[$settings.lang]['collName']}
-</label>
-<br/>
-{#if $settings.showInstitution}
-<input type="text" bind:value={$settings.collectionName} style="display:inline; margin:0;height:10px" placeholder="Collection name..."><br>
-<br/>
-{/if}
-<label style="display:inline">
-  <input type=checkbox bind:checked={$settings.detLabel}>
-  {langs[$settings.lang]['dets']}
-</label>
-<br/>
-<label style="display:inline">
-  <input type=checkbox bind:checked={$settings.detLabelOnly}>
-  {langs[$settings.lang]['detsOnly']}
-</label>
-<br/>
-<label style="display:inline">
-  <input type=checkbox bind:checked={$settings.includePunch}>
-  {langs[$settings.lang]['punch']}
-</label>
-<br/>
-<label style="display:inline">
-  <input type=checkbox bind:checked={$settings.includeQRCode}>
-  Include QR code
-</label>
-<br/>
-{#if $settings.includeQRCode && !$settings.detLabelOnly}
-<label style="display:inline">
-  <input type=checkbox style="margin-left:2em;" bind:checked={$settings.qrCodeOnDetLabels}>
-  Add it on det labels
-</label>
-<br/>
-{/if}
-<label style="display:inline">
-  <input type=checkbox bind:checked={$settings.showStorage}>
-  {langs[$settings.lang]['storage']}
-</label>
-<br/>
-<label style="display:inline">
-  <input type=checkbox bind:checked={$settings.includeTaxonAuthorities}>
-  {langs[$settings.lang]['authors']}
-</label>
-<br/>
-<label style="display:inline">
-  <input type=checkbox bind:checked={$settings.excludeNoCatnums}>
-  {langs[$settings.lang]['excludeCatNums']}
-</label>
-<br/>
-<label style="display:inline">
-  <input type=checkbox bind:checked={$settings.includeFieldNumber}>
-  Include field number
-</label>
-<br/>
-<label style="display:inline">
-  <input type=checkbox bind:checked={$settings.includeProject}>
-  Include project name
-</label>
-<br/>
-<label style="display:inline">
-  <input type=checkbox bind:checked={$settings.underline}>
-  {langs[$settings.lang]['underline']}
-</label>
-<br/>
-<label style="display:inline">
-  <input type=checkbox bind:checked={$settings.italics}>
-  Italics for scientific names
-</label>
-<br/>
-<label style="display:inline">
-  <input type=checkbox bind:checked={$settings.addPrintedDate}>
-  {langs[$settings.lang]['printDate']}
-</label>
-<br/>
-{#if $settings.addPrintedDate}
-<input type="text" bind:value={$settings.printerModel} style="display:inline; margin:0;height:10px" placeholder="Printer make and model"><br>
-<br/>
-{/if}
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.labelPerSpecimen}>
+    {langs[$settings.lang]['count']}
+  </label>
+  <br/>
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.useRomanNumeralMonths}>
+    {langs[$settings.lang]['romanNums']}
+  </label>
+  <br/>
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.showInstitution}>
+    {langs[$settings.lang]['collName']}
+  </label>
+  <br/>
+  {#if $settings.showInstitution}
+  <input type="text" bind:value={$settings.collectionName} style="display:inline; margin:0;height:10px" placeholder="Collection name..."><br>
+  <br/>
+  {/if}
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.detLabel}>
+    {langs[$settings.lang]['dets']}
+  </label>
+  <br/>
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.detLabelOnly}>
+    {langs[$settings.lang]['detsOnly']}
+  </label>
+  <br/>
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.includePunch}>
+    {langs[$settings.lang]['punch']}
+  </label>
+  <br/>
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.includeQRCode}>
+    Include QR code
+  </label>
+  <br/>
+  {#if $settings.includeQRCode && $settings.detLabel && !$settings.detLabelOnly}
+  <label style="display:inline">
+    <input type=checkbox style="margin-left:2em;" bind:checked={$settings.qrCodeOnDetLabels}>
+    Add it on det labels
+  </label>
+  <br/>
+  {:else}
+  <br/> <!-- we need this to maintain the column wrap -->
+  {/if}
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.showStorage}>
+    {langs[$settings.lang]['storage']}
+  </label>
+  <br/>
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.includeTaxonAuthorities}>
+    {langs[$settings.lang]['authors']}
+  </label>
+  <br/>
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.excludeNoCatnums}>
+    {langs[$settings.lang]['excludeCatNums']}
+  </label>
+  <br/>
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.includeFieldNumber}>
+    Include field number
+  </label>
+  <br/>
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.includeProject}>
+    Include project name
+  </label>
+  <br/>
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.underline}>
+    {langs[$settings.lang]['underline']}
+  </label>
+  <br/>
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.italics}>
+    Italics for scientific names
+  </label>
+  <br/>
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.addPrintedDate}>
+    {langs[$settings.lang]['printDate']}
+  </label>
+  <br/>
+  {#if $settings.addPrintedDate}
+  <input type="text" bind:value={$settings.printerModel} style="display:inline; margin:0;height:10px" placeholder="Printer make and model"><br>
+  <br/>
+  {/if}
+</div>
 <div style="display:flex; gap:5px">
   <div>
     <label>{langs[$settings.lang]['font']}</label>
@@ -207,3 +211,14 @@
 </div>
 <p style="position:relative; margin:0; top:-1em; font-size:0.7em">{langs[$settings.lang]['saveSettings']}</p>
 <br/>
+
+<style>
+  .cols {
+    width: 100%;
+    column-count: 2;
+    column-width: 50%;
+    column-gap: 1em;
+    break-before: column;
+    margin-bottom: 1em;
+  }
+</style>

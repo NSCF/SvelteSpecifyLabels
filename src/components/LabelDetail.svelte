@@ -200,6 +200,11 @@
     {#if !$settings.detLabelOnly}
       <CutMarks char={'-'}/>
     {/if}
+    {#if $settings.detLabelOnly && $settings.showInstitution}
+      <div style="width:100%; text-align:center;margin-bottom:.5em;" class:bolder={!$settings.underline} class:underline={$settings.underline}>
+        {$settings.collectionName || ''}
+      </div>
+    {/if}
     <div class="label-part det-label">
       {#if $settings.includePunch}
         <div class="labelpunch">

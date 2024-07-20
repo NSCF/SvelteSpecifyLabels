@@ -1,6 +1,6 @@
 export default {
   fontSize: {
-    min: 6,
+    min: 4,
     max: 24,
     default: 12
   },
