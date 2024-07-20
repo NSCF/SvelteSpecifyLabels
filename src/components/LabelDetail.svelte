@@ -44,13 +44,13 @@
     {:else}
       <div style="padding:4px;">No storage recorded -- cut this off label</div>
     {/if}
-    <CutMarks char={'-'}/>
+  <CutMarks char={'-'}/>
   {/if}
   {#if !$settings.detLabelOnly}
     {#if $settings.showInstitution}
-    <div style="width:100%; text-align:center;margin-bottom:.5em;" class:bolder={!$settings.underline} class:underline={$settings.underline}>
-      {$settings.collectionName || ''}
-    </div>
+      <div style="width:100%; text-align:center;margin-bottom:.5em;" class:bolder={!$settings.underline} class:underline={$settings.underline}>
+        {$settings.collectionName || ''}
+      </div>
     {/if}
     <div class="label-part">
       {#if $settings.includePunch}
@@ -62,19 +62,19 @@
       {/if}
       <div class="labeltext">
         {#if labelRecord.catalogNumber || labelRecord.recordNumber || labelRecord.fieldNumber}
-        <div style="display:flex; flex-direction:row-reverse; justify-content:space-between;margin-right:1em">
-          {#if labelRecord.recordNumber || labelRecord.fieldNumber}
-          <div class:bolder={!labelRecord.catalogNumber && !$settings.underline} class:underline={!labelRecord.catalogNumber && $settings.underline}>
-            {#if $settings.includeFieldNumber && labelRecord.fieldNumber}
-            <span>{labelRecord.fieldNumber}{labelRecord.recordNumber? ' / ' : ''}</span>
+          <div style="display:flex; flex-direction:row-reverse; justify-content:space-between;margin-right:1em">
+            {#if labelRecord.recordNumber || labelRecord.fieldNumber}
+              <div class:bolder={!labelRecord.catalogNumber && !$settings.underline} class:underline={!labelRecord.catalogNumber && $settings.underline}>
+                {#if $settings.includeFieldNumber && labelRecord.fieldNumber}
+                <span>{labelRecord.fieldNumber}{labelRecord.recordNumber? ' / ' : ''}</span>
+                {/if}
+                <span>{labelRecord.recordNumber}</span>
+              </div>
             {/if}
-            <span>{labelRecord.recordNumber}</span>
+            {#if labelRecord.catalogNumber}
+              <div class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</div>
+            {/if}
           </div>
-          {/if}
-          {#if labelRecord.catalogNumber}
-          <div class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</div>
-          {/if}
-        </div>
         {/if}
         <div class="labelrow clearfloat">
           {#if labelRecord.fullLocality}
@@ -87,7 +87,9 @@
             <span class="inlineblock">{labelRecord.fullCoordsString}</span>
           {/if}    
         </div>
-        <div class="labelrow">{labelRecord.habitat || ''}</div>
+        <div class="labelrow">
+          {labelRecord.habitat || ''}
+        </div>
         <div class="labelrow">
           {#if labelRecord.collectionDate}
             <span class="padright-sm">{labelRecord.collectionDate}</span>
@@ -127,7 +129,9 @@
             <span class="inlineblock">{labelRecord.specimenStageSex}</span>
           {/if}
         {/if}
-        <div>{labelRecord.occurrenceRemarks || ''}</div>
+        <div>
+          {labelRecord.occurrenceRemarks || ''}
+        </div>
         {#if labelRecord.typeStatus}
           <div class="clearfix">
             <span class="floatleft uppercase">{labelRecord.typeStatus}</span>
@@ -137,65 +141,66 @@
           </div>
         {/if}
         {#if $settings.addPrintedDate}
-        <div class:bolder={!$settings.underline} class:underline={$settings.underline} >Printed on {$settings.printerModel ? $settings.printerModel : ''} {getPrintDateString()}</div>
+          <div class:bolder={!$settings.underline} class:underline={$settings.underline} >Printed on {$settings.printerModel ? $settings.printerModel : ''} {getPrintDateString()}</div>
         {/if}
         {#if labelRecord.project && $settings.includeProject}
-        <div class:bolder={!$settings.underline} class:underline={$settings.underline} >{labelRecord.project}</div>
+          <div class:bolder={!$settings.underline} class:underline={$settings.underline} >{labelRecord.project}</div>
         {/if}
       </div>
       {#if $settings.includeQRCode && labelRecord.catalogNumber}
-      <div style="margin:.25em;">
-        <img width={$settings.qrCodeDims} height={$settings.qrCodeDims} bind:this={img} alt="QR code"/>
-      </div>
+        <div style="margin:.25em;">
+          <img width={$settings.qrCodeDims} height={$settings.qrCodeDims} bind:this={img} alt="QR code"/>
+        </div>
       {/if}
     </div>
-    {/if}
-    {#if labelRecord.seriesSampleCounts && Array.isArray(labelRecord.seriesSampleCounts) && labelRecord.seriesSampleCounts.length > 1} <!--this is customized for label data from Arthrobase-->
-      <CutMarks char={'-'} />
-      <div class="label-part">
-        <div class="labeltext">
-          <div class="inlineblock" class:bolder={!$settings.underline} class:underline={$settings.underline}>Collecting events:</div>
-          {#if labelRecord.catalogNumber || labelRecord.recordNumber || labelRecord.fieldNumber}
+  {/if}
+  {#if labelRecord.seriesSampleCounts && Array.isArray(labelRecord.seriesSampleCounts) && labelRecord.seriesSampleCounts.length > 1} <!--this is customized for label data from Arthrobase-->
+    <CutMarks char={'-'} />
+    <div class="label-part">
+      <div class="labeltext">
+        <div class="inlineblock" class:bolder={!$settings.underline} class:underline={$settings.underline}>
+          Collecting events:
+        </div>
+        {#if labelRecord.catalogNumber || labelRecord.recordNumber || labelRecord.fieldNumber}
           <div style="display:flex; flex-direction:row-reverse; justify-content:space-between;margin-right:1em">
             {#if labelRecord.recordNumber}
-            <div class:bolder={!labelRecord.catalogNumber && !$settings.underline} class:underline={!labelRecord.catalogNumber && $settings.underline}>
-              {#if $settings.includeFieldNumber && labelRecord.fieldNumber}
-              <span>{labelRecord.fieldNumber}{labelRecord.recordNumber? ' / ' : ''}</span>
-              {/if}
-              <span>{labelRecord.recordNumber}</span>
-            </div>
+              <div class:bolder={!labelRecord.catalogNumber && !$settings.underline} class:underline={!labelRecord.catalogNumber && $settings.underline}>
+                {#if $settings.includeFieldNumber && labelRecord.fieldNumber}
+                  <span>{labelRecord.fieldNumber}{labelRecord.recordNumber? ' / ' : ''}</span>
+                {/if}
+                <span>{labelRecord.recordNumber}</span>
+              </div>
             {/if}
             {#if labelRecord.catalogNumber}
-            <div class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</div>
+              <div class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</div>
             {/if}
           </div>
-          {/if}
-          {#each labelRecord.seriesSampleCounts as ssc}
-            {#if ssc.collectingDate}
-              <br/>
-              <div>{ssc.collectingDate}</div>
-              {#if ssc.collectors}
-                <div>{ssc.collectors}</div>
-              {/if}
-              {#if ssc.collectMethods}
-                <div>{ssc.collectMethods}</div>
-              {/if}
-              {#if ssc.conditions}
-                <div>{ssc.conditions}</div>
-              {/if}
-              {#if ssc.lifeStageSexCounts}
-                <div>{ssc.lifeStageSexCounts}</div>
-              {/if}
-              <br/>
+        {/if}
+        {#each labelRecord.seriesSampleCounts as ssc}
+          {#if ssc.collectingDate}
+            <br/>
+            <div>{ssc.collectingDate}</div>
+            {#if ssc.collectors}
+              <div>{ssc.collectors}</div>
             {/if}
-          {/each}
-        </div>
+            {#if ssc.collectMethods}
+              <div>{ssc.collectMethods}</div>
+            {/if}
+            {#if ssc.conditions}
+              <div>{ssc.conditions}</div>
+            {/if}
+            {#if ssc.lifeStageSexCounts}
+              <div>{ssc.lifeStageSexCounts}</div>
+            {/if}
+            <br/>
+          {/if}
+        {/each}
       </div>
-    
+    </div>
   {/if}
   {#if ($settings.detLabel || $settings.detLabelOnly) && labelDet} <!-- Apologies to readers for these, detLabel flags whether to add the label, labelDet is what goes on the label -->
     {#if !$settings.detLabelOnly}
-    <CutMarks char={'-'}/>
+      <CutMarks char={'-'}/>
     {/if}
     <div class="label-part det-label">
       {#if $settings.includePunch}
@@ -243,17 +248,14 @@
         {/if}
       </div>
       {#if $settings.includeQRCode && $settings.detLabelOnly && labelRecord.catalogNumber}
-      <div style="margin:.25em;">
-        <img width={$settings.qrCodeDims} height={$settings.qrCodeDims} bind:this={img} alt="QR code"/>
-      </div>
+        <div style="margin:.25em;">
+          <img width={$settings.qrCodeDims} height={$settings.qrCodeDims} bind:this={img} alt="QR code"/>
+        </div>
       {/if}
     </div>
   {/if}
   <CutMarks char={'—'}/>
 </div>
-
-
-<!-- ################################# -->
 
 <style>
 
