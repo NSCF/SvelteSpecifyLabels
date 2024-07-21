@@ -8,7 +8,6 @@
 
 </script>
 
-<!-- ################################# -->
 <div class="cols" style="--label-width: { $settings.labelWidth + 'cm' }"> 
   {#if inputData && inputData.length}
     {#each inputData as labelRecord}
@@ -21,12 +20,12 @@
 
 
 <style>
+
   .cols {
-    /* width: 100%; */
+    width: 100%;
     column-width: var(--label-width);
     column-gap: 1em;
     break-before: column;
-    column-rule: dashed;
   }
 
 </style>

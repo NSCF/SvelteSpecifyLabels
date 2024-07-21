@@ -42,7 +42,7 @@
     {:else}
       <div style="padding:4px;">No storage recorded -- cut this off label</div>
     {/if}
-  <CutMarks char={'-'}/>
+  <CutMarks char={'—'}/>
   {/if}
   {#if !$settings.detLabelOnly}
     {#if $settings.showInstitution}
@@ -153,7 +153,7 @@
     </div>
   {/if}
   {#if labelRecord.seriesSampleCounts && Array.isArray(labelRecord.seriesSampleCounts) && labelRecord.seriesSampleCounts.length > 1} <!--this is customized for label data from Arthrobase-->
-    <CutMarks char={'-'} />
+    <CutMarks char={'—'} />
     <div class="label-part">
       <div class="labeltext">
         <div class="inlineblock" class:bolder={!$settings.underline} class:underline={$settings.underline}>
@@ -198,7 +198,7 @@
   {/if}
   {#if ($settings.detLabel || $settings.detLabelOnly) && labelDet} <!-- Apologies to readers for these, detLabel flags whether to add the label, labelDet is what goes on the label -->
     {#if !$settings.detLabelOnly}
-      <CutMarks char={'-'}/>
+      <CutMarks char={'—'}/>
     {/if}
     {#if $settings.detLabelOnly && $settings.showInstitution}
       <div style="width:100%; text-align:center;margin-bottom:.5em;" class:bolder={!$settings.underline} class:underline={$settings.underline}>
@@ -257,7 +257,7 @@
       {/if}
     </div>
   {/if}
-  <CutMarks char={'—'}/>
+  <CutMarks char={'-'}/>
 </div>
 
 <style>

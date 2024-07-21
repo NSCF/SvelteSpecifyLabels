@@ -46,7 +46,7 @@ const exampleData = [
     "detNote": ""
   },
   {
-    "catnum": "TM12345",
+    "catnum": "TM54321",
     "collectorNo": "IE11-143",
     "typestatus": "",
     "country": "South Africa",
@@ -92,7 +92,7 @@ const exampleData = [
     "detNote": "Confirmed after topotypes collected at Hanover"
   },
   {
-    "catnum": "LAC NKW 328NP29B",
+    "catnum": "TM12335",
     "collectorNo": "IE15-018",
     "typestatus": "paratype",
     "country": "South Africa",
@@ -117,7 +117,7 @@ const exampleData = [
     "collectors": "I. Engelbrecht (UP); D. Kambas",
     "collectMethods": "road cruise",
     "conditions": "",
-    "lifeStageSexCounts": "3ad♂",
+    "lifeStageSexCounts": "5ad♂",
     "seriesNote": "presumed conspecific with IE15-017",
     "canonicalName": "Harpactirella",
     "taxonRank": "genus",
