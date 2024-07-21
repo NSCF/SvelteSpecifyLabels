@@ -2,6 +2,7 @@ import numberInputSettings from './numberInputSettings.js'
 
 export default {
   	lang: 'en',
+		type: 'general',
 		showInstitution: false,
 		collectionName: null,
 		labelPerSpecimen: false,

@@ -42,7 +42,7 @@ export const fieldsMappings = {
   specimenStageSex: ['Stage Sex Count', 'lifeStageSexCounts'],
   sex:['Sex'],
   lifeStage: ['stage'],
-  specimenCount:['count', 'counts', 'countamt', 'countamount',],
+  specimenCount:['count', 'counts', 'countamt', 'countamount', 'duplicates'],
   seriesSampleCounts:[], //just for Arthrobase
   occurrenceRemarks: ['Remarks', 'Collection Object Remarks', 'Collection Object/Remarks', 'seriesNote', 'notes', 'note', 'specimenNotes', 'specimenNote'],
 

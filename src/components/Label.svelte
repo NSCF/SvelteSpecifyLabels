@@ -1,6 +1,6 @@
 <script>
   import { getContext } from "svelte";
-  import LabelDetail from './LabelDetail.svelte'
+  import LabelDetail from './labels/GeneralLabel.svelte'
   import getLabelDet from "../lib/getLabelDet";
 
   export let labelRecord

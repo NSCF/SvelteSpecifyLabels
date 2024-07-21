@@ -1,10 +1,17 @@
-
-import Home from '../routes/Home.svelte'
-import NotFound from '../routes/NotFound.svelte';
+import Home from '../components/routes/Home.svelte'
+import Design from '../components/routes/Design.svelte'
+import FieldMappings from '../components/routes/FieldMappings.svelte'
+import Info from '../components/routes/Info.svelte'
 
 const routes = {
-  '/': Home,
-  '*' : NotFound
+
+  "/": Home,
+
+  "/design": Design,
+
+  "/mappings": FieldMappings,
+
+  "/info": Info
 }
-  
+
 export default routes

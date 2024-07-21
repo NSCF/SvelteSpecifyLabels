@@ -13,19 +13,16 @@
 
   const handleAddMapping = _ => {
     if (labelFieldToMap) {
-      console.log('running handleAddMapping')
       $fieldMappings[labelFieldToMap] = mappedDatasetField
       labelFieldToMap = ""
       mappedDatasetField = ""
-      dispatch('mappings-updated')
     }
   }
 
 </script>
 
 <div style="display:flex; height:2em; align-items:center; margin-bottom: 2em;">
-  <button on:click={handleAddMapping}>Map</button>
-  <select class:placeholder-option={!labelFieldToMap} style="margin:0; margin-left:1em;" bind:value={labelFieldToMap}>
+  <select class:placeholder-option={!labelFieldToMap} style="margin:0; " bind:value={labelFieldToMap}>
     <option value="">Choose a label field</option>
     {#each Object.keys($fieldMappings).filter(labelField => !$fieldMappings[labelField]) as labelField}
     {#if !excludeFromMappings.includes(labelField) }
@@ -42,6 +39,7 @@
     <option style="color: black;" value={recordField}>{recordField}</option>
     {/each}
   </select>
+  <button style="margin-left:1em;" on:click={handleAddMapping}>Map</button>
 </div>
 
 <style>

@@ -1,7 +1,7 @@
 <script>
-  import CutMarks from "./CutMarks.svelte";
+  import CutMarks from "../CutMarks.svelte";
   import { getContext } from "svelte";
-  import getLabelDet from '../lib/getLabelDet'
+  import getLabelDet from '../../lib/getLabelDet'
   import QRCode from 'qrcode'
 
   export let labelRecord
@@ -268,8 +268,6 @@
     font-size: calc(var(--font-size, 10pt));
     font-weight: var(--font-weight, 400);
     line-height: var(--line-height, 105%);
-    width: var(--label-width, 5cm);
-    /* border-bottom: 0.5px solid black; */
     break-inside:avoid;
   }
 

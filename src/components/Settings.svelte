@@ -45,7 +45,17 @@
 
 </script>
 <div class="cols">
-
+  <label style="display:inline">
+    Label type
+    <br/>
+    <input type="radio" id="wetlabel" name="label-type" value="general" bind:group={$settings.type}>
+    <label for="wetlabel">General</label><br>
+    <input type="radio" id="herbariumlabel" name="label-type" value="herbarium" bind:group={$settings.type} disabled>
+    <label for="herbariumlabel">Herbarium (coming soon)</label><br>
+    <input type="radio" id="insectlabel" name="label-type" value="insect" bind:group={$settings.type} disabled>
+    <label for="insectlabel">Insect (coming soon)</label>
+  </label>
+  <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.labelPerSpecimen}>
     {langs[$settings.lang]['count']}
@@ -91,8 +101,6 @@
     Add it on det labels
   </label>
   <br/>
-  {:else}
-  <br/> <!-- we need this to maintain the column wrap -->
   {/if}
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.showStorage}>

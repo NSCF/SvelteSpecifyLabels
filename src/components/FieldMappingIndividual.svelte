@@ -24,7 +24,7 @@
     <option value={datasetField}>{datasetField}</option>
     {/each}
   </select>
-  <button class="close-button"><CloseIcon/></button>
+  <button class="close-button" on:click={_ => $fieldMappings[labelField] = null}><CloseIcon/></button>
 </label>
 
 <style>
