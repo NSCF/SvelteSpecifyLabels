@@ -1,6 +1,8 @@
 <script>
 	import { setContext } from 'svelte'
 	import { writable } from 'svelte/store';
+	// import Router from 'svelte-spa-router'
+	// import routes from '../lib/routes';
 	import ChooseFile from './ChooseFile.svelte'
 	import Settings from './Settings.svelte';
 	import LabelLayout from './LabelLayout.svelte'
