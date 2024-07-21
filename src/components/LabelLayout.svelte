@@ -22,10 +22,11 @@
 
 <style>
   .cols {
-    width: 100%;
-    column-width: var(--label-width, 5cm);
+    /* width: 100%; */
+    column-width: var(--label-width);
     column-gap: 1em;
     break-before: column;
+    column-rule: dashed;
   }
 
 </style>
