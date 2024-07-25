@@ -31,7 +31,7 @@
 	<title>{title}</title>
 </svelte:head>
 <Header />
-<div style="max-width:600px; margin:auto">
+<div style="max-width:1200px; margin:auto">
   <ChooseFile on:data={handleFileDataAndTitle} />
   <div style="width:100%; display: flex; justify-content:flex-end; gap:2em;">
     <a href={exampleDataURL} target="_blank">{langs['exampleData'][$settings.lang]}</a>

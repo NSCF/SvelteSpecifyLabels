@@ -140,8 +140,8 @@ const langs = {
     afr: "Stellings is getstoor as jy uitdruk",
   },
   printButton: {
-    en: "Let's print these babies...",
-    afr: "Lat ons druk etikette",
+    en: "Let's print these labels...",
+    afr: "Lat ons druk etikette...",
   },
   reset: {
     en: "reset",

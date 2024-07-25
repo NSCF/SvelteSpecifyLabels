@@ -5,14 +5,15 @@
   const settings = getContext('settings')
 
   const langComponents = {
-    en: 'En.svelte',
-    afr: 'Afr.svelte'
+    en: async _ => await import('../langs/En.svelte'),
+    afr: async _ => await import('../langs/Afr.svelte'),
   }
 
   let Lang 
 
   const getLang = async _ => {
-    Lang = (await import('../langs/' + langComponents[$settings.lang])).default
+    const result = await langComponents[$settings.lang]()
+    Lang = result.default
   }
 
   onMount(getLang)
@@ -21,9 +22,9 @@
 
 </script>
 
+<Header />
 <div style="max-width:1200px; margin:auto;">
 
-  <Header />
   {#if Lang}
   <svelte:component this={Lang} />
   {/if}
