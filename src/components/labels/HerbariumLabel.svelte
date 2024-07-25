@@ -27,27 +27,34 @@
   <div id="main" >
     <div id="taxon">
       <div>
-        <div style="text-transform:capitalize" class:bolder={!$settings.underline} class:underline={$settings.underline}>Orchidaceae</div>
-        <div>Disa walleri Rchb.f.</div>
+        <div style="display:flex; justify-content:space-between">
+          <div style="height:1em;text-transform:capitalize" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.family || 'Familiaceae'}</div>
+          <div>{labelRecord.genusCode || ''}</div>
+        </div>
+        <div>{labelDet || ''} </div>
       </div>
     </div>
     <div>
-      <div id="locality" style="height: 2.2em; overflow:hidden; ">{labelRecord.fullLocality || ''} </div>
+      <div id="locality" style="height: 3.2em; overflow:hidden; ">{labelRecord.fullLocality || ''} </div>
       <div id="coords" style="height: 1em; overflow:hidden;">{labelRecord.fullCoordsString || ''}</div>
     </div>
-    <div style="height: 2.2em; overflow:hidden;">{labelRecord.habitat || ''}</div>
-    <div>Description</div>
-    <div>notes</div>
+    <div style="height: 3.2em; overflow:hidden;">{labelRecord.habitat || ''}</div>
+    <div style="height:2.2em;">{labelRecord.description || ''}</div>
+    <div style="height:2.2em;">{labelRecord.notes || ''}</div>
     <div>
-      <div>Collector: {labelRecord.recordedBy}</div>
+      <div>Coll: {labelRecord.recordedBy}</div>
       <div style="display: flex; justify-content:space-between">
-        <div class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.recordNumber}</div>
+        <div >{labelRecord.recordNumber}</div>
         <div>{labelRecord.collectionDate}</div>
       </div>
     </div>
-    <div style="display: flex; justify-content:space-between">
-      <div>Det: {labelRecord.identifiedBy} {labelRecord.dateIdentified}</div>
-      <div>{labelRecord.genusCode || ''}</div>
+    <div style="display: flex; justify-content:space-between;border-top:1px solid gray">
+      {#if labelRecord.identifiedBy}
+      <div>Det: {labelRecord.identifiedBy} </div>
+      <div>{labelRecord.dateIdentified}</div>
+      {:else}
+      <div>Det:</div>
+      {/if}
     </div>
   </div>
 </div>
@@ -62,6 +69,7 @@
     flex-direction:column;
     align-items:center;
     font-size: 10pt;
+    border:1px solid gray
   }
 
   #header {
@@ -84,7 +92,7 @@
     height: 3em;
     display: flex;
     align-items: center;
-    border: 1px dotted gray
+    border-bottom: 1px solid gray
   }
 
   .bolder {

@@ -1,3 +1,19 @@
+const infraSpecificRanks = {
+  subspecies: 'subsp.',
+  variety: 'var.',
+  subvariety: 'subvar.',
+  form: 'f.',
+  subform: 'subf.'
+}
+
+//this is used differently to above
+const rankParts = ['subsp', 'var', 'subvar', 'f', 'subf']
+
+const prefixQualifiers = ['aff.', 'cf.', 'nr']
+const suffixQualifiers = ['sensu lato', 'sensu stricto']
+
+const notItalics = [...Object.values(infraSpecificRanks), ...prefixQualifiers, ...suffixQualifiers]
+
 export default function getLabelDet(labelRecord, includeAuthority, includeInfraspecificRanks, addItalics) { 
 
   let labelDet
@@ -5,8 +21,28 @@ export default function getLabelDet(labelRecord, includeAuthority, includeInfras
   // we prioritize verbatimDet, although we can't have italics
   // we assume that verbatim det will have the qualifiers, etc included, because that's what a verbatim det is
   if(labelRecord.verbatimIdentification) {
-    // too complicated to italicize verbatim identifications with qualifiers, authors etc, just print as is
+
     labelDet = labelRecord.verbatimIdentification
+
+    if (addItalics) {
+      const nameParts = labelRecord.verbatimIdentification.split(' ').filter(x => x)
+      //we need to know it's genus to italicize it
+      if (labelRecord.taxonRank && labelRecord.taxonRank == 'genus') {
+        nameParts[0] = '<i>' + nameParts[0] + '</i>'
+      }
+      else if (nameParts.length > 1 && nameParts[1] == nameParts[1].toLowerCase() && !nameParts[1].includes('sp.')) { //test if it's a species
+        for (let i = 0; i < nameParts.length; i++) {
+          const namePart = nameParts[i]
+          if (notItalics.includes(namePart) || namePart != namePart.toLowerCase() || namePart.includes('sp.') || /['"]+/.test(namePart)) {
+            continue
+          }
+          else {
+            nameParts[i] = '<i>' + namePart + '</i>'
+          }
+        }
+      }
+      labelDet = nameParts.join(' ')
+    }
   }
   else {
 
@@ -22,16 +58,9 @@ export default function getLabelDet(labelRecord, includeAuthority, includeInfras
 
 }
 
-const infraSpecificRanks = {
-  subspecies: 'subsp.',
-  variety: 'var.',
-  subvariety: 'subvar.',
-  form: 'f.',
-  subform: 'subf.'
-}
 
-//this is used differently to above
-const rankParts = ['subsp', 'var', 'subvar', 'f', 'subf']
+
+
 
 function isRankPart(namePart) {
   return rankParts.some(rank => {
@@ -99,7 +128,7 @@ function getDetStringFromRanks(record, includeAuthority, includeInfraspecificRan
     addQualifierToNamePartsArray(fullNameParts, record.identificationQualifier, fullNameParts.length - 1)
     
     //we only have author if it's a prefix qualifier
-    if(includeAuthority && record.scientificNameAuthorship && ['aff.', 'cf.', 'nr'].includes(record.identificationQualifier)) {
+    if(includeAuthority && record.scientificNameAuthorship && prefixQualifiers.includes(record.identificationQualifier)) {
       fullNameParts.push(record.scientificNameAuthorship)
     }
   }
@@ -126,7 +155,7 @@ function getDetStringFromRanks(record, includeAuthority, includeInfraspecificRan
 
 function addQualifierToNamePartsArray(nameParts, qualifier, insertionIndex) {
   // prefixes go in at a particular point
-  if(['aff.', 'cf.', 'nr'].includes(qualifier)) {
+  if(prefixQualifiers.includes(qualifier)) {
     nameParts.splice(insertionIndex, 0, qualifier)
   }
   //otherwise they go at the end
@@ -205,7 +234,7 @@ function getDetStringFromScientificName(labelRecord, includeAuthority, addItalic
     addQualifierToNamePartsArray(nameParts, labelRecord.identificationQualifier, lastEpithetIndex)
     
     //we only add authors if it's a prefix qualifier
-    if(includeAuthority && labelRecord.scientificNameAuthorship && ['aff.', 'cf.', 'nr'].includes(labelRecord.identificationQualifier)) {
+    if(includeAuthority && labelRecord.scientificNameAuthorship && prefixQualifiers.includes(labelRecord.identificationQualifier)) {
       nameParts.push(labelRecord.scientificNameAuthorship)
     }
   }

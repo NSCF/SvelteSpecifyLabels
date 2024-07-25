@@ -56,6 +56,50 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, 
     mappedRecord.geography = [mappedRecord.country, mappedRecord.stateProvince, mappedRecord.county].filter(x=>x).map(x => x.trim()).filter(x=>x).join('; ')
 
   }
+
+  // handle BRAHMS coordinates
+  //TODO check against some real BRAHMS extracts
+  if (mappedRecord.verbatimLatitude && mappedRecord.verbatimLongitude && mappedRecord.llunit) {
+    
+    if (mappedRecord.llunit == 'DD') {
+      if (mappedRecord.ns && mappedRecord.ns.toUpperCase() == 'S') {
+        mappedRecord.verbatimLatitude = '-' + mappedRecord.verbatimLatitude
+      }
+      if(mappedRecord.ew && mappedRecord.ew.toUpperCase() == 'W') {
+        mappedRecord.verbatimLongitude = '-' + mappedRecord.verbatimLongitude
+      }
+    }
+
+    if (mappedRecord.llunit == 'DM' ) {
+      mappedRecord.verbatimLatitude = mappedRecord.verbatimLatitude.slice(0, 2) + '°' + mappedRecord.verbatimLatitude.slice(2);
+      mappedRecord.verbatimLatitude = mappedRecord.verbatimLatitude.slice(0, 6) + '.' + mappedRecord.verbatimLatitude.slice(6);
+      mappedRecord.verbatimLatitude += '\'' + mappedRecord.ns? mappedRecord.ns.toUpperCase() : ''
+      if (mappedRecord.verbatimLongitude.length == 7) {
+        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 3) + '°' + mappedRecord.verbatimLongitude.slice(3);
+        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 7) + '.' + mappedRecord.verbatimLongitude.slice(7);
+      }
+      else {
+        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 2) + '°' + mappedRecord.verbatimLongitude.slice(2);
+        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 6) + '.' + mappedRecord.verbatimLongitude.slice(6);
+      }
+      mappedRecord.verbatimLongitude += '\'' + mappedRecord.ew? mappedRecord.ew.toUpperCase() : ''
+    }
+
+    if (mappedRecord.llunit == 'DMS') {
+      mappedRecord.verbatimLatitude = mappedRecord.verbatimLatitude.slice(0, 2) + '°' + mappedRecord.verbatimLatitude.slice(2);
+      mappedRecord.verbatimLatitude = mappedRecord.verbatimLatitude.slice(0, 6) + '\'' + mappedRecord.verbatimLatitude.slice(6);
+      mappedRecord.verbatimLatitude += '"' + mappedRecord.ns? mappedRecord.ns.toUpperCase() : ''
+      if (mappedRecord.verbatimLongitude.length == 7) {
+        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 3) + '°' + mappedRecord.verbatimLongitude.slice(3);
+        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 7) + '\'' + mappedRecord.verbatimLongitude.slice(7);
+      }
+      else {
+        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 2) + '°' + mappedRecord.verbatimLongitude.slice(2);
+        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 6) + '\'' + mappedRecord.verbatimLongitude.slice(6);
+      }
+      mappedRecord.verbatimLongitude += '"' + mappedRecord.ew? mappedRecord.ew.toUpperCase() : ''
+    }
+  }
   
   if(!mappedRecord.fullCoordsString) {
     let coords = null
@@ -71,9 +115,19 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, 
       coords = mappedRecord.verbatimCoordinates
     }
     
-    if(coords && mappedRecord.coordsUncertainty != null && mappedRecord.coordsUncertaintyUnit) {
-      let uncertainty = `${mappedRecord.coordsUncertainty}${mappedRecord.coordsUncertaintyUnit}`
-      coords = coords + '±' + uncertainty
+    if(coords && mappedRecord.coordsUncertainty != null) {
+      if (isNaN(mappedRecord.coordsUncertainty)){
+        if (['m', 'km', 'mi'].some(x => mappedRecord.coordsUncertainty.includes(x))) {
+          coords += '±' + mappedRecord.coordsUncertainty
+        }
+        else {
+          coords += ' (' + mappedRecord.coordsUncertainty + ')'
+        }
+      }
+      else if (mappedRecord.coordsUncertaintyUnit) {
+        let uncertainty = `${mappedRecord.coordsUncertainty}${mappedRecord.coordsUncertaintyUnit}`
+        coords = coords + '±' + uncertainty
+      }
     }
     
     if(coords && mappedRecord.coordsSource){
@@ -180,12 +234,26 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, 
         console.error(err)
       }
     }
-  }
-  else {
-    if (useRomanNumeralMonths){
-      mappedRecord.collectionDate = addRomanNumeralDates(mappedRecord.collectionDate)
-      
+    else {
+      let dateParts = []
+      if (mappedRecord.year) {
+        dateParts.push(mappedRecord.year)
+        if (mappedRecord.month) {
+          dateParts.push(mappedRecord.month.toString().padStart(2, '0'))
+          if (mappedRecord.day) {
+            dateParts.push(mappedRecord.day.toString().padStart(2, '0'))
+          }
+        }
+      }
+      if(dateParts.length) {
+        mappedRecord.collectionDate = dateParts.join('-')
+      }
     }
+  }
+
+  if (mappedRecord.collectionDate && useRomanNumeralMonths){
+    mappedRecord.collectionDate = addRomanNumeralDates(mappedRecord.collectionDate)
+    
   }
 
   //we want em dashes instead of en dashes
@@ -260,11 +328,29 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, 
 
   //det stuff
 
+  if (!mappedRecord.dateIdentified) {
+    mappedRecord.dateIdentified = null
+    const detDateParts = []
+    if (mappedRecord.detYear) {
+      detDateParts.push(mappedRecord.detYear)
+      if (mappedRecord.detMonth) {
+        detDateParts.push(mappedRecord.detMonth.padStart(2, '0'))
+        if (mappedRecord.detDay) {
+          detDateParts.push(mappedRecord.detDay.padStart(2, '0'))
+        }
+      }
+    }
+    if (detDateParts.length) {
+      mappedRecord.dateIdentified = detDateParts.join('-')
+    }
+  }
+
   if (mappedRecord.dateIdentified && useRomanNumeralMonths) {
     mappedRecord.dateIdentified = addRomanNumeralDates(mappedRecord.dateIdentified)
   }
 
   if(!mappedRecord.identifiedBy){
+    mappedRecord.identifiedBy = null
     //TODO Specify has an Initials field as well as middle initial, need to reconcile those
     if(mappedRecord.detByLast) {
       mappedRecord.identifiedBy = mappedRecord.detByLast

@@ -1,6 +1,6 @@
 <script>
   import HerbariumLabel from "../labels/HerbariumLabel.svelte";
-  import exampleData from "../../exampleData";
+  import exampleData from "../../exampleDataPlants";
   import getFieldMappings from "../../lib/getFieldMappings";
   import mapRecord from "../../lib/mapRecord";
 

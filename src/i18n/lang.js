@@ -4,28 +4,28 @@ const langs = {
     afr: "Etikette",
   }, 
   home: {
-    en: 'home',
-    afr: 'tuis'
+    en: 'Home',
+    afr: 'Tuis'
   }, 
   info: {
-    en: 'info',
-    afr: 'hulp'
+    en: 'Info',
+    afr: 'Hulp'
   },
   box: {
     en:'Drag and drop a CSV file with your label data here or click to select from your hard drive',
     afr: "Sleep en los 'n CSV-lêer met jou etiketdata hier of klik om van jou hardeskyf te kies",
   }, 
   wet: {
-    en: 'wet',
-    afr: 'nat',
+    en: 'Wet',
+    afr: 'Nat',
   },
   herbarium: {
-    en: 'herbarium',
-    afr: 'herbarium',
+    en: 'Herbarium',
+    afr: 'Herbarium',
   },
   insect:  {
-    en: 'ento',
-    afr: 'insek',
+    en: 'Ento',
+    afr: 'Insek',
   },
   coming:  {
     en: 'coming soon',
@@ -44,8 +44,8 @@ const langs = {
     afr: "Voegby my versameling",
   },
   collName: {
-    en: 'collection name',
-    afr: 'versameling naam',
+    en: 'Collection name',
+    afr: 'Versameling naam',
   },
   dets: {
     en: "Include det labels",
@@ -144,8 +144,8 @@ const langs = {
     afr: "Lat ons druk etikette...",
   },
   reset: {
-    en: "reset",
-    afr: "herstel",
+    en: "Reset",
+    afr: "Herstel",
   },
   mappings: {
     en: 'Field mappings',
@@ -164,12 +164,12 @@ const langs = {
     afr: 'terug',
   },
   exampleData: {
-    en: 'example data',
-    afr: 'voorbeeld data',
+    en: 'Example data',
+    afr: 'Voorbeeld data',
   },
   exampleLabels: {
-    en: "example labels",
-    afr: "voorbeeld etikette",
+    en: "Example labels",
+    afr: "Voorbeeld etikette",
   },
   remove: {
     en: 'remove',

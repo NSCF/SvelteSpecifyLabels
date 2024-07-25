@@ -1,23 +1,30 @@
 export const fieldsMappings = { 
   //this uses DwC, mostly...
-  catalogNumber: ['Catalog Number', 'CatNum', 'catnum',], 
-  recordNumber:['Field Number', 'collNum', 'collNo', 'collectorNo', 'collectornumber', 'collectorCode'],
+  catalogNumber: ['Catalog Number', 'CatNum', 'catnum', 'barcode'], 
+  recordNumber:['Field Number', 'collNum', 'collNo', 'collectorNo', 'collectornumber', 'collectorCode', 'number'],
   project: ['projectname', 'survey', 'fieldtrip', 'trip'],
   geography: ['Orig. Prov', 'countryprovince'],
   country: [],
-  stateProvince: ['province','state', 'admin1'],
+  stateProvince: ['province','state', 'admin1', 'majorarea'],
   admin1Type: ['stateProvinceType', 'statetype', 'provincetype'], //specific for Arthrobase extracts
-  county: ['district', 'municipality', 'admin2' ],
+  county: ['district', 'municipality', 'admin2', 'minorarea'],
   admin2Type: ['districttype', 'countytype', 'municipalitytype', 'admin2type' ], //specific for Arthrobase extracts
-  locality: ['localityname', 'localitystring'],
+  locality: ['localityname', 'localitystring', 'locnotes'],
   fullLocality: [], 
   fullCoordsString: [],
   verbatimCoordinates: ['Orig Coords', 'verbatimCoords', 'original coords', 'verbatimcoordinates'], //odd mapping here due to field usage in Specify
-  verbatimLatitude: ['Lat1text', 'verbatimLat', 'verbatimlatitude', 'latitude'],
-  verbatimLongitude: ['Long1text', 'verbatimLong', 'verbatimlongitude', 'longitude'],
-  decimalLatitude: ['Latitude1', 'ddLat', 'ddlat', 'decimalLat', 'decimallatitude'],
-  decimalLongitude:['Longitude1', 'ddLong', 'ddLon', 'decimalLong', 'decimalLon', 'decimallongitude'],
-  coordsUncertainty: ['Max Uncertainty Est', 'uncertainty'],
+  verbatimLatitude: ['Lat1text', 'verbatimLat', 'verbatimlatitude', 'latitude', 'lat'],
+  verbatimLongitude: ['Long1text', 'verbatimLong', 'verbatimlongitude', 'longitude', 'long'],
+  decimalLatitude: ['Latitude1', 'ddLat', 'ddlat', 'declat', 'decimalLat', 'decimallatitude'],
+  decimalLongitude:['Longitude1', 'ddLong', 'ddLon', 'declong', 'decimalLong', 'decimalLon', 'decimallongitude'],
+
+  // BRAHMS coordinates fields, here only so we can try get people off BRAHMS...
+  llunit: [],
+  ns: [],
+  ew: [],
+
+  // and back to sanity...
+  coordsUncertainty: ['Max Uncertainty Est', 'uncertainty', 'llres'],
   coordsUncertaintyUnit:['Max Uncertainty Est Unit',  'uncertaintyunit'],
   coordsSource: ['Lat/Long Method', 'georeferenceSources', 'georefSource', 'georefSources', 'coordsMethod', 'coordsSource'], //because its should not be a georeference!!
   verbatimSRS: ['Datum', 'geodeticDatum'],
@@ -26,13 +33,17 @@ export const fieldsMappings = {
   verbatimElevation: ['elevation', 'altitude', 'Verbatim Elev'],
   minElevationMeters:['Min Elevation in meters', 'minElev'],
   maxElevationMeters:['Max Elevation in meters', 'maxElev'],
-  habitat: [],
+  habitat: ['habitattxt'],
+  description: ['plantdesc'],
   fieldNumber: ['eventcode', 'sitecode', 'eventnumber', 'sitenumber', 'site/eventcode', 'site/eventnumber'],
   collectionDate: ['verbatimEventDate','dateCollected', 'eventDate', 'collectingDate', 'date'],
   collectionStartDate: ['startdate','collectingstartdate'],
   collectionEndDate: ['enddate', 'collectingenddate'],
   collectionStartTime: ['starttime', 'collectingstarttime'],
   collectionEndTime: ['endtime', 'collectingendtime'],
+  year: ['collyy'],
+  month: ['collmm'],
+  day: ['colldd'],
   permitNumber: ['permit', 'permitcode', 'permitnumber', 'permitno'],
   recordedBy: ['Collectors [Aggregated]', 'collector', 'collectors', 'collectedby'],
   primaryCollectorLastName: ['primaryCollector'],
@@ -77,6 +88,9 @@ export const fieldsMappings = {
   detByFirst: ['firstname'],
   detByInitials: ['inital', 'initials', 'middleinitial'],
   dateIdentified: ['Determined Date', 'detdate'],
+  detYear: ['detyy'],
+  detMonth:['detmm'],
+  detDay: ['detdd'],
   identificationRemarks: ['Determinations/Remarks', 'Determinations Remarks', 'detRemarks', 'detNotes', 'detNote'],
 
   //type data

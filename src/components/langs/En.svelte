@@ -43,7 +43,7 @@
 <h5>Taxon name fields</h5>
 <p>
   Taxon names can be stored in many different ways. The tool gives priority to names stored in individual rank fields, i.e. family,
-  genus, species, etc (down to subforma for plants). Alternatively you can use a one field for the taxon name and store the identified 
+  genus, species, etc (down to subforma for plants). Alternatively you can use one field for the taxon name and store the identified 
   name there regardless of its rank (a separate field, taxonRank, can be included). It is also recommended to include separate
   fields for the taxon author, qualifiers, certainty, etc. You can also include identification remarks, literature sources, and so on.
 </p>
@@ -55,7 +55,7 @@
   describing how each field should be used. You are welcome to make a copy of this sheet for your own use (File >> Make a copy).
 </p>
 <p>
-  To make labels from a Google Sheet you need to download the data in CSV format. Fo to File >> Download, and select 'Comma separated values (.csv)'. 
+  To make labels from a Google Sheet you need to download the data in CSV format. Go to File >> Download, and select 'Comma separated values (.csv)'. 
 </p>
 <p>
   The spreadsheet includes a field called 'print', which can be used for flagging and filtering records for printing. 

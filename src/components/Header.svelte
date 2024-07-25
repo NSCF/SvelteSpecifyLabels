@@ -22,7 +22,7 @@
 <div style="display:flex; width: 100%; justify-content:space-between; border-bottom: 1px solid rgb(168, 168, 168);">
   
   <div >
-    <a class="logo" style="display: flex;align-items:center" href="/" use:link><img src="/logo.png" width="50px" height="60px" alt=""><span style="color:#2e3238;font-size:3em; font-family:Cedarville Cursive, cursive; margin-left:.2em">{langs['header'][$settings.lang]}</span></a>
+    <a class="logo" style="display: flex;align-items:center" href="/" use:link><img src="/logo.png" width="50px" height="60px" alt=""><span style="color:#2e3238;font-size:3em; font-family:Cedarville Cursive, cursive; margin-left:.2em; margin-top:15px;">{langs['header'][$settings.lang]}</span></a>
   </div>
   <nav style="display: flex; gap:2em">
     <a href="/" use:link>{langs['home'][$settings.lang]}</a>
