@@ -2,6 +2,7 @@ import Home from '../components/routes/Home.svelte'
 import Design from '../components/routes/Design.svelte'
 import FieldMappings from '../components/routes/FieldMappings.svelte'
 import Info from '../components/routes/Info.svelte'
+import Workshop from '../components/routes/Workshop.svelte'
 
 const routes = {
 
@@ -11,7 +12,9 @@ const routes = {
 
   "/mappings": FieldMappings,
 
-  "/info": Info
+  "/info": Info,
+
+  "/workshop": Workshop
 }
 
 export default routes

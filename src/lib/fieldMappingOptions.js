@@ -59,6 +59,7 @@ export const fieldsMappings = {
   tribe: [],
   subtribe: [],
   genus: [],
+  genusCode: ['gencode', 'dthno', 'genusnumber', 'apgno', 'genusno', 'apgnumber', 'genspec', 'genspecno','taxoncode'],
   species: ['specificEpithet'],
   subspecies:['infraspecificEpithet'],
   variety: ['var'],
