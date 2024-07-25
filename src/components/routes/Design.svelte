@@ -104,6 +104,12 @@
     {
       display: none !important;
     }
+
+    
+  }
+
+  @page { 
+    marks: crop cross; 
   }
 
 

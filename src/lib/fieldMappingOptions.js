@@ -45,7 +45,7 @@ export const fieldsMappings = {
   month: ['collmm'],
   day: ['colldd'],
   permitNumber: ['permit', 'permitcode', 'permitnumber', 'permitno'],
-  recordedBy: ['Collectors [Aggregated]', 'collector', 'collectors', 'collectedby'],
+  recordedBy: ['Collectors [Aggregated]', 'collector', 'collectors', 'collectedby', 'namestring'],
   primaryCollectorLastName: ['primaryCollector'],
   samplingProtocol: ['collectionMethod', 'Collecting Information/Method', 'collectMethods', 'collectmethod', 'method'],
   eventConditions: ['conditions'],
@@ -66,7 +66,7 @@ export const fieldsMappings = {
   // we just use ranks here, because Darwin Core taxon fields are a mess...
   order: [],
   superfamily: [],
-  family: [],
+  family: ['faname'],
   tribe: [],
   subtribe: [],
   genus: [],

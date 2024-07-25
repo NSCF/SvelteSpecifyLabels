@@ -44,7 +44,7 @@
     <div>
       <div>Coll: {labelRecord.recordedBy}</div>
       <div style="display: flex; justify-content:space-between">
-        <div >{labelRecord.recordNumber}</div>
+        <div >{labelRecord.recordNumber[0].toUpperCase() + labelRecord.recordNumber.substring(1)}</div>
         <div>{labelRecord.collectionDate}</div>
       </div>
     </div>
@@ -64,12 +64,13 @@
   #container {
     width:9cm;
     height:10cm;
-    padding:1em;
+    padding:.5em;
     display:flex; 
     flex-direction:column;
     align-items:center;
     font-size: 10pt;
-    border:1px solid gray
+    border-top:1px dashed gray;
+    border-bottom:1px dashed gray;
   }
 
   #header {

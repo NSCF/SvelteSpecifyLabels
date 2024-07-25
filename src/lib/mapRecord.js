@@ -60,45 +60,37 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, 
   // handle BRAHMS coordinates
   //TODO check against some real BRAHMS extracts
   if (mappedRecord.verbatimLatitude && mappedRecord.verbatimLongitude && mappedRecord.llunit) {
-    
-    if (mappedRecord.llunit == 'DD') {
-      if (mappedRecord.ns && mappedRecord.ns.toUpperCase() == 'S') {
-        mappedRecord.verbatimLatitude = '-' + mappedRecord.verbatimLatitude
+
+    if (!mappedRecord.ns || !mappedRecord.ew) {
+      mappedRecord.fullCoordsString = 'coords error'
+    }
+    else {
+      mappedRecord.verbatimLatitude = mappedRecord.verbatimLatitude.toString()
+      mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.toString()
+      
+      if (mappedRecord.llunit == 'DD') {
+        if (mappedRecord.ns && mappedRecord.ns.toUpperCase() == 'S') {
+          mappedRecord.verbatimLatitude = '-' + mappedRecord.verbatimLatitude
+        }
+        if(mappedRecord.ew && mappedRecord.ew.toUpperCase() == 'W') {
+          mappedRecord.verbatimLongitude = '-' + mappedRecord.verbatimLongitude
+        }
       }
-      if(mappedRecord.ew && mappedRecord.ew.toUpperCase() == 'W') {
-        mappedRecord.verbatimLongitude = '-' + mappedRecord.verbatimLongitude
+  
+      if (mappedRecord.llunit == 'DM' || mappedRecord.llunit == 'DMS' ) {
+        mappedRecord.verbatimLatitude = mappedRecord.verbatimLatitude.replace('.', '°')
+        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.replace('.', '°')
+        const latInsertionIndex = mappedRecord.verbatimLatitude.indexOf('°') + 2
+        const longInsertionIndex = mappedRecord.verbatimLongitude.indexOf('°') + 2
+        const insertionSymbol = mappedRecord.llunit == 'DM' ? '.' : '\''
+        mappedRecord.verbatimLatitude = mappedRecord.verbatimLatitude.slice(0, latInsertionIndex) + insertionSymbol + mappedRecord.verbatimLatitude.slice(latInsertionIndex);
+        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, longInsertionIndex) + insertionSymbol + mappedRecord.verbatimLongitude.slice(longInsertionIndex);
+        const appendSymbol = mappedRecord.llunit == 'DM' ? '\'' : '"'
+        mappedRecord.verbatimLatitude += appendSymbol + mappedRecord.ns ? mappedRecord.ns.toUpperCase() : ''
+        mappedRecord.verbatimLongitude += appendSymbol + mappedRecord.ew ? mappedRecord.ew.toUpperCase() : ''
       }
     }
 
-    if (mappedRecord.llunit == 'DM' ) {
-      mappedRecord.verbatimLatitude = mappedRecord.verbatimLatitude.slice(0, 2) + '°' + mappedRecord.verbatimLatitude.slice(2);
-      mappedRecord.verbatimLatitude = mappedRecord.verbatimLatitude.slice(0, 6) + '.' + mappedRecord.verbatimLatitude.slice(6);
-      mappedRecord.verbatimLatitude += '\'' + mappedRecord.ns? mappedRecord.ns.toUpperCase() : ''
-      if (mappedRecord.verbatimLongitude.length == 7) {
-        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 3) + '°' + mappedRecord.verbatimLongitude.slice(3);
-        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 7) + '.' + mappedRecord.verbatimLongitude.slice(7);
-      }
-      else {
-        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 2) + '°' + mappedRecord.verbatimLongitude.slice(2);
-        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 6) + '.' + mappedRecord.verbatimLongitude.slice(6);
-      }
-      mappedRecord.verbatimLongitude += '\'' + mappedRecord.ew? mappedRecord.ew.toUpperCase() : ''
-    }
-
-    if (mappedRecord.llunit == 'DMS') {
-      mappedRecord.verbatimLatitude = mappedRecord.verbatimLatitude.slice(0, 2) + '°' + mappedRecord.verbatimLatitude.slice(2);
-      mappedRecord.verbatimLatitude = mappedRecord.verbatimLatitude.slice(0, 6) + '\'' + mappedRecord.verbatimLatitude.slice(6);
-      mappedRecord.verbatimLatitude += '"' + mappedRecord.ns? mappedRecord.ns.toUpperCase() : ''
-      if (mappedRecord.verbatimLongitude.length == 7) {
-        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 3) + '°' + mappedRecord.verbatimLongitude.slice(3);
-        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 7) + '\'' + mappedRecord.verbatimLongitude.slice(7);
-      }
-      else {
-        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 2) + '°' + mappedRecord.verbatimLongitude.slice(2);
-        mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, 6) + '\'' + mappedRecord.verbatimLongitude.slice(6);
-      }
-      mappedRecord.verbatimLongitude += '"' + mappedRecord.ew? mappedRecord.ew.toUpperCase() : ''
-    }
   }
   
   if(!mappedRecord.fullCoordsString) {
