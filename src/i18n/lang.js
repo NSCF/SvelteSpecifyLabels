@@ -1,7 +1,7 @@
 const langs = {
   header: {
-    en: "Let's make some labels",
-    afr: "Koms ons begin - Maak so paar etikette, hier gaan ons nou! Heeha!",
+    en: "Labels",
+    afr: "Etikette",
   }, 
   home: {
     en: 'home',

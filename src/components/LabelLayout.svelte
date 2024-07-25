@@ -8,7 +8,7 @@
 
 </script>
 
-<div class="cols" style="--label-width: { $settings.labelWidth + 'cm' }"> 
+<div class="cols" style="color:black; --label-width: { $settings.labelWidth + 'cm' }"> 
   {#if inputData && inputData.length}
     {#each inputData as labelRecord}
       <Label {labelRecord} />
