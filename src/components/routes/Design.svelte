@@ -72,10 +72,10 @@
   <Settings />
   <div style="display:flex; justify-content: space-between">
     <div style="display:flex; flex-direction:row;">
-      <button class="secondary-button" on:click={reset} >{langs[$settings.lang]['reset']}</button>
-      <a href="/mappings" style="margin:0.5rem 0; padding:1rem 2rem" use:link>{langs[$settings.lang]['mappings'].toLowerCase()}</a>
+      <button class="secondary-button" on:click={reset} >{langs['reset'][$settings.lang]}</button>
+      <a href="/mappings" style="margin:0.5rem 0; padding:1rem 2rem" use:link>{langs['mappings'][$settings.lang].toLowerCase()}</a>
     </div>
-    <button on:click={showPrint} disabled={!labelData.length}>{langs[$settings.lang]['printButton']}</button>
+    <button on:click={showPrint} disabled={!labelData.length}>{langs['printButton'][$settings.lang]}</button>
   </div>
   <hr/>
 </div>

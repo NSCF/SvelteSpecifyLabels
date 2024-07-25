@@ -1,12 +1,12 @@
 # Specimen labels using Svelte
 
-A [Svelte](https://svelte.dev/) app for generating specimen labels with a range of options (Svelte is a front end framework for building web apps, it has nothing to do with labels!). 
+A web app for generating specimen labels with a range of options, and intended to make generating labels a breeze for those still doing it in MS Word. Originally made for making labels from Specify extracts, because HTML is just easier, and built with [Svelte](https://svelte.dev/), a beautiful front end framework for building web apps, hence the name of this repository.
 
-This tool was originally built as a proof of concept for generating labels from Specify database extracts, because it's just easier. However, it can generate labels from any input CSV file with sensible field headings. 
+This tool is running live at at [labels.nscf.org.za](labels.nscf.org.za), the easiest is to use it there. If you want to run it locally, follow the installation steps below.
 
-This project will hopefully find it's way to being a full fledged web app available online somewhere, but in the meantime we need to run it locally.
+This is not a label designing tool like we have in most collection management databases, it is for generating labels using generic (opinionated) templates. 
 
-The label design is opinionated (what the programmer thinks is best) and hence is not customizable. 
+(Note to maintainer/s: this tool is published on the NSCF web hosting platform as a set of static files directly via FTP).
 
 ## Installation
 
@@ -19,11 +19,10 @@ Create a folder on your hard drive (name it whatever you like), then open that f
 
 When it's done, type `cd sveltespecifylabels` in the command window and enter, then `npm install` and enter, then `npm run dev` and enter. The command window will show you a URL that you need to copy and paste into your web browser, and press enter.
 
-You only need to do the clone and install once. Then each time you want to make labels, just open the command window in the SvelteSpecifyLabels folder, and run `npm run dev`. Make sure to check the GitHub repo from time to time for updates. If there are updates since you last used the tool, run `git pull` and `npm install` to before running `npm run dev`.
+You only need to do the clone and install once. Then each time you want to make labels, just open the command window in the SvelteSpecifyLabels folder, and run `npm run dev`. Make sure to check the GitHub repo from time to time for updates. If there are updates since you last used the tool, run `git pull` before running `npm run dev`. If it breaks after a pull, try `npm install` before `npm run dev` as there may be new dependencies included. 
 
 ## Usage
-Drag and drop a CSV file with your specimen data onto the grey block on the screen and then use the various options to customize your labels as you would like. Your settings will be saved on the machine for future use (but you will have to set everything again if you make labels on a different computer). When you press print, remember to set the page size and margins in the print window as required (try not to waste label paper).
-
+When the app is running in your browser go to Info (menu bar at the top) for usage instructions.
 
 ***Rest assured that none of your data is saved anywhere or sent over the internet. You (or someone who knows Javascript) are welcome to check the code in this repo to confirm this.***
 

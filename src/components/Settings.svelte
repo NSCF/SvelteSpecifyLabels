@@ -49,108 +49,108 @@
     Label type
     <br/>
     <input type="radio" id="wetlabel" name="label-type" value="general" bind:group={$settings.type}>
-    <label for="wetlabel">General</label><br>
+    <label for="wetlabel">{langs['wet'][$settings.lang]}</label><br>
     <input type="radio" id="herbariumlabel" name="label-type" value="herbarium" bind:group={$settings.type} disabled>
-    <label for="herbariumlabel">Herbarium (coming soon)</label><br>
+    <label for="herbariumlabel">{langs['herbarium'][$settings.lang]} ({langs['coming'][$settings.lang]})</label><br>
     <input type="radio" id="insectlabel" name="label-type" value="insect" bind:group={$settings.type} disabled>
-    <label for="insectlabel">Insect (coming soon)</label>
+    <label for="insectlabel">{langs['insect'][$settings.lang]} ({langs['coming'][$settings.lang]})</label>
   </label>
   <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.labelPerSpecimen}>
-    {langs[$settings.lang]['count']}
+    {langs['count'][$settings.lang]}
   </label>
   <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.useRomanNumeralMonths}>
-    {langs[$settings.lang]['romanNums']}
+    {langs['romanNums'][$settings.lang]}
   </label>
   <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.showInstitution}>
-    {langs[$settings.lang]['collName']}
+    {langs['collName'][$settings.lang]}
   </label>
   <br/>
   {#if $settings.showInstitution}
-  <input type="text" bind:value={$settings.collectionName} style="display:inline; margin:0;height:10px" placeholder="Collection name..."><br>
+  <input type="text" bind:value={$settings.collectionName} style="display:inline; margin:0;height:10px" placeholder={langs['collName'][$settings.lang]}><br>
   <br/>
   {/if}
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.detLabel}>
-    {langs[$settings.lang]['dets']}
+    {langs['dets'][$settings.lang]}
   </label>
   <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.detLabelOnly}>
-    {langs[$settings.lang]['detsOnly']}
+    {langs['detsOnly'][$settings.lang]}
   </label>
   <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.includePunch}>
-    {langs[$settings.lang]['punch']}
+    {langs['punch'][$settings.lang]}
   </label>
   <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.includeQRCode}>
-    Include QR code
+    {langs['qrCode'][$settings.lang]}
   </label>
   <br/>
   {#if $settings.includeQRCode && $settings.detLabel && !$settings.detLabelOnly}
   <label style="display:inline">
     <input type=checkbox style="margin-left:2em;" bind:checked={$settings.qrCodeOnDetLabels}>
-    Add it on det labels
+    {langs['onDetLabels'][$settings.lang]}
   </label>
   <br/>
   {/if}
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.showStorage}>
-    {langs[$settings.lang]['storage']}
+    {langs['storage'][$settings.lang]}
   </label>
   <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.includeTaxonAuthorities}>
-    {langs[$settings.lang]['authors']}
+    {langs['authors'][$settings.lang]}
   </label>
   <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.excludeNoCatnums}>
-    {langs[$settings.lang]['excludeCatNums']}
+    {langs['excludeCatNums'][$settings.lang]}
   </label>
   <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.includeFieldNumber}>
-    Include field number
+    {langs['fieldNumber'][$settings.lang]}
   </label>
   <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.includeProject}>
-    Include project name
+    {langs['project'][$settings.lang]}
   </label>
   <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.underline}>
-    {langs[$settings.lang]['underline']}
+    {langs['underline'][$settings.lang]}
   </label>
   <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.italics}>
-    Italics for scientific names
+    {langs['italics'][$settings.lang]}
   </label>
   <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.addPrintedDate}>
-    {langs[$settings.lang]['printDate']}
+    {langs['printDate'][$settings.lang]}
   </label>
   <br/>
   {#if $settings.addPrintedDate}
-  <input type="text" bind:value={$settings.printerModel} style="display:inline; margin:0;height:10px" placeholder="Printer make and model"><br>
+  <input type="text" bind:value={$settings.printerModel} style="display:inline; margin:0;height:10px" placeholder={langs['printer'][$settings.lang]}><br>
   <br/>
   {/if}
 </div>
 <div style="display:flex; gap:5px">
   <div>
-    <label>{langs[$settings.lang]['font']}</label>
-    <select bind:value={$settings.font}>
+    <label for="fonts">{langs['font'][$settings.lang]}</label>
+    <select id="fonts" bind:value={$settings.font}>
       {#each fonts as font}
       <option value={font}>{font}</option>
       {/each}
@@ -158,8 +158,8 @@
   </div>
   {#if $settings.font in fontWeights}
   <div>
-    <label>{langs[$settings.lang]['fontWeight']}</label>
-    <select bind:value={$settings.fontWeight}>
+    <label for="font-weight">{langs['fontWeight'][$settings.lang]}</label>
+    <select id="font-weight" bind:value={$settings.fontWeight}>
       {#each fontWeights[$settings.font] as weightOption}
       <option value={weightOption}>{weightOption}</option>
       {/each}
@@ -167,8 +167,8 @@
   </div>
   {/if}
   <div>
-    <label>{langs[$settings.lang]['fontSize']}</label>
-    <input type="number" name="fontSize" 
+    <label for="font=size">{langs['fontSize'][$settings.lang]}</label>
+    <input id="font-size" type="number" name="fontSize" 
     min={numberInputSettings.fontSize.min} 
     max={numberInputSettings.fontSize.max} 
     step={numberInputSettings.fontSize.step || 1}
@@ -176,8 +176,8 @@
     on:wheel={handleMouseWheel} bind:value={$settings.fontSize} >
   </div>
   <div>
-    <label>{langs[$settings.lang]['lineHeight']}</label>
-    <input type="number" name="lineHeight" 
+    <label for="line-height">{langs['lineHeight'][$settings.lang]}</label>
+    <input id="line-height" type="number" name="lineHeight" 
     min={numberInputSettings.lineHeight.min} 
     max={numberInputSettings.lineHeight.max} 
     step={numberInputSettings.lineHeight.step || 1}
@@ -185,21 +185,21 @@
     on:wheel={handleMouseWheel} bind:value={$settings.lineHeight} >
   </div>
   <div>
-    <label>{langs[$settings.lang]['labelWidth']}</label>
-    <div style="display:flex; align-items: baseline; ">
+    <label for="label-width">{langs['labelWidth'][$settings.lang]}</label>
+    <div id="label-width" style="display:flex; align-items: baseline; ">
       <input type="number" name="labelWidth" 
       min={numberInputSettings.labelWidth.min} 
       max={numberInputSettings.labelWidth.max} 
       step={numberInputSettings.labelWidth.step || 1}
       on:keyup={handleKeyboardInput} 
       on:wheel={handleMouseWheel} bind:value={$settings.labelWidth} >
-      <span>{langs[$settings.lang]['labelWidthUnit']}</span>
+      <span>{langs['labelWidthUnit'][$settings.lang]}</span>
     </div>
   </div>
   {#if $settings.includeQRCode}
   <div>
-    <label>QR Code size</label>
-    <input type="number" name="qrCodeDims" 
+    <label for="qrcode-size">{langs['qrCodeSize'][$settings.lang]}</label>
+    <input id="qrcode-size" type="number" name="qrCodeDims" 
     min={numberInputSettings.qrCodeDims.min} 
     max={numberInputSettings.qrCodeDims.max} 
     step={numberInputSettings.qrCodeDims.step || 1}
@@ -207,8 +207,8 @@
     on:wheel={handleMouseWheel} bind:value={$settings.qrCodeDims} >
   </div>
   <div>
-    <label>Robustness</label>
-    <select bind:value={$settings.qrCodeErrorLevel}>
+    <label for="robustness">{langs['robustness'][$settings.lang]}</label>
+    <select id="robustness" bind:value={$settings.qrCodeErrorLevel}>
       <option value="L">Low</option>
       <option value="M">Medium</option>
       <option value="Q">Quartile</option>
@@ -217,7 +217,7 @@
   </div>
   {/if}
 </div>
-<p style="position:relative; margin:0; top:-1em; font-size:0.7em">{langs[$settings.lang]['saveSettings']}</p>
+<p style="position:relative; margin:0; top:-1em; font-size:0.7em">{langs['saveSettings'][$settings.lang]}</p>
 <br/>
 
 <style>

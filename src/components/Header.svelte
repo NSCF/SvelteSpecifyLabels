@@ -19,16 +19,28 @@
 	}
 
 </script>
-<div style="display:flex; width: 100%; justify-content:space-between">
-  <h2>{langs[$settings.lang]['header']}</h2>
+<div style="display:flex; width: 100%; justify-content:space-between; border-bottom: 1px solid rgb(168, 168, 168);">
+  
+  <div>
+    <a class="logo" href="/" use:link><img src="/logo.png" width="50px" height="50px" alt=""><span style="font-size:3em; font-family:Cedarville Cursive, cursive; margin-left:.2em">Labels</span></a>
+  </div>
   <nav style="display: flex; gap:2em">
-    <a href="/" use:link>home</a>
-    <a href="/info" use:link>info</a>
+    <a href="/" use:link>{langs['home'][$settings.lang]}</a>
+    <a href="/info" use:link>{langs['info'][$settings.lang]}</a>
     <button class="secondary-button" on:click={handLangButtonClick}>{$settings.lang}</button>
   </nav>
 </div>
 
 <style>
+
+  .logo {
+    font-weight: normal;
+  }
+
+  .logo:hover {
+    filter: none;
+    text-decoration: none;
+  }
 
   .secondary-button {
     background-color: transparent; 

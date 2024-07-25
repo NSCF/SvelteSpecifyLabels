@@ -114,7 +114,7 @@
     on:click={_ => hiddenInput.click()}
     ondragover="return false"
   >
-    <p>{langs[$settings.lang]['box']}</p>
+    <p>{langs['box'][$settings.lang]}</p>
   </div>
 </div>
 <input type="file" bind:this={hiddenInput} style="visibility:hidden" on:change={handleFileSelected}>

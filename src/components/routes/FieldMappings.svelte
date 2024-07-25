@@ -27,11 +27,11 @@
 
 </script>
 
-<h2>{langs[$settings.lang]['mappings']}</h2>
-<p style="max-width:1000px;">{langs[$settings.lang]['mappingHelp']}</p>
+<h2>{langs['mappings'][$settings.lang]}</h2>
+<p style="max-width:1000px;">{langs['mappingHelp'][$settings.lang]}</p>
 <div style="display: flex; justify-content:space-between">
-  <button id="back-button" on:click={_ => pop()}>{langs[$settings.lang]['back']}</button>
-  <button on:click={refreshMappings}>{langs[$settings.lang]['refreshMappings']}</button>
+  <button id="back-button" on:click={_ => pop()}>{langs['back'][$settings.lang]}</button>
+  <button on:click={refreshMappings}>{langs['refreshMappings'][$settings.lang]}</button>
 </div>
 <div style="width: 100%; display:flex; justify-content:center; margin-bottom:2em; ">
   <div style="width: {$settings.labelWidth}cm">
