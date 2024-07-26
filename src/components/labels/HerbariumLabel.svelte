@@ -28,19 +28,19 @@
     <div id="taxon">
       <div>
         <div style="display:flex; justify-content:space-between">
-          <div style="height:1em;text-transform:capitalize" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.family || 'Familiaceae'}</div>
+          <div style="text-transform:uppercase" class="one-line-condensed" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.family || 'Familiaceae'}</div>
           <div>{labelRecord.genusCode || ''}</div>
         </div>
         <div>{labelDet || ''} </div>
       </div>
     </div>
     <div>
-      <div id="locality" style="height: 3.2em; overflow:hidden; ">{labelRecord.fullLocality || ''} </div>
-      <div id="coords" style="height: 1em; overflow:hidden;">{labelRecord.fullCoordsString || ''}</div>
+      <div id="locality" class="three-lines">{labelRecord.fullLocality || ''} </div>
+      <div id="coords" class="one-line-condensed">{labelRecord.fullCoordsString || ''}</div>
     </div>
-    <div style="height: 3.2em; overflow:hidden;">{labelRecord.habitat || ''}</div>
-    <div style="height:2.2em;">{labelRecord.description || ''}</div>
-    <div style="height:2.2em;">{labelRecord.notes || ''}</div>
+    <div class="three-lines">{labelRecord.habitat || ''}</div>
+    <div class="two-lines">{labelRecord.description || ''}</div>
+    <div class="two-lines">{labelRecord.notes || ''}</div>
     <div>
       <div>Coll: {labelRecord.recordedBy}</div>
       <div style="display: flex; justify-content:space-between">
@@ -94,6 +94,21 @@
     display: flex;
     align-items: center;
     border-bottom: 1px solid gray
+  }
+
+  .one-line-condensed {
+    height: 1em;
+    overflow:hidden;
+  }
+
+  .two-lines {
+    height: 2.2em; 
+    overflow:hidden;
+  }
+
+  .three-lines {
+    height: 3.2em; 
+    overflow:hidden;
   }
 
   .bolder {

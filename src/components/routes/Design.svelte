@@ -104,12 +104,10 @@
     {
       display: none !important;
     }
-
-    
   }
 
   @page { 
-    marks: crop cross; 
+    marks: crop; 
   }
 
 
