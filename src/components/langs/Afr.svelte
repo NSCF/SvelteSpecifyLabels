@@ -1,113 +1,122 @@
-<h3>Info</h3>
+<h3>Inligting</h3>
 <p>
-  This tool makes creating specimen labels quick and easy. Simply add your dataset, select the label type you want, and 
-  tweak the settings as needed. The labels have been designed to meet the needs of most collection types and adhere to best practices. 
-  We hope this will save you some time and that you will enjoy using it. If you encounter any problems please create on issue
-  on the Github page.
+  Hierdie hulpmiddel maak die skep van etikette vir eksemplare vinnig en maklik. Trek eenvoudig jou datastel in, 
+  kies die etikettipe en pas die stellings aan soos nodig. Die etikette is ontwerp om te voldoen aan die vereistes 
+  van die meeste versamelingstipes en volg die beste praktyke. Ons hoop dat dit jou sal tyd spaar en dat jy sal geniet 
+  om dit te gebruik. Indien jy enige probleme ondervind, skep asseblief ‘n kwessie op die Github-bladsy.
 </p>
 
-<h3>Usage</h3>
+<h3>Gebruik</h3>
 
-<h4>Loading your data</h4>
+<h4>Laai jou data</h4>
 <p>
-  Start by loading in a CSV file with your data from the home page. <a href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV</a> is the simplest and 
-  easiest format for exchanging data between systems. There is a link to an example file you can use as a template (see below).
+  Begin deur ‘n CSV-lêer met jou data op die tuisblad te laai. <a href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV</a>
+  is die eenvoudigste en maklikste formaat vir die uitruil van data. Daar is ‘n skakel na ‘n lêer wat as templaatvoorbeeld 
+  gebruik kan word (sien hieronder).
 </p>
-<p>If you are using Excel or Access to manage your specimen data then make sure to set the encoding to 
-  <a href="https://www.motionpoint.com/blog/the-importance-of-character-encoding-website-translation-user-experience">UTF-8</a> when you export your records to 
-  CSV format, otherwise special characters like degree symbols will get scrambled. Most other database systems (such as Specify) use UTF-8 by default.
+<p>Indien jy Excel of Access gebruik om jou data te verwerk, maak seker dat jy die enkodering stel op 
+  <a href="https://www.motionpoint.com/blog/the-importance-of-character-encoding-website-translation-user-experience">UTF-8</a> 
+  wanneer jy die rekords in CSV-formaat skryf, anders sal spesiale karakters soos grade verander word. Meeste ander 
+  datastelsels (soos Specify) gebruik UTF-8 as standaard.
 </p>
 <p>
   <em>
-    Note that no specimen data are stored or sent over the internet when using this tool. The source code is 
-    <a href="https://github.com/NSCF/SvelteSpecifyLabels">available on Github</a> and can be checked
-    by someone who knows Javascript to confirm.  
+    Let daarop dat geen data gestoor of oor die internet gestuur word wanneer hierdie hulpmiddel gebruik word nie. 
+    Die oorspronklike kode is <a href="https://github.com/NSCF/SvelteSpecifyLabels">beskikbaar op Github</a> en iemand wat 
+    Javascript ken, kan dit kontroleer en bevestig.  
   </em>
 </p>
 
-<h4>Data fields</h4>
+<h4>Datavelde</h4>
 <p>
-  The tool makes use of standard data fields like locality, date, taxon name, etc. and uses <a href="https://dwc.tdwg.org/terms/">Darwin Core fields</a>
-  as far as possible. When you load your data the tool does its best to map the fields from your dataset to the label fields. For example, if you have a field called 'localityname'
-  it will be mapped to 'locality'. The idea is to be able to import your data using whatever fields you have and have them picked up by the tool, so you don't have to do extra work.
+  Hierdie hulpmiddel maak so ver as moontlik gebruik van standaard datavelde soos ligging, datum, taksonnaam, ens. 
+  <a href="https://dwc.tdwg.org/terms/">Darwin Core-velde</a>. Wanneer jy jou data laai, probeer die hulpmiddel om 
+  die velde in jou datastel met die ooreenstemmende etiketvelde te verbind. As jy byvoorbeeld ‘n veld genaamd 'localityname' 
+  het, sal die data geskryf word na die veld 'locality'. Die idee is dat jy jou data kan intrek met watter velde jy 
+  ook al het en die hulpmiddel die vergelyking laat doen, sodat jy nie ekstra werk hoef te doen nie.
 </p>
 <p>
-  If your fields don't appear on the label there is an option to set the mappings manually. Fields can be included or excluded
-  as you see fit. You can also read up on the Darwin Core term definitions in the mapping section using the links provided.
+  Indien jou velde nie op die etiket verskyn nie, is daar 'n opsie om die verbindings (‘links’) met die hand te stel. 
+  Velde kan ingesluit of uitgesluit word soos jy goeddink. Jy kan meer lees oor die Darwin Core-termdefinisies deur 
+  die skakels wat verskaf word te volg.
 </p>
 <p>
-  Remember that the fields you include on the label are up to you. The tool requires at lease one field like locality or taxon name in 
-  order to generate a label, but other than that you are free to pick and choose as you like.
-</p>
-
-<h5>Taxon name fields</h5>
-<p>
-  Taxon names can be stored in many different ways. The tool gives priority to names stored in individual rank fields, i.e. family,
-  genus, species, etc (down to subforma for plants). Alternatively you can use a one field for the taxon name and store the identified 
-  name there regardless of its rank (a separate field, taxonRank, can be included). It is also recommended to include separate
-  fields for the taxon author, qualifiers, certainty, etc. You can also include identification remarks, literature sources, and so on.
+  Onthou dat die velde wat jy op die etiket insluit, jou keuse is. Die hulpmiddel benodig ten minste een veld, soos 
+  ligging of taksonnaam, om 'n etiket te genereer, maar andersins is jy vry om te kies en keur soos jy wil. 
 </p>
 
-<h5>The example dataset</h5>
+<h5>Taksonnaamvelde</h5>
 <p>
-  When you click on the link for the example dataset you will be taken to a Google Sheet which includes fields that will be
-  picked up by the tool, and some example records. Take a few moments to go through the field headings to see the comments 
-  describing how each field should be used. You are welcome to make a copy of this sheet for your own use (File >> Make a copy).
-</p>
-<p>
-  To make labels from a Google Sheet you need to download the data in CSV format. Fo to File >> Download, and select 'Comma separated values (.csv)'. 
-</p>
-<p>
-  The spreadsheet includes a field called 'print', which can be used for flagging and filtering records for printing. 
-  <a href="https://youtu.be/SYSevA4znlc?si=oO6e0d_pxyUikpEd">This 3min video</a> shows how to filter Google Sheets. To print labels 
-  for filtered records you will need to copy and paste them into a separate spreadsheet before downloading
-  the CSV file. Unfortunately Google Sheets exports everything in a spreadsheet, ignoring any filters applied. You can add as 
-  many filtering columns as you need to your spreadsheet. You may want fields for institution where the specimens 
-  are deposited, and date deposited, for example, for printing labels for batches of specimens as you deposit them.
+  Taksonname kan op baie verskillende maniere gestoor word. Die hulpmiddel gee prioriteit aan name wat in individuele 
+  rangvelde gestoor word, dit wil sê familie, genus, spesie, ens. (tot subforma vir plante). Alternatiewelik kan jy 
+  een veld vir die taksonnaam gebruik en die naam daarin stoor ongeag sy rang ('n aparte veld, taksonrang, kan ingesluit word). 
+  Dit word aanbeveel om aparte velde vir die outeursitaat, spesifikasies, akkuraatheid, ens. te gebruik. Jy kan ook enige 
+  opmerkings rakende die identifikasie, literatuurbronne, ens. insluit.
 </p>
 
-<h4>Duplicate labels</h4>
+<h5>Die voorbeelddatastel</h5>
 <p>
-  If you want to duplicate labels for each specimen in a series (e.g. several insects of the same species collected together, 
-  or duplicate herbarium specimens), you will need to include a field in your dataset with a count (call the field 'count'). If you 
-  have a field with counts of specimens per age/sex, the tool will deduce counts from that field, if you don't already have a count field. 
+  Wanneer jy op die skakel vir die voorbeelddatastel kliek, sal jy na 'n Google Sheet geneem word wat velde insluit 
+  wat deur die hulpmiddel herken sal word, asook 'n paar voorbeelde van rekords. Neem 'n paar oomblikke om deur die 
+  veldopskrifte te gaan en lees die opmerkings wat beskryf hoe elke veld gebruik moet word. Jy is welkom om 'n kopie
+  van hierdie bladsy vir eie gebruik te maak (File >> Make a copy).
+<p>
+  Om etikette van 'n Google Sheet te maak, moet jy die data eers in CSV-formaat aflaai. Gaan na File >> Download, 
+  en kies 'Comma separated values (.csv)'.
+</p>
+<p>
+  Die sigblad bevat 'n veld genaamd 'druk', wat gebruik kan word vir die kies en filter van rekords om te druk.  
+  <a href="https://youtu.be/SYSevA4znlc?si=oO6e0d_pxyUikpEd"> Hierdie 3 minute video</a> wys hoe om in Google Sheets
+  te filter. Om etikette te druk vir gefilterde rekords, moet jy die rekords kopieer en in 'n aparte sigblad plak 
+  voordat jy dit aflaai as CSV-lêer. Ongelukkig ignoreer Google Sheets enige toegepaste filters en alle rekords 
+  in 'n sigblad word uitgevoer. Jy kan soveel verskillende filters gebruik soos jy wil. Jy wil dalk velde insluit 
+  vir die instituut waar die eksemplare gestoor word en die datum waarop eksemplare gestoor word, om sodoende 
+  etikette te druk vir groepe eksemplare soos dit in die versameling opgeneem word.
 </p>
 
-<h4>Label options</h4>
+<h4>Duplikaat etikette</h4>
 <p>
-  Once you've added your data you will see a list of options for customizing your label design. When you click the print label button 
-  your choices (and field mappings) will be saved for the next time you want to print labels. Use a small dataset to get the label design right before 
-  generating large batches of labels.
+  As jy duplikaat etikette vir elke monster in 'n reeks wil hê (bv. verskeie insekte van dieselfde spesie wat saam versamel is, 
+  of duplikate van herbarium eksemplare), sal jy 'n veld by jou datastel moet voeg met 'n aantal (noem die veld 'count'). 
+  Indien jy nie 'n spesifieke aantalveld het nie, sal die instrument die veld die met aantal monsters per ouderdom/geslag gebruik. 
+</p>
+
+<h4>Etiket opsies</h4>
+<p>
+  Sodra jy jou datastel ingetrek het, sal jy 'n lys opsies sien om jou etiketontwerp aan te pas. Wanneer jy op die druk etiket-knoppie kliek, 
+  sal jou keuses (en veldskakels) gestoor word vir die volgende keer wanneer jy etikette wil druk. Gebruik 'n klein 
+  datastel om die etiketontwerp baas te raak, voordat jy groot groepe etikette maak.
 </p>
 <p>
   <em>
-    It is strongly recommended that you <strong>print</strong> a small number of test labels to check that your design works well when
-    physically printed before you print large batches of actual specimen labels. 
+    Dit word sterk aanbeveel dat jy 'n klein aantal toetsetikette druk om seker te maak dat jou ontwerp goed werk, 
+    voordat jy groot groepe finale etikette druk. 
   </em>
 </p>
 
-<h4>Printing labels</h4>
+<h4>Druk van etikette</h4>
 <p>
-  When you click the print button the browser will open the standard print dialog. Make sure to set the page size
-  and margins appropriately before printing. You can either print directly from here or you can save the labels as a PDF
-  for later printing. It is recommended to use the 'Save as PDF' option rather than 'Microsoft Print to PDF'
-  as this gives better results. 
+  Wanneer jy op die drukknoppie kliek, sal die blaaier die standaard drukdialoog oopmaak. Maak seker dat jy toepaslike bladsygrootte 
+  en kantlyne kies voordat jy druk. Jy kan óf direk druk óf die etikette as 'n PDF stoor en later druk. Dit word aanbeveel dat die 
+  'Save as PDF'-opsie eerder as die 'Microsoft Print to PDF' gebruik word, aangesien dit beter resultate gee. 
 </p>
 <p>
-  For guidelines on printing archival quality specimen labels please see the <a href="https://nscf.org.za/resources/collections-management/">NSCF Collection Management Manual</a>.
-</p>
-
-<h3>Comments, suggestions, and issues</h3>
-<p>
-  If you have any comments or suggestions, or if you encounter a bug, please create an issue on the <a href="https://github.com/NSCF/SvelteSpecifyLabels/issues">Github page for this tool</a>.
+  Sien asseblief die <a href="https://nscf.org.za/resources/collections-management/">NSCF Collection Management Manual</a> vir riglyne 
+  oor die druk van argiefgehalte etikette. 
 </p>
 
-<h3>Acknowledgements</h3>
+<h3>Opmerkings, voorstelle en kwessies </h3>
 <p>
-  Several members of the NSCF community provided inputs and suggestions on label design, layout and 
-  functionality of this tool.
+  As jy enige opmerkings of voorstelle het, of as jy 'n fout teëkom, skep asseblief 'n kwessie op die 
+  <a href="https://github.com/NSCF/SvelteSpecifyLabels/issues">Github-bladsy van hierdie hulpmiddel</a>.
 </p>
-<h4>Translations were provided by:</h4>
+
+<h3>Bedankings</h3>
+<p>
+  Verskeie lede van die NSCF-gemeenskap het insette en voorstelle oor etiketontwerp, uitleg en funksionaliteit 
+  vir hierdie hulpmiddel bygedra.
+</p>
+<h4>Vertaling is verskaf deur:</h4>
 <ul>
   <li>afr: Adriaan Jordaan, Christiaan Steenkamp, Hester Steyn, Ian Engelbrecht</li>
 </ul>
