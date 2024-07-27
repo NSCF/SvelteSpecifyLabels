@@ -29,8 +29,8 @@
 
 <h4>Datavelde</h4>
 <p>
-  Hierdie hulpmiddel maak so ver as moontlik gebruik van standaard datavelde soos ligging, datum, taksonnaam, ens. 
-  <a href="https://dwc.tdwg.org/terms/">Darwin Core-velde</a>. Wanneer jy jou data laai, probeer die hulpmiddel om 
+  Hierdie hulpmiddel gebruik standaard datavelde soos ligging, datum, taksonnaam, ens. en maak gebruik van 
+  <a href="https://dwc.tdwg.org/terms/">Darwin Core-velde</a> so ver as moontlik. Wanneer jy jou data laai, probeer die hulpmiddel om 
   die velde in jou datastel met die ooreenstemmende etiketvelde te verbind. As jy byvoorbeeld 'n veld genaamd 'localityname' 
   het, sal die data geskryf word na die veld 'locality'. Die idee is dat jy jou data kan intrek met watter velde jy 
   ook al het en die hulpmiddel die vergelyking laat doen, sodat jy nie ekstra werk hoef te doen nie.
@@ -78,7 +78,7 @@
 <p>
   As jy duplikaat etikette vir elke monster in 'n reeks wil hê (bv. verskeie insekte van dieselfde spesie wat saam versamel is, 
   of duplikate van herbarium eksemplare), sal jy 'n veld by jou datastel moet voeg met 'n aantal (noem die veld 'count'). 
-  Indien jy nie 'n spesifieke aantalveld het nie, sal die instrument die veld die met aantal monsters per ouderdom/geslag gebruik. 
+  Indien jy nie 'n spesifieke aantalveld het nie, sal die instrument die veld met aantal monsters per ouderdom/geslag gebruik. 
 </p>
 
 <h4>Etiket opsies</h4>
