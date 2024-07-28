@@ -10,24 +10,24 @@
 
 <h4>Loading your data</h4>
 <p>
-  Start by loading in a CSV file with your data from the home page. <a href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV</a> is the simplest and 
+  Start by loading in a CSV file with your data from the home page. <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">CSV</a> is the simplest and 
   easiest format for exchanging data between systems. There is a link to an example file you can use as a template (see below).
 </p>
 <p>If you are using Excel or Access to manage your specimen data then make sure to set the encoding to 
-  <a href="https://www.motionpoint.com/blog/the-importance-of-character-encoding-website-translation-user-experience">UTF-8</a> when you export your records to 
+  <a href="https://www.motionpoint.com/blog/the-importance-of-character-encoding-website-translation-user-experience" target="_blank">UTF-8</a> when you export your records to 
   CSV format, otherwise special characters like degree symbols will get scrambled. Most other database systems (such as Specify) use UTF-8 by default.
 </p>
 <p>
   <em>
     Note that no specimen data are stored or sent over the internet when using this tool. The source code is 
-    <a href="https://github.com/NSCF/SvelteSpecifyLabels">available on Github</a> and can be checked
+    <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">available on Github</a> and can be checked
     by someone who knows Javascript to confirm.  
   </em>
 </p>
 
 <h4>Data fields</h4>
 <p>
-  The tool makes use of standard data fields like locality, date, taxon name, etc. and uses <a href="https://dwc.tdwg.org/terms/">Darwin Core fields</a>
+  The tool makes use of standard data fields like locality, date, taxon name, etc. and uses <a href="https://dwc.tdwg.org/terms/" target="_blank">Darwin Core fields</a>
   as far as possible. When you load your data the tool does its best to map the fields from your dataset to the label fields. For example, if you have a field called 'localityname'
   it will be mapped to 'locality'. The idea is to be able to import your data using whatever fields you have and have them picked up by the tool, so you don't have to do extra work.
 </p>
@@ -59,7 +59,7 @@
 </p>
 <p>
   The spreadsheet includes a field called 'print', which can be used for flagging and filtering records for printing. 
-  <a href="https://youtu.be/SYSevA4znlc?si=oO6e0d_pxyUikpEd">This 3min video</a> shows how to filter Google Sheets. To print labels 
+  <a href="https://youtu.be/SYSevA4znlc?si=oO6e0d_pxyUikpEd" target="_blank">This 3min video</a> shows how to filter Google Sheets. To print labels 
   for filtered records you will need to copy and paste them into a separate spreadsheet before downloading
   the CSV file. Unfortunately Google Sheets exports everything in a spreadsheet, ignoring any filters applied. You can add as 
   many filtering columns as you need to your spreadsheet. You may want fields for institution where the specimens 
@@ -94,12 +94,12 @@
   as this gives better results. 
 </p>
 <p>
-  For guidelines on printing archival quality specimen labels please see the <a href="https://nscf.org.za/resources/collections-management/">NSCF Collection Management Manual</a>.
+  For guidelines on printing archival quality specimen labels please see the <a href="https://nscf.org.za/resources/collections-management/" target="_blank">NSCF Collection Management Manual</a>.
 </p>
 
 <h3>Comments, suggestions, and issues</h3>
 <p>
-  If you have any comments or suggestions, or if you encounter a bug, please create an issue on the <a href="https://github.com/NSCF/SvelteSpecifyLabels/issues">Github page for this tool</a>.
+  If you have any comments or suggestions, or if you encounter a bug, please create an issue on the <a href="https://github.com/NSCF/SvelteSpecifyLabels/issues" target="_blank">Github page for this tool</a>.
 </p>
 
 <h3>Acknowledgements</h3>

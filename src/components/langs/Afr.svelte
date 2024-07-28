@@ -10,19 +10,19 @@
 
 <h4>Laai jou data</h4>
 <p>
-  Begin deur 'n CSV-lêer met jou data op die tuisblad te laai. <a href="https://en.wikipedia.org/wiki/Comma-separated_values">CSV</a>
+  Begin deur 'n CSV-lêer met jou data op die tuisblad te laai. <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">CSV</a>
   is die eenvoudigste en maklikste formaat vir die uitruil van data. Daar is 'n skakel na 'n lêer wat as templaatvoorbeeld 
   gebruik kan word (sien hieronder).
 </p>
 <p>Indien jy Excel of Access gebruik om jou data te verwerk, maak seker dat jy die enkodering stel op 
-  <a href="https://www.motionpoint.com/blog/the-importance-of-character-encoding-website-translation-user-experience">UTF-8</a> 
+  <a href="https://www.motionpoint.com/blog/the-importance-of-character-encoding-website-translation-user-experience" target="_blank">UTF-8</a> 
   wanneer jy die rekords in CSV-formaat skryf, anders sal spesiale karakters soos grade verander word. Meeste ander 
   datastelsels (soos Specify) gebruik UTF-8 as standaard.
 </p>
 <p>
   <em>
     Let daarop dat geen data gestoor of oor die internet gestuur word wanneer hierdie hulpmiddel gebruik word nie. 
-    Die oorspronklike kode is <a href="https://github.com/NSCF/SvelteSpecifyLabels">beskikbaar op Github</a> en iemand wat 
+    Die oorspronklike kode is <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">beskikbaar op Github</a> en iemand wat 
     Javascript ken, kan dit kontroleer en bevestig.  
   </em>
 </p>
@@ -30,7 +30,7 @@
 <h4>Datavelde</h4>
 <p>
   Hierdie hulpmiddel gebruik standaard datavelde soos ligging, datum, taksonnaam, ens. en maak gebruik van 
-  <a href="https://dwc.tdwg.org/terms/">Darwin Core-velde</a> so ver as moontlik. Wanneer jy jou data laai, probeer die hulpmiddel om 
+  <a href="https://dwc.tdwg.org/terms/" target="_blank">Darwin Core-velde</a> so ver as moontlik. Wanneer jy jou data laai, probeer die hulpmiddel om 
   die velde in jou datastel met die ooreenstemmende etiketvelde te verbind. As jy byvoorbeeld 'n veld genaamd 'localityname' 
   het, sal die data geskryf word na die veld 'locality'. Die idee is dat jy jou data kan intrek met watter velde jy 
   ook al het en die hulpmiddel die vergelyking laat doen, sodat jy nie ekstra werk hoef te doen nie.
@@ -66,7 +66,7 @@
 </p>
 <p>
   Die sigblad bevat 'n veld genaamd 'print', wat gebruik kan word vir die kies en filter van rekords om te druk.  
-  <a href="https://youtu.be/SYSevA4znlc?si=oO6e0d_pxyUikpEd"> Hierdie 3 minute video</a> wys hoe om in Google Sheets
+  <a href="https://youtu.be/SYSevA4znlc?si=oO6e0d_pxyUikpEd" target="_blank"> Hierdie 3 minuut video</a> wys hoe om in Google Sheets
   te filter. Om etikette te druk vir gefilterde rekords, moet jy die rekords kopieer en in 'n aparte sigblad plak 
   voordat jy dit aflaai as CSV-lêer. Ongelukkig ignoreer Google Sheets enige toegepaste filters en alle rekords 
   in 'n sigblad word uitgevoer. Jy kan soveel verskillende filters gebruik soos jy wil. Jy wil dalk velde insluit 
@@ -101,14 +101,14 @@
   'Save as PDF'-opsie eerder as die 'Microsoft Print to PDF' gebruik word, aangesien dit beter resultate gee. 
 </p>
 <p>
-  Sien asseblief die <a href="https://nscf.org.za/resources/collections-management/">NSCF Collection Management Manual</a> vir riglyne 
+  Sien asseblief die <a href="https://nscf.org.za/resources/collections-management/" target="_blank">NSCF Collection Management Manual</a> vir riglyne 
   oor die druk van argiefgehalte etikette. 
 </p>
 
 <h3>Opmerkings, voorstelle en kwessies </h3>
 <p>
   As jy enige opmerkings of voorstelle het, of as jy 'n fout teëkom, skep asseblief 'n kwessie op die 
-  <a href="https://github.com/NSCF/SvelteSpecifyLabels/issues">Github-bladsy van hierdie hulpmiddel</a>.
+  <a href="https://github.com/NSCF/SvelteSpecifyLabels/issues" target="_blank">Github-bladsy van hierdie hulpmiddel</a>.
 </p>
 
 <h3>Bedankings</h3>
