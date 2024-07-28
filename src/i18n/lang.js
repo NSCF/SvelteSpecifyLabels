@@ -16,8 +16,8 @@ const langs = {
     afr: "Sleep en los 'n CSV-lêer met jou etiketdata hier of klik om van jou hardeskyf te kies",
   }, 
   wet: {
-    en: 'Wet',
-    afr: 'Nat',
+    en: 'General/wet',
+    afr: 'Algemeen/nat',
   },
   herbarium: {
     en: 'Herbarium',
