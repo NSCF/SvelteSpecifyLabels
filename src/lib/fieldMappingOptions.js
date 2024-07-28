@@ -9,6 +9,7 @@ export const fieldsMappings = {
   admin1Type: ['stateProvinceType', 'statetype', 'provincetype'], //specific for Arthrobase extracts
   county: ['district', 'municipality', 'admin2', 'minorarea'],
   admin2Type: ['districttype', 'countytype', 'municipalitytype', 'admin2type' ], //specific for Arthrobase extracts
+  verbatimLocality:[],
   locality: ['localityname', 'localitystring', 'locnotes'],
   fullLocality: [], 
   fullCoordsString: [],

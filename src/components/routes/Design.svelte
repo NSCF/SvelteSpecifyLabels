@@ -73,7 +73,7 @@
   <div style="display:flex; justify-content: space-between">
     <div style="display:flex; flex-direction:row;">
       <button class="secondary-button" on:click={reset} >{langs['reset'][$settings.lang]}</button>
-      <a href="/mappings" style="margin:0.5rem 0; padding:1rem 2rem" use:link>{langs['mappings'][$settings.lang].toLowerCase()}</a>
+      <a href="/mappings" style="margin:0.5rem 0; padding:1rem 2rem" use:link>{langs['mappings'][$settings.lang]}</a>
     </div>
     <button on:click={showPrint} disabled={!labelData.length}>{langs['printButton'][$settings.lang]}</button>
   </div>

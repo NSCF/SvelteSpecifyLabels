@@ -157,7 +157,7 @@ const langs = {
   },
   refreshMappings: {
     en: "Refresh mappings",
-    afr: "herhaal passings",
+    afr: "Herhaal passings",
   },
   back: {
     en: 'back',

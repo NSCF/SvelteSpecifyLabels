@@ -164,6 +164,11 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, 
   }
 
   if (!mappedRecord.fullLocality) {
+    
+    if (mappedRecord.verbatimLocality && !mappedRecord.locality) {
+      mappedRecord.locality = mappedRecord.verbatimLocality
+    }
+    
     if(mappedRecord.locality){
       if(mappedRecord.locality.toLowerCase().includes(mappedRecord.geography.toLowerCase())) {
         mappedRecord.fullLocality = mappedRecord.locality
