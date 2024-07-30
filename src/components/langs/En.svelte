@@ -81,8 +81,8 @@
 </p>
 <p>
   <em>
-    It is strongly recommended that you <strong>print</strong> a small number of test labels to check that your design works well when
-    physically printed before you print large batches of actual specimen labels. 
+    It is strongly recommended that you <strong>print</strong> a small number of test labels to check that your design 
+    works well when     physically printed before you print large batches of actual specimen labels. 
   </em>
 </p>
 
@@ -94,15 +94,18 @@
   as this gives better results. 
 </p>
 <p>
-  For guidelines on printing archival quality specimen labels please see the <a href="https://nscf.org.za/resources/collections-management/" target="_blank">NSCF Collection Management Manual</a>.
+  For guidelines on printing archival quality specimen labels please see the 
+  <a href="https://nscf.org.za/resources/collections-management/" target="_blank">NSCF Collection Management Manual</a>.
 </p>
 
 <h3>Comments, suggestions, and issues</h3>
 <p>
-  If you have any comments or suggestions, or if you encounter a bug, please create an issue on the <a href="https://github.com/NSCF/SvelteSpecifyLabels/issues" target="_blank">Github page for this tool</a>.
+  If you have any comments or suggestions, or if you encounter a bug, please create an issue on the 
+  <a href="https://github.com/NSCF/SvelteSpecifyLabels/issues" target="_blank">Github page for this tool</a>.
 </p>
-<p>If you'd like to contribute a language translation to broaden the range of languages the tool is available in, please see the 
-  instructions <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">on the Github page</a>, and create an issue as above if you need technical assistance.
+<p>If you'd like to contribute a language translation to broaden the range of languages the tool is available in, 
+  please see the instructions <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">on the Github page</a>, 
+  and create an issue as above if you need technical assistance.
 </p>
 
 <h3>Acknowledgements</h3>
