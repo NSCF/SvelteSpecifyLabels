@@ -2,6 +2,7 @@
   import { getContext } from "svelte";
   import getLabelDet from '../../lib/getLabelDet'
   import QRCode from 'qrcode'
+  import JsBarcode from "jsbarcode";
 
   export let labelRecord
 
@@ -29,7 +30,7 @@
       <div>
         <div style="display:flex; justify-content:space-between">
           <div style="text-transform:uppercase" class="one-line-condensed" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.family || 'Familiaceae'}</div>
-          <div>{labelRecord.genusCode || ''}</div>
+          
         </div>
         <div>{labelDet || ''} </div>
       </div>
@@ -55,6 +56,21 @@
       {:else}
       <div>Det:</div>
       {/if}
+    </div>
+    <div id="filing" style="width:100%; border: border-top:1px solid black;">
+      <div class="one-line-condensed" style="display: flex; justify-content:space-between">
+        {#if labelRecord.familyCode}
+        <div>Family: {labelRecord.familyCode}</div>
+        {:else}
+        <div></div> <!-- a placeholder -->
+        {/if}
+        <div>Genus Code: {labelRecord.genusCode || ''}</div>
+      </div>
+      <div class="two-lines" style="display: flex; justify-content:space-between; align-items:center">
+        <div>{$settings.herbariumCode} number: {labelRecord.catalogNumber}</div>
+        <img id="barcode" alt="barcode"/>
+      </div> 
+
     </div>
   </div>
 </div>

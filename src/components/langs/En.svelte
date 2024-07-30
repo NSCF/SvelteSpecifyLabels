@@ -101,6 +101,9 @@
 <p>
   If you have any comments or suggestions, or if you encounter a bug, please create an issue on the <a href="https://github.com/NSCF/SvelteSpecifyLabels/issues" target="_blank">Github page for this tool</a>.
 </p>
+<p>If you'd like to contribute a language translation to broaden the range of languages the tool is available in, please see the 
+  instructions <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">on the Github page</a>, and create an issue as above if you need technical assistance.
+</p>
 
 <h3>Acknowledgements</h3>
 <p>

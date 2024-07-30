@@ -35,6 +35,9 @@ Your field headings don't have to match these headings perfectly. You can use th
 
 To see all the fields that are used you can go to the src/lib/ folder and fieldMappings.js in a text editor. This shows you the fields that are included on the labels and their alternative names (aliases) that they can have in the input file. 
 
+## Languages
+We hope to make this tool available in several different languages to make it more user friendly to a broader audience. If you would like to contribute a translation (the various labels, links and buttons, as well the more lengthy help/info page), please follow the standard process for [forking and cloning a Github repo](https://www.jcchouinard.com/github-forks-and-pull-requests/), and create a pull request with your translation. Short phrases are in src/i18n/lang.js, and the help/info pages are in src/components/langs (copy paste an existing file, rename it, and then translate). Please use the relevant ISO 639-3 language code. You can add the translations using a simple text editor like Notepad (not MS Word), or alternatively [download and install VS Code](https://code.visualstudio.com/download) for a richer, more colourful text editing experience. 
+
 ## Feedback
 
 If you encounter errors or have suggestions, please make use of the Issues feature in Github: [https://github.com/NSCF/SvelteSpecifyLabels/issues](https://github.com/NSCF/SvelteSpecifyLabels/issues)
