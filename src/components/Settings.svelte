@@ -5,7 +5,7 @@
 
   const settings = getContext('settings')
 
-  const fonts = ["Roboto Condensed", "Courier", 'PT Sans Narrow', 'Arial']
+  const fonts = ["Roboto Condensed", "Courier", 'PT Sans Narrow', 'Times New Roman', 'Arial']
 	//only include fonts here where we want to give the user an option to choose
 	const fontWeights = {
 		"Roboto Condensed": [100, 200, 300, 400]

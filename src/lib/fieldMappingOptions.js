@@ -3,6 +3,7 @@ export const fieldsMappings = {
   catalogNumber: ['Catalog Number', 'CatNum', 'catnum', 'barcode'], 
   recordNumber:['Field Number', 'collNum', 'collNo', 'collectorNo', 'collectornumber', 'collectorCode', 'number'],
   project: ['projectname', 'survey', 'fieldtrip', 'trip'],
+  duplicates: ['dups', 'dup'],
   geography: ['Orig. Prov', 'countryprovince'],
   country: [],
   stateProvince: ['province','state', 'admin1', 'majorarea'],
@@ -54,7 +55,7 @@ export const fieldsMappings = {
   specimenStageSex: ['Stage Sex Count', 'lifeStageSexCounts'],
   sex:['Sex'],
   lifeStage: ['stage'],
-  specimenCount:['count', 'counts', 'countamt', 'countamount', 'duplicates'],
+  specimenCount:['count', 'counts', 'countamt', 'countamount'],
   seriesSampleCounts:[], //just for Arthrobase
   occurrenceRemarks: ['Remarks', 'Collection Object Remarks', 'Collection Object/Remarks', 'seriesNote', 'notes', 'note', 'specimenNotes', 'specimenNote'],
 
@@ -67,11 +68,12 @@ export const fieldsMappings = {
   // we just use ranks here, because Darwin Core taxon fields are a mess...
   order: [],
   superfamily: [],
+  familyCode: ['familynumber', 'facode', 'fanumber'],
   family: ['faname'],
   tribe: [],
   subtribe: [],
   genus: [],
-  genusCode: ['gencode', 'dthno', 'genusnumber', 'apgno', 'genusno', 'apgnumber', 'genspec', 'genspecno','taxoncode'],
+  genusCode: ['gecode', 'gencode', 'dthno', 'genusnumber', 'apgno', 'genusno', 'apgnumber', 'genspec', 'genspecno','taxoncode'],
   species: ['specificEpithet'],
   subspecies:['infraspecificEpithet'],
   variety: ['var'],
