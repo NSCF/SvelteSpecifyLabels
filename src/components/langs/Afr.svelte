@@ -110,7 +110,10 @@
   As jy enige opmerkings of voorstelle het, of as jy 'n fout teëkom, skep asseblief 'n kwessie op die 
   <a href="https://github.com/NSCF/SvelteSpecifyLabels/issues" target="_blank">Github-bladsy van hierdie hulpmiddel</a>.
 </p>
-
+<p>As jy 'n vertaling wil bydra om die aantal tale waarin die instrument beskikbaar is te vermeerder, sien asseblief die 
+   instruksies <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">op die Github-bladsy</a>, en skep 'n 
+   kwessie soos hierbo indien jy tegniese bystand benodig.
+</p>
 <h3>Bedankings</h3>
 <p>
   Verskeie lede van die NSCF-gemeenskap het insette en voorstelle oor etiketontwerp, uitleg en funksionaliteit 
