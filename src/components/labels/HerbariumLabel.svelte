@@ -9,15 +9,22 @@
   const settings = getContext('settings')
 
   let labelDet = null
-  let img
+  let qrImg
+  let barcodeImg
 
   $: if (labelRecord || $settings.includeTaxonAuthorities || $settings.italics) labelDet =  getLabelDet(labelRecord, $settings.includeTaxonAuthorities, false, $settings.italics)
 
-  $: if($settings.includeQRCode && $settings.qrCodeErrorLevel && img && labelRecord && labelRecord.catalogNumber) {
-    QRCode.toDataURL(labelRecord.catalogNumber, { margin: 0, errorCorrectionLevel: $settings.qrCodeErrorLevel }, function (error, url) {
+  $: if($settings.includeQRCode && $settings.qrCodeErrorLevel && qrImg && labelRecord && labelRecord.catalogNumber) {
+    console.log('creating QR code')
+    QRCode.toDataURL('PRE0023456-0', { margin: 0, errorCorrectionLevel: $settings.qrCodeErrorLevel }, function (error, url) {
       if (error) console.error(error)
-      if (url) img.src = url
+      if (url) qrImg.src = url
     })
+  }
+
+  $: if ($settings.includeBarcode && !$settings.includeQRCode && barcodeImg && labelRecord && labelRecord.catalogNumber) {
+    console.log('creating barcode')
+    JsBarcode(barcodeImg, 'PRE0023456-0', {width:1, height:20, displayValue: false} )
   }
 
 </script>
@@ -49,7 +56,7 @@
         <div>{labelRecord.collectionDate}</div>
       </div>
     </div>
-    <div style="display: flex; justify-content:space-between;border-top:1px solid gray">
+    <div style="display: flex; justify-content:space-between;">
       {#if labelRecord.identifiedBy}
       <div>Det: {labelRecord.identifiedBy} </div>
       <div>{labelRecord.dateIdentified}</div>
@@ -57,20 +64,23 @@
       <div>Det:</div>
       {/if}
     </div>
-    <div id="filing" style="width:100%; border: border-top:1px solid black;">
-      <div class="one-line-condensed" style="display: flex; justify-content:space-between">
-        {#if labelRecord.familyCode}
-        <div>Family: {labelRecord.familyCode}</div>
-        {:else}
-        <div></div> <!-- a placeholder -->
-        {/if}
-        <div>Genus Code: {labelRecord.genusCode || ''}</div>
+    <div id="filing" style="width:100%; border-top:1px solid black;">
+      <div class="" style="display: flex; justify-content:space-between; width:100%;">
+        <div style="width:15%">Family:</div>
+        <div style="width:30%;">{labelRecord.familyCode || ''}</div>
+        <div style="width:25%; white-space: nowrap;">Genus:</div>
+        <div style="width:30%;">{labelRecord.genusCode || ''}</div>
       </div>
-      <div class="two-lines" style="display: flex; justify-content:space-between; align-items:center">
-        <div>{$settings.herbariumCode} number: {labelRecord.catalogNumber}</div>
-        <img id="barcode" alt="barcode"/>
-      </div> 
-
+      <div class="two-lines" style="width:100%;display:flex;justify-content:space-between;align-items:center;height:35px">
+        <div>{labelRecord.catalogNumber}</div>
+        {#if $settings.includeQRCode}
+          <img style="height: 100%;margin-right:20px" alt="QR code" bind:this={qrImg}/>
+        {:else if $settings.includeBarcode}
+          <svg alt="barcode" bind:this={barcodeImg}/>
+        {/if}
+      </div>
+      <div>Special collections:</div>
+      <div>Dups: asdfasdf</div> 
     </div>
   </div>
 </div>

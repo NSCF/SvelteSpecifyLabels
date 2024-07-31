@@ -1,8 +1,10 @@
 <script>
+  import Settings from '../Settings.svelte'
   import HerbariumLabel from "../labels/HerbariumLabel.svelte";
   import exampleData from "../../exampleDataPlants";
   import getFieldMappings from "../../lib/getFieldMappings";
   import mapRecord from "../../lib/mapRecord";
+
 
   // add some extra fields to exampledata
   const fieldMappings = getFieldMappings(exampleData[0])
@@ -23,7 +25,7 @@
   }
 
 </script>
-
+<Settings />
 <div id="label" style="color: black;">
   <HerbariumLabel labelRecord={mappedData[recordIndex]}/>
   <div style="display: flex; align-items:center; gap:1em">

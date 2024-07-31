@@ -1,5 +1,6 @@
 const exampleData = [
   {
+    catalogNumber: 'J234234',
     "COLLECTOR": "Steyn, H.M.",
     "NUMBER": "2548",
     "COLLDD": 12,
@@ -13,7 +14,7 @@ const exampleData = [
     "ALT": 903,
     "LLRES": "50m",
     "LAT": 29.14359,
-    "LONG": 17.4442,
+    "LONG": 17.44420,
     "LLUNIT": "DMS",
     "VEGCD": "succulent karroo",
     "SUBSTRCD": "stony soil/rocky",
