@@ -1,10 +1,11 @@
 import getFieldMappings from '../lib/getFieldMappings.js'
 import mapRecord from '../lib/mapRecord.js'
 import getLabelDet from '../lib/getLabelDet.js'
-import exampleData from '../exampleData.js'
+import exampleData from '../exampleDataPlants.js'
 
-const example = exampleData[2]
-const mappings = getFieldMappings(example)
-const mapped = mapRecord(example, mappings)
-const labelDet = getLabelDet(mapped, false)
-let i = 0
+const mappings = getFieldMappings(exampleData[0])
+
+for (let i = 0; i < exampleData.length; i++) {
+  const mapped = mapRecord(exampleData[i], mappings)
+  const labelDet = getLabelDet(mapped, false, false, true)
+}

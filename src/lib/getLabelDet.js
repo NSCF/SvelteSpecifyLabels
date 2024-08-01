@@ -115,6 +115,11 @@ function getDetStringFromRanks(record, includeAuthority, includeInfraspecificRan
     return null
   }
 
+  // we need a check here because these fields might include the full name
+  if (fullNameParts.some(x => x.split(' ').length > 1)) {
+    return null
+  }
+
   fullNameParts.reverse()
 
   let questionMark = false

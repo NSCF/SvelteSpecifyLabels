@@ -12,10 +12,9 @@
   let qrImg
   let barcodeImg
 
-  $: if (labelRecord || $settings.includeTaxonAuthorities || $settings.italics) labelDet =  getLabelDet(labelRecord, $settings.includeTaxonAuthorities, false, $settings.italics)
+  $: if (labelRecord || $settings.includeTaxonAuthorities || $settings.italics) labelDet =  getLabelDet(labelRecord, $settings.includeTaxonAuthorities, false, $settings.italics), console.log(labelDet)
 
   $: if($settings.includeQRCode && $settings.qrCodeErrorLevel && qrImg && labelRecord && labelRecord.catalogNumber) {
-    console.log('creating QR code')
     QRCode.toDataURL('PRE0023456-0', { margin: 0, errorCorrectionLevel: $settings.qrCodeErrorLevel }, function (error, url) {
       if (error) console.error(error)
       if (url) qrImg.src = url
@@ -23,7 +22,6 @@
   }
 
   $: if ($settings.includeBarcode && !$settings.includeQRCode && barcodeImg && labelRecord && labelRecord.catalogNumber) {
-    console.log('creating barcode')
     JsBarcode(barcodeImg, 'PRE0023456-0', {width:1, height:20, displayValue: false} )
   }
 
@@ -36,15 +34,16 @@
     <div id="taxon">
       <div>
         <div style="display:flex; justify-content:space-between">
-          <div style="text-transform:uppercase" class="one-line-condensed" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.family || 'Familiaceae'}</div>
-          
+          <div style="text-transform:uppercase" class="one-line-condensed" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.family || 'No family'}</div>
         </div>
-        <div>{labelDet || ''} </div>
+        <div>{@html labelDet || ''} </div>
       </div>
     </div>
-    <div>
-      <div id="locality" class="three-lines">{labelRecord.fullLocality || ''} </div>
-      <div id="coords" class="one-line-condensed">{labelRecord.fullCoordsString || ''}</div>
+    <div class="four-lines" style="display:flex;width:100%;align-items:center">
+      <div>
+        <div id="locality" >{labelRecord.fullLocality || ''} </div>
+        <div id="coords" class="one-line-condensed">{labelRecord.fullCoordsString || ''}</div>
+      </div>
     </div>
     <div class="three-lines">{labelRecord.habitat || ''}</div>
     <div class="two-lines">{labelRecord.description || ''}</div>
@@ -80,7 +79,7 @@
         {/if}
       </div>
       <div>Special collections:</div>
-      <div>Dups: asdfasdf</div> 
+      <div>Dups: {labelRecord.duplicates}</div> 
     </div>
   </div>
 </div>
@@ -134,6 +133,11 @@
 
   .three-lines {
     height: 3.2em; 
+    overflow:hidden;
+  }
+
+  .four-lines {
+    height: 4.2em; 
     overflow:hidden;
   }
 
