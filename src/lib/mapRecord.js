@@ -146,21 +146,35 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, 
     if(mappedRecord.verbatimElevation) {
       mappedRecord.labelElevation = mappedRecord.verbatimElevation
     }
-    else {
-      if(mappedRecord.minElevationMeters) {
-        if(mappedRecord.maxElevationMeters){
-          if(mappedRecord.minElevationMeters == mappedRecord.maxElevationMeters){
-            mappedRecord.verbatimElevation = mappedRecord.minElevationMeters + 'm'
-          }
-          else {
-            let elevVals = [Number(mappedRecord.minElevationMeters), Number(mappedRecord.maxElevationMeters)]
-            let minElev = Math.min(elevVals)
-            let maxElev = Math.max(elevVals)
-            mappedRecord.verbatimElevation = [minElev,maxElev].join('-') + 'm'
-          }
+    else if(mappedRecord.minElevationMeters || mappedRecord.maxElevationMeters) {
+      let elevVals = [mappedRecord.minElevationMeters, mappedRecord.maxElevationMeters].filter(x => x !== null && x !== undefined)
+      if (elevVals.length == 1) {
+        if (isNaN(elevVals[0])) {
+          mappedRecord.labelElevation = elevVals[0]
+        }
+        else {
+          mappedRecord.labelElevation = elevVals[0].toString() + 'm'
         }
       }
+      else if (mappedRecord.minElevationMeters == mappedRecord.maxElevationMeters){
+        mappedRecord.verbatimElevation = mappedRecord.minElevationMeters + 'm'
+      }
+      else {
+        let minElev = Math.min(elevVals)
+        let maxElev = Math.max(elevVals)
+        mappedRecord.verbatimElevation = [minElev,maxElev].join('-') + 'm'
+      }
     }
+    else if (mappedRecord.alt) {
+      mappedRecord.labelElevation = mappedRecord.alt.toString()
+      if (mappedRecord.altUnit) {
+        mappedRecord.labelElevation += mappedRecord.altUnit
+      }
+      else {
+        mappedRecord.labelElevation += 'm'
+      }
+    }
+    
   }
 
   if (!mappedRecord.fullLocality) {

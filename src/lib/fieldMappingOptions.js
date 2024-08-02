@@ -20,10 +20,12 @@ export const fieldsMappings = {
   decimalLatitude: ['Latitude1', 'ddLat', 'ddlat', 'declat', 'decimalLat', 'decimallatitude'],
   decimalLongitude:['Longitude1', 'ddLong', 'ddLon', 'declong', 'decimalLong', 'decimalLon', 'decimallongitude'],
 
-  // BRAHMS coordinates fields, here only so we can try get people off BRAHMS...
+  // BRAHMS coordinates and altitude fields, here only so we can try get people off BRAHMS...
   llunit: [],
   ns: [],
   ew: [],
+  alt: [],
+  altUnit: [],
 
   // and back to sanity...
   coordsUncertainty: ['Max Uncertainty Est', 'uncertainty', 'llres'],
@@ -49,6 +51,7 @@ export const fieldsMappings = {
   permitNumber: ['permit', 'permitcode', 'permitnumber', 'permitno'],
   recordedBy: ['Collectors [Aggregated]', 'collector', 'collectors', 'collectedby', 'namestring'],
   primaryCollectorLastName: ['primaryCollector'],
+  additionalCollectors: ['addcoll'], ///BRAHMS strikes again...
   samplingProtocol: ['collectionMethod', 'Collecting Information/Method', 'collectMethods', 'collectmethod', 'method'],
   eventConditions: ['conditions'],
   eventRemarks:['collectingeventremarks'],
