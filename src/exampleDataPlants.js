@@ -54,7 +54,7 @@ const exampleData = [
     "RANK2": "",
     "SP3": "",
     "AUTHOR3": "",
-    "LABELTOTAL": 0
+    "LABELTOTAL": 3
   },
   {
     "CATEGORY": "PS",

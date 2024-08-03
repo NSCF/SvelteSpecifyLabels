@@ -9,7 +9,7 @@ export default {
 		herbariumCollection: null,
 		herbariumInstitution: null,
 		labelPerSpecimen: false,
-		labelCountField: null,
+		labelsPerHerbariumSpecimen: false,
 		useRomanNumeralMonths: false,
 		detLabel: true,
 		detLabelOnly: false,

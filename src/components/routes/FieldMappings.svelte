@@ -75,6 +75,7 @@
 <style>
 
   .label-preview {
+    color: black;
     padding:4px; 
     border-radius: 4px;
   }

@@ -10,6 +10,7 @@
   export let lang
 
   const fieldMappings = getContext('mappings')
+  const settings = getContext('settings')
 
 </script>
 
@@ -18,13 +19,13 @@
   {#if darwinCoreFields.includes(labelField)}
   <a style="position: relative; top: 4px;" href={"https://dwc.tdwg.org/terms/#dwc:" + labelField} target=”_blank”><LinkIcon /></a>
   {/if}
-  <select style="display: inline; color: black; margin:0; margin-left:1em;" bind:value={$fieldMappings[labelField]}>
+  <select style="display: inline; color: black; margin:0; margin-left:1em;" bind:value={$fieldMappings[$settings.type][labelField]}>
     <option value="">{langs['remove'][lang]}</option>
     {#each Object.keys(record) as datasetField}
     <option value={datasetField}>{datasetField}</option>
     {/each}
   </select>
-  <button class="close-button" on:click={_ => $fieldMappings[labelField] = null}><CloseIcon/></button>
+  <button class="close-button" on:click={_ => $fieldMappings[$settings.type][labelField] = null}><CloseIcon/></button>
 </label>
 
 <style>

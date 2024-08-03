@@ -34,11 +34,18 @@
 
   $: $settings.type, getLabel()
 
+  const multipleLabels = _ => {
+    return ($settings.type == 'herbarium' && $settings.labelsPerHerbariumSpecimen && labelRecord.specimenCount) || 
+      ($settings.type != 'herbarium' && $settings.labelPerSpecimen && labelRecord.specimenCount)
+  }
+
+  console.log(labelRecord.specimenCount)
+
 </script>
 
 
 {#if makeLabel}
-  {#if $settings.labelPerSpecimen && labelRecord.specimenCount }
+  {#if ($settings.labelPerSpecimen || $settings.labelsPerHerbariumSpecimen) && multipleLabels() }
     {#each Array(labelRecord.specimenCount) as i}
       <svelte:component this={LabelDetail} {labelRecord} />
     {/each}

@@ -58,10 +58,17 @@
     <label for="insectlabel">{langs['insect'][$settings.lang]} ({langs['coming'][$settings.lang]})</label>
   </label>
   <br/>
+  {#if $settings.type == 'herbarium'}
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.labelsPerHerbariumSpecimen}>
+    {langs['count'][$settings.lang]}
+  </label>
+  {:else}
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.labelPerSpecimen}>
     {langs['count'][$settings.lang]}
   </label>
+  {/if}
   <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.useRomanNumeralMonths} on:change={_ => dispatch('calc_labels')}>
@@ -111,11 +118,13 @@
     </label>
     <br/>
   {/if}
+  {#if $settings.type == 'herbarium'}
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.includeBarcode}>
     {langs['barcode'][$settings.lang]}
   </label>
   <br/>
+  {/if}
   <label style="display:inline">
     <input type=checkbox bind:checked={$settings.includeQRCode}>
     {langs['qrCode'][$settings.lang]}
