@@ -1,6 +1,5 @@
 <script>
-  import { getContext } from "svelte";
-  import LabelDetail from './labels/GeneralLabel.svelte'
+  import { onMount, getContext } from "svelte";
   import getLabelDet from "../lib/getLabelDet";
 
   export let labelRecord
@@ -19,16 +18,32 @@
 
   const settings = getContext('settings')
 
+  const labelComponents = {
+    general: async _ => await import('../components/labels/GeneralLabel.svelte'),
+    herbarium: async _ => await import('../components/labels/HerbariumLabel.svelte'),
+  }
+
+  let LabelDetail 
+
+  const getLabel = async _ => {
+    const result = await labelComponents[$settings.type]()
+    LabelDetail = result.default
+  }
+
+  onMount(getLabel)
+
+  $: $settings.type, getLabel()
+
 </script>
 
 
 {#if makeLabel}
   {#if $settings.labelPerSpecimen && labelRecord.specimenCount }
     {#each Array(labelRecord.specimenCount) as i}
-      <LabelDetail {labelRecord} />
+      <svelte:component this={LabelDetail} {labelRecord} />
     {/each}
   {:else}
-    <LabelDetail {labelRecord} />
+    <svelte:component this={LabelDetail} {labelRecord} />
   {/if}
 {:else}
   <div>insufficent data to make label...</div>

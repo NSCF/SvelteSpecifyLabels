@@ -26,8 +26,8 @@
   </div>
   <nav style="display: flex; gap:2em">
     <a href="/" use:link>{langs['home'][$settings.lang]}</a>
+    <a href="https://nscf.org.za/learn-more-about-us" target="_blank">{langs['aboutNSCF'][$settings.lang]}</a>
     <a href="/info" use:link>{langs['info'][$settings.lang]}</a>
-    <a href="https://nscf.org.za" target="_blank">NSCF</a>
     <button class="secondary-button" on:click={handLangButtonClick}>{$settings.lang}</button>
   </nav>
 </div>

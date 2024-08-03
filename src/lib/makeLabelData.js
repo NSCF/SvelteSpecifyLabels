@@ -1,12 +1,12 @@
 import sortLabelData from './sortLabelData.js'
 import mapRecord from './mapRecord.js'
 
-export default function makeLabelData(rawData, fieldMapping, useRomanNumeralMonths, excludeNoCatnums, sortOnStorage) {
+export default function makeLabelData(rawData, fieldMappings, useRomanNumeralMonths, excludeNoCatnums, sortOnStorage) {
 
   let labelData = []
   if (rawData.length) {
     
-    labelData = rawData.map(raw => mapRecord(raw, fieldMapping, useRomanNumeralMonths))
+    labelData = rawData.map(raw => mapRecord(raw, fieldMappings, useRomanNumeralMonths))
     
     sortLabelData(labelData, sortOnStorage)
 

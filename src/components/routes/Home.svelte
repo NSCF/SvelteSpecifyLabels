@@ -4,7 +4,6 @@
   import Header from '../Header.svelte';
   import ChooseFile from '../ChooseFile.svelte'
   import langs from '../../i18n/lang';
-  import exampleData from '../../exampleData'
 
   let title = "NSCF labels"
   let exampleDataURL = 'https://docs.google.com/spreadsheets/d/17GK3ET4YRysCzieaSZAwn4mOyt3dBvTwlocZSIVPFgc/edit?usp=sharing'
@@ -20,10 +19,6 @@
     push('/design')
 	}
 
-	const addExampleLabels = _ => {
-		$rawData = exampleData
-		push('/design')
-	}
 
 </script>
 
@@ -35,6 +30,6 @@
   <ChooseFile on:data={handleFileDataAndTitle} />
   <div style="width:100%; display: flex; justify-content:flex-end; gap:2em;">
     <a href={exampleDataURL} target="_blank">{langs['exampleData'][$settings.lang]}</a>
-    <a href="/design" use:link  on:click|preventDefault={addExampleLabels}>{langs['exampleLabels'][$settings.lang]}</a>
+    <a href="/design" use:link  on:click|preventDefault={_ => push('/design')}>{langs['exampleLabels'][$settings.lang]}</a>
   </div>
 </div>

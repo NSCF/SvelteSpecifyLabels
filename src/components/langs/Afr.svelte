@@ -1,12 +1,10 @@
-<h3>Inligting</h3>
+<h3>Skep etikette vinnig en maklik</h3>
 <p>
-  Hierdie hulpmiddel maak die skep van etikette vir eksemplare vinnig en maklik. Trek eenvoudig jou datastel in, 
-  kies die etikettipe en pas die stellings aan soos nodig. Die etikette is ontwerp om te voldoen aan die vereistes 
-  van die meeste versamelingstipes en volg die beste praktyke. Ons hoop dat dit jou sal tyd spaar en dat jy sal geniet 
-  om dit te gebruik. Indien jy enige probleme ondervind, skep asseblief 'n kwessie op die Github-bladsy.
+  Trek eenvoudig jou datastel in, kies die etikettipe en pas die stellings aan soos nodig. Die etikette is ontwerp om te voldoen aan die vereistes 
+  van die meeste versamelingstipes en volg die beste praktyke.
 </p>
 
-<h3>Gebruik</h3>
+<h3>Hoe om die hulpmiddel te gebruik</h3>
 
 <h4>Laai jou data</h4>
 <p>
@@ -23,7 +21,7 @@
   <em>
     Let daarop dat geen data gestoor of oor die internet gestuur word wanneer hierdie hulpmiddel gebruik word nie. 
     Die oorspronklike kode is <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">beskikbaar op Github</a> en iemand wat 
-    Javascript ken, kan dit kontroleer en bevestig.  
+    Javascript ken kan dit kontroleer en bevestig.  
   </em>
 </p>
 
@@ -36,7 +34,7 @@
   ook al het en die hulpmiddel die vergelyking laat doen, sodat jy nie ekstra werk hoef te doen nie.
 </p>
 <p>
-  Indien jou velde nie op die etiket verskyn nie, is daar 'n opsie om die verbindings ('links') met die hand te stel. 
+  Indien jou velde nie op die etiket verskyn nie, is daar 'n opsie om die verbindings/passings met die hand te stel. 
   Velde kan ingesluit of uitgesluit word soos jy goeddink. Jy kan meer lees oor die Darwin Core-termdefinisies deur 
   die skakels wat verskaf word te volg.
 </p>
@@ -68,7 +66,7 @@
   Die sigblad bevat 'n veld genaamd 'print', wat gebruik kan word vir die kies en filter van rekords om te druk.  
   <a href="https://youtu.be/SYSevA4znlc?si=oO6e0d_pxyUikpEd" target="_blank"> Hierdie 3 minuut video</a> wys hoe om in Google Sheets
   te filter. Om etikette te druk vir gefilterde rekords, moet jy die rekords kopieer en in 'n aparte sigblad plak 
-  voordat jy dit aflaai as CSV-lêer. Ongelukkig ignoreer Google Sheets enige toegepaste filters en alle rekords 
+  voordat jy dit aflaai. Ongelukkig ignoreer Google Sheets enige toegepaste filters en alle rekords 
   in 'n sigblad word uitgevoer. Jy kan soveel verskillende filters gebruik soos jy wil. Jy wil dalk velde insluit 
   vir die instituut waar die eksemplare gestoor word en die datum waarop eksemplare gestoor word, om sodoende 
   etikette te druk vir groepe eksemplare soos dit in die versameling opgeneem word.
@@ -76,9 +74,9 @@
 
 <h4>Duplikaat etikette</h4>
 <p>
-  As jy duplikaat etikette vir elke monster in 'n reeks wil hê (bv. verskeie insekte van dieselfde spesie wat saam versamel is, 
+  As jy duplikaat etikette vir elke eksemplaar in 'n reeks wil hê (bv. verskeie insekte van dieselfde spesie wat saam versamel is, 
   of duplikate van herbarium eksemplare), sal jy 'n veld by jou datastel moet voeg met 'n aantal (noem die veld 'count'). 
-  Indien jy nie 'n spesifieke aantalveld het nie, sal die instrument die veld met aantal monsters per ouderdom/geslag gebruik. 
+  Indien jy nie 'n spesifieke aantalveld het nie, sal die instrument die veld met aantal eksemplare per ouderdom/geslag gebruik. 
 </p>
 
 <h4>Etiket opsies</h4>
@@ -97,7 +95,7 @@
 <h4>Druk van etikette</h4>
 <p>
   Wanneer jy op die drukknoppie kliek, sal die blaaier die standaard drukdialoog oopmaak. Maak seker dat jy toepaslike bladsygrootte 
-  en kantlyne kies voordat jy druk. Jy kan óf direk druk óf die etikette as 'n PDF stoor en later druk. Dit word aanbeveel dat die 
+  en kantlyne kies voordat jy druk. Jy kan of direk druk of die etikette as 'n PDF stoor en later druk. Dit word aanbeveel dat die 
   'Save as PDF'-opsie eerder as die 'Microsoft Print to PDF' gebruik word, aangesien dit beter resultate gee. 
 </p>
 <p>
@@ -110,10 +108,7 @@
   As jy enige opmerkings of voorstelle het, of as jy 'n fout teëkom, skep asseblief 'n kwessie op die 
   <a href="https://github.com/NSCF/SvelteSpecifyLabels/issues" target="_blank">Github-bladsy van hierdie hulpmiddel</a>.
 </p>
-<p>As jy 'n vertaling wil bydra om die aantal tale waarin die instrument beskikbaar is te vermeerder, sien asseblief die 
-   instruksies <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">op die Github-bladsy</a>, en skep 'n 
-   kwessie soos hierbo indien jy tegniese bystand benodig.
-</p>
+
 <h3>Bedankings</h3>
 <p>
   Verskeie lede van die NSCF-gemeenskap het insette en voorstelle oor etiketontwerp, uitleg en funksionaliteit 
@@ -122,4 +117,9 @@
 <h4>Vertaling is verskaf deur:</h4>
 <ul>
   <li>afr: Adriaan Jordaan, Christiaan Steenkamp, Hester Steyn, Ian Engelbrecht, Google Translate</li>
+  <li>zul: Help ons asseblief!</li>
 </ul>
+<p>As jy 'n vertaling wil bydra om die aantal tale waarin die instrument beskikbaar is te vermeerder, sien asseblief die 
+  instruksies <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">op die Github-bladsy</a>, en skep 'n 
+  kwessie soos hierbo indien jy tegniese bystand benodig.
+</p>

@@ -5,7 +5,9 @@ export default {
 		type: 'general',
 		showInstitution: false,
 		collectionName: null,
-		herbariumCode: 'J',
+		showHerbariumCollection: false,
+		herbariumCollection: null,
+		herbariumInstitution: null,
 		labelPerSpecimen: false,
 		labelCountField: null,
 		useRomanNumeralMonths: false,
@@ -26,9 +28,16 @@ export default {
 		addPrintedDate: false,
     includeProject: false,
 		font: 'Roboto Condensed',
+		herbarimLabelFont: 'Courier',
 		fontSize: numberInputSettings.fontSize.default,
 		fontWeight: 400,
 		lineHeight: numberInputSettings.lineHeight.default,
 		labelWidth: numberInputSettings.labelWidth.default,
-		qrCodeDims: numberInputSettings.qrCodeDims.default
+		qrCodeDims: numberInputSettings.qrCodeDims.default,
+		defaults: {
+			labelWidth: {
+				insect: '2cm',
+				herbarium: '9cm'
+			}
+		}
 }

@@ -12,7 +12,7 @@
   let qrImg
   let barcodeImg
 
-  $: if (labelRecord || $settings.includeTaxonAuthorities || $settings.italics) labelDet =  getLabelDet(labelRecord, $settings.includeTaxonAuthorities, false, $settings.italics), console.log(labelDet)
+  $: if (labelRecord || $settings.includeTaxonAuthorities || $settings.italics) labelDet =  getLabelDet(labelRecord, $settings.includeTaxonAuthorities, true, $settings.italics), console.log(labelDet)
 
   $: if($settings.includeQRCode && $settings.qrCodeErrorLevel && qrImg && labelRecord && labelRecord.catalogNumber) {
     QRCode.toDataURL('PRE0023456-0', { margin: 0, errorCorrectionLevel: $settings.qrCodeErrorLevel }, function (error, url) {
@@ -27,11 +27,18 @@
 
 </script>
 
-<div id="label" >
-  <div id="header">
-    <div id="title"  class:bolder={!$settings.underline} class:underline={$settings.underline} style="font-size:12pt">Bews Herbarium (NU)</div>
-    <div id="subtitle"  class:bolder={!$settings.underline} class:underline={$settings.underline}>University of KwaZulu-Natal</div>
-  </div>
+<div id="label" 
+  style="--font: {$settings.herbarimLabelFont};
+  --label-width: {$settings.defaults.herbarium}
+  ">
+  {#if $settings.showHerbariumCollection}
+    <div id="header">
+      <div id="title"  class:bolder={!$settings.underline} class:underline={$settings.underline} style="font-size:12pt">{$settings.herbariumCollection || ''}</div>
+      {#if $settings.herbariumInstitution}
+        <div id="subtitle"  class:bolder={!$settings.underline} class:underline={$settings.underline}>{$settings.herbariumInstitution}</div>
+      {/if}
+    </div>
+  {/if}
   <div id="main">
     <div id="taxon">
       <div style="width: 100%;">
@@ -43,9 +50,12 @@
     </div>
     <div id="details" >
       <div class="" style="display:flex;width:100%;align-items:center">
-        <div>
+        <div style="width:100%">
           <div id="locality" >{labelRecord.fullLocality || ''} </div>
-          <div id="coords" class="">{labelRecord.fullCoordsString || ''} {labelRecord.labelElevation ? 'Alt: ' + labelRecord.labelElevation : ''}</div>
+          <div style="width:100%;display:flex;justify-content:space-between">
+            <div id="coords" class="">{labelRecord.fullCoordsString || ''} {labelRecord.gridReference ? '[' + labelRecord.gridReference + ']' : ''}</div>
+            <div>{labelRecord.labelElevation ? 'Alt: ' + labelRecord.labelElevation : ''}</div>
+          </div>
         </div>
       </div>
       <div class="">{labelRecord.habitat || ''}</div>
@@ -54,7 +64,11 @@
       <div class="">
         <div>Coll: {labelRecord.recordedBy}{labelRecord.additionalCollectors ? ', with ' + labelRecord.additionalCollectors : ''}</div>
         <div style="display: flex; justify-content:space-between">
-          <div >{labelRecord.recordNumber[0].toUpperCase() + labelRecord.recordNumber.substring(1)}</div>
+          {#if labelRecord.recordNumber}
+            <div >{labelRecord.recordNumber[0].toUpperCase() + labelRecord.recordNumber.substring(1)}</div>
+          {:else}
+            <div></div>
+          {/if}
           <div>{labelRecord.collectionDate}</div>
         </div>
       </div>
@@ -82,8 +96,8 @@
           <svg alt="barcode" style="z-index: 0;" bind:this={barcodeImg}/>
         {/if}
       </div>
-      <div>Special collections:</div>
-      <div>Dups: {labelRecord.duplicates}</div> 
+      <div>Project: {labelRecord.project || ''}</div>
+      <div>Dups: {labelRecord.duplicates || ''}</div> 
     </div>
   </div>
 </div>
@@ -91,15 +105,17 @@
 <style>
 
   #label {
-    width:9cm;
-    height:10cm;
+    width: var(--label-width, 9cm);
+    height:9.5cm;
     padding:.5em;
     display:flex; 
     flex-direction:column;
     align-items:center;
+    font-family: var(--font, sans-serif);
     font-size: 10pt;
-    border-top:1px dashed gray;
-    border-bottom:1px dashed gray;
+    /* border-top:1px dashed gray; */
+    /* border-bottom:1px dashed gray; */
+    break-inside:avoid;
   }
 
   #header {

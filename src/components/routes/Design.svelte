@@ -1,6 +1,6 @@
 <script>
   import { getContext } from 'svelte'
-  import {link, replace} from 'svelte-spa-router'
+  import { link } from 'svelte-spa-router'
   import Header from '../Header.svelte';
   import Settings from '../Settings.svelte';
 	import LabelLayout from '../LabelLayout.svelte'
@@ -9,6 +9,8 @@
   import makeLabelData from '../../lib/makeLabelData'
   import defaultSettings from '../../lib/settings'
   import langs from '../../i18n/lang';
+  import exampleData from '../../exampleData'
+  import exampleDataPlants from '../../exampleDataPlants'
 
   let labelData = []
 
@@ -18,26 +20,55 @@
 
   // back to home if we have no raw data
   if ($rawData.length == 0) {
-    replace('/') // we have to go back to the home page and try again...
+    if ($settings.type == 'herbarium') {
+      $rawData = exampleDataPlants
+    }
+    else {
+      $rawData = exampleData
+    }
   }
 
   if (Object.keys($fieldMappings).length == 0) {
     const savedFieldMappingsJSON = localStorage.getItem("fieldMappings")
     if (savedFieldMappingsJSON) {
-      const savedFieldMappings = JSON.parse(savedFieldMappingsJSON)
-      reconcileFieldMappings(savedFieldMappings, $rawData[0])
+      let savedFieldMappings = JSON.parse(savedFieldMappingsJSON)
+      if (!savedFieldMappings[$settings.type]) {
+        savedFieldMappings = { [$settings.type]: savedFieldMappings}
+      }
+      reconcileFieldMappings(savedFieldMappings[$settings.type], $rawData[0])
       $fieldMappings = savedFieldMappings
-      console.log('got mappings from history')
     }
     else {
       const newFieldMappings = getFieldMappings($rawData[0])
-      $fieldMappings = newFieldMappings
-      console.log('created new mappings')
+      $fieldMappings = { [$settings.type]: newFieldMappings}
     }
   }
 
-  $: $settings, labelData = makeLabelData($rawData, $fieldMappings, $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage)
-  $: $fieldMappings, labelData = makeLabelData($rawData, $fieldMappings, $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage)
+  labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage)
+  
+  const handleTypeChange = _ => {
+    if ($settings.type == 'herbarium') {
+      $rawData = exampleDataPlants
+    }
+    else {
+      $rawData = exampleData
+    }
+
+    if (!$fieldMappings[$settings.type]) {
+      const newFieldMappings = getFieldMappings($rawData[0])
+      $fieldMappings[$settings.type] = newFieldMappings
+    }
+    else {
+      reconcileFieldMappings($fieldMappings[$settings.type], $rawData[0])
+    }
+
+    labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage)
+
+  }
+
+  const handleCalcLabels = _ => {
+    labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage)
+  }
 
   const showPrint = _ => {
 		localStorage.setItem('labelSettings', JSON.stringify($settings))
@@ -69,7 +100,7 @@
 </div>
 <div class="topstuff">
   <Header />
-  <Settings />
+  <Settings on:calc_labels={handleCalcLabels} on:type-change={handleTypeChange} />
   <div style="display:flex; justify-content: space-between">
     <div style="display:flex; flex-direction:row;">
       <button class="secondary-button" on:click={reset} >{langs['reset'][$settings.lang]}</button>

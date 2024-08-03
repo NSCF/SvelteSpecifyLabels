@@ -9,9 +9,14 @@ const langs = {
     afr: 'Tuis',
     zul: '',
   }, 
+  aboutNSCF: {
+    en: 'About the NSCF',
+    afr: 'Oor die NSCF',
+    zul: '',
+  },
   info: {
-    en: 'Info',
-    afr: 'Hulp',
+    en: 'About this tool',
+    afr: 'Oor hierdie hulpmiddel',
     zul: '',
   },
   box: {
@@ -59,6 +64,11 @@ const langs = {
     afr: 'Versameling naam',
     zul: '',
   },
+  inst: {
+    en: 'Institution',
+    afr: 'Organisasie',
+    zul: '',
+  },
   dets: {
     en: "Include det labels",
     afr: "Sluit in determinasie labels",
@@ -74,9 +84,14 @@ const langs = {
     afr: "Sluit in a gat merk", 
     zul: '',
   },
+  barcode: {
+    en: 'Include barcode',
+    afr: 'Sluit in \'n strepieskode',
+    zul: '',
+  },
   qrCode: {
     en: 'Include QR code',
-    afr: 'Sluit in QR coda',
+    afr: 'Sluit in QR (blokkies)kode',
     zul: '',
   },
   onDetLabels: {

@@ -337,6 +337,16 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, 
     mappedRecord.specimenStageSex = mappedRecord.specimenStageSex.replace(/M/g, '♂').replace(/F/g, '♀')
   }
 
+  if (!mappedRecord.specimenCount && mappedRecord.dups) {
+
+    if (typeof mappedRecord.dups == 'number' || !isNaN(mappedRecord.dups)) {
+      mappedRecord.specimenCount = Number(mappedRecord.dups)
+    }
+    else if (typeof mappedRecord.dups == 'string') {
+      mappedRecord.specimenCount = mappedRecord.dups.split(/[,|;\s]/).filter(x => x).length
+    }
+  }
+
   //det stuff
 
   if (!mappedRecord.dateIdentified) {

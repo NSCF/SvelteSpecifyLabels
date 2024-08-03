@@ -8,7 +8,7 @@
 
 </script>
 
-<div class="cols" style="color:black; --label-width: { $settings.labelWidth + 'cm' }"> 
+<div class="cols" style="color:black; --label-width: { $settings.type == 'general' ? $settings.labelWidth + 'cm' : '9cm' }"> 
   {#if inputData && inputData.length}
     {#each inputData as labelRecord}
       <Label {labelRecord} />
@@ -17,7 +17,6 @@
   No data to show, refresh to start over and choose a different file
   {/if}
 </div>
-
 
 <style>
 

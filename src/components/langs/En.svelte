@@ -1,12 +1,10 @@
-<h3>Info</h3>
+<h3>Quick and easy specimen labels</h3>
 <p>
-  This tool makes creating specimen labels quick and easy. Simply add your dataset, select the label type you want, and 
+  Simply add your dataset, select the label type you want, and 
   tweak the settings as needed. The labels have been designed to meet the needs of most collection types and adhere to best practices. 
-  We hope this will save you some time and that you will enjoy using it. If you encounter any problems please create on issue
-  on the Github page.
 </p>
 
-<h3>Usage</h3>
+<h3>How to use this tool</h3>
 
 <h4>Loading your data</h4>
 <p>
@@ -27,7 +25,7 @@
 
 <h4>Data fields</h4>
 <p>
-  The tool makes use of standard data fields like locality, date, taxon name, etc. and uses <a href="https://dwc.tdwg.org/terms/" target="_blank">Darwin Core fields</a>
+  The tool makes use of standard data fields like locality, date, taxon name, etc. and uses <a href="https://dwc.tdwg.org/terms/" target="_blank">Darwin Core field names</a>
   as far as possible. When you load your data the tool does its best to map the fields from your dataset to the label fields. For example, if you have a field called 'localityname'
   it will be mapped to 'locality'. The idea is to be able to import your data using whatever fields you have and have them picked up by the tool, so you don't have to do extra work.
 </p>
@@ -38,6 +36,15 @@
 <p>
   Remember that the fields you include on the label are up to you. The tool requires at lease one field like locality or taxon name in 
   order to generate a label, but other than that you are free to pick and choose as you like.
+</p>
+<p>
+  For herbarium labels you can also include fields like 'dups' to list institutions where duplicates are deposited, and 'additionalCollectors', as well as family and 
+  genus number/code fields if you want those for filing purposes.
+</p>
+<p>
+  For insect labels you can include a field called 'shortLocality' for an abbreviated form of the locality for printing on the label 
+  (insect labels have severe space limitations). This should include everything from country down to the specific locality as you would like it on the label, 
+  but not the coordinates or coordinate metadata, which get their own line. 
 </p>
 
 <h5>Taxon name fields</h5>
@@ -103,10 +110,6 @@
   If you have any comments or suggestions, or if you encounter a bug, please create an issue on the 
   <a href="https://github.com/NSCF/SvelteSpecifyLabels/issues" target="_blank">Github page for this tool</a>.
 </p>
-<p>If you'd like to contribute a language translation to broaden the range of languages the tool is available in, 
-  please see the instructions <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">on the Github page</a>, 
-  and create an issue as above if you need technical assistance.
-</p>
 
 <h3>Acknowledgements</h3>
 <p>
@@ -117,3 +120,7 @@
 <ul>
   <li>afr: Adriaan Jordaan, Christiaan Steenkamp, Hester Steyn, Ian Engelbrecht</li>
 </ul>
+<p>If you'd like to contribute a language translation to broaden the range of languages the tool is available in, 
+  please see the instructions <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">on the Github page</a>, 
+  and create an issue as above if you need technical assistance.
+</p>
