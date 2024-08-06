@@ -28,9 +28,7 @@
   // deprecated fields
   const excludeFromMappings = ['detByLast', 'detByFirst', 'detByInitials', 
   'fullLocality', 'fullCoordsString', 'llunit', 'ns', 'ew', 'detYear', 
-  'detMonth', 'detDay', 'year', 'month', 'day', 'order', 'superfamily', 
-  'family', 'tribe', 'subtribe', 'genus', 'species', 'subspecies', 
-  'variety', 'subvariety', 'forma', 'subforma']
+  'detMonth', 'detDay', 'year', 'month', 'day']
 
   const rawData = getContext('data')
   const settings = getContext('settings')

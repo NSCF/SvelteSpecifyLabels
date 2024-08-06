@@ -48,10 +48,14 @@
   
   const handleTypeChange = _ => {
     if ($settings.type == 'herbarium') {
-      $rawData = exampleDataPlants
+      if ($rawData == exampleData) {
+        $rawData = exampleDataPlants
+      }
     }
     else {
-      $rawData = exampleData
+      if ($rawData == exampleDataPlants) {
+        $rawData = exampleData
+      }
     }
 
     if (!$fieldMappings[$settings.type]) {

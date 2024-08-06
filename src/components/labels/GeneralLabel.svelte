@@ -66,7 +66,7 @@
                 {#if $settings.includeFieldNumber && labelRecord.fieldNumber}
                 <span>{labelRecord.fieldNumber}{labelRecord.recordNumber? ' / ' : ''}</span>
                 {/if}
-                <span>{labelRecord.recordNumber}</span>
+                <span>{labelRecord.recordNumber || ''}</span>
               </div>
             {/if}
             {#if labelRecord.catalogNumber}
@@ -81,10 +81,10 @@
           {#if labelRecord.labelElevation}
             <span class="inlineblock">{labelRecord.labelElevation}</span>
           {/if}
-          {#if labelRecord.fullCoordsString}
-            <span class="inlineblock">{labelRecord.fullCoordsString}</span>
-          {/if}    
         </div>
+        {#if labelRecord.fullCoordsString}
+          <div class="inlineblock">{labelRecord.fullCoordsString}</div>
+        {/if}    
         <div class="labelrow">
           {labelRecord.habitat || ''}
         </div>
