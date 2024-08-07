@@ -12,7 +12,7 @@ const rankParts = ['subsp', 'var', 'subvar', 'f', 'subf']
 const prefixQualifiers = ['aff.', 'cf.', 'nr']
 const suffixQualifiers = ['sensu lato', 'sensu stricto']
 
-const notItalics = [...Object.values(infraSpecificRanks), ...prefixQualifiers, ...suffixQualifiers]
+const notItalics = [...Object.values(infraSpecificRanks), ...prefixQualifiers, ...suffixQualifiers, 'sp.', 'sp']
 
 export default function getLabelDet(labelRecord, includeAuthority, includeInfraspecificRanks, addItalics) { 
 
@@ -173,79 +173,52 @@ function getDetStringFromScientificName(labelRecord, includeAuthority, addItalic
 
   let detString = labelRecord.scientificName
 
-  //let's just simplify things here
-  if (labelRecord.scientificNameAuthorship && detString.includes(labelRecord.scientificNameAuthorship)) {
-    detString = detString.replace(labelRecord.scientificNameAuthorship).trim()
-  }
-
   let nameParts = detString.split(' ').map(x => x.trim()).filter(x => x)
-
-  // might still include the author, so let's assume authors will always have a capital letter somewhere, and that we only have authors for species and below
-  let lastEpithetIndex = 0
-  for (let i = 1; i < nameParts.length; i++) { //we start after the first name part, which (should) always be titlecase
-    
-    if (/^sp\.?$/i.test(nameParts[i])) {
-      break
-    }
-    
-    if (nameParts[i] == nameParts[i].toLowerCase()){
-      lastEpithetIndex = i
-    }
-    else { //we might have reached an author name
-      if (!nameParts[i].includes('(')){ // or it might be a subgenus
-        break
-      }
-    }
-  }
 
   // attempting to add italics here
   if (addItalics) {
 
-    if (nameParts.length == 1) {
-      // we need to know if it's a genus in order it italicize
-      if (labelRecord.taxonRank && labelRecord.taxonRank == 'genus') {
-        nameParts[0] = '<i>' + nameParts[0] + '</i>'
+    // if it's a genus or subgenus we need to know that in order to italicise, otherwise it doesn't get italics unless it's two or more parts and one is lowercase
+    if (labelRecord.taxonRank && ['genus', 'subgenus'].includes(labelRecord.taxonRank)) {
+      for (let i = 0; i < nameParts.length; i++) {
+        nameParts[i] = '<i>' + nameParts[i] + '</i>'
       }
     }
-    else {
-      //it might be [something] sp., in which case we need taxonRank to know if it's a genus or not
-      if (/^sp\.?$/.test(nameParts[lastEpithetIndex])) {
-        if (labelRecord.taxonRank && ['genus', 'subgenus'].includes(labelRecord.taxonRank)) {
-          // let's iterate because the rank might not be correct
-          for (let i = 0; i <= lastEpithetIndex; i++) {
-            nameParts[i] = '<i>' + nameParts[i] + '</i>'
-          }
+    else if (nameParts.length > 1 && nameParts.some(x => !notItalics.includes(x) && x == x.toLowerCase())) {
+      nameParts[0] = '<i>' + nameParts[0] + '</i>'
+      for (let i = 1; i < nameParts.length; i++) {
+        if (!notItalics.includes(nameParts[i]) && nameParts[i] == nameParts[i].toLowerCase()) {
+          nameParts[i] = '<i>' + nameParts[i] + '</i>'
         }
-      }
-      else if (lastEpithetIndex > 0) { // species, subspecies, etc
-        for (let i = 0; i <= lastEpithetIndex; i++) {
-          if (!isRankPart(nameParts[i])) {
-            nameParts[i] = '<i>' + nameParts[i] + '</i>'
-          }
-        }
-      }
-      else { //this should only only have two parts, which can be genus subgenus or genus author
-
       }
     }
   }
 
-  //check whether the previous part is a rank
-  if (isRankPart(nameParts[lastEpithetIndex -1])) {
-    lastEpithetIndex -= 1
+  if (labelRecord.taxonRank && labelRecord.taxonRank == 'genus' || labelRecord.taxonRank == 'subgenus') {
+    if (!nameParts.includes('sp.')) {
+      nameParts.push('sp.')
+    }
   }
 
-  if(labelRecord.identificationQualifier) {
-    addQualifierToNamePartsArray(nameParts, labelRecord.identificationQualifier, lastEpithetIndex)
+  if (labelRecord.identificationQualifier) {
     
     //we only add authors if it's a prefix qualifier
     if(includeAuthority && labelRecord.scientificNameAuthorship && prefixQualifiers.includes(labelRecord.identificationQualifier)) {
       nameParts.push(labelRecord.scientificNameAuthorship)
     }
-  }
-  else if (labelRecord.taxonRank && labelRecord.taxonRank == 'genus' || labelRecord.taxonRank == 'subgenus') {
-    if (!nameParts.includes('sp.')) {
-      nameParts.push('sp.')
+    //qualifiers go at the beginning of the name if the name includes ranks
+    else if (Object.values(infraSpecificRanks).some(x => nameParts.includes(x)) || rankParts.some(x => nameParts.includes(x))) {
+      nameParts.unshift(labelRecord.identificationQualifier)
+    }
+    // otherwise they go before the last epithet
+    else {
+      let lastEpithetIndex = 0
+      for (let i = 1; i < nameParts.length; i++) {
+        if (nameParts[i] == nameParts[i].toLowerCase()) {
+          lastEpithetIndex = i
+        }
+      }
+      addQualifierToNamePartsArray(nameParts, labelRecord.identificationQualifier, lastEpithetIndex)
     }
   }
 
