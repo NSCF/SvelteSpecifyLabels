@@ -16,8 +16,8 @@
   CSV format, otherwise special characters like degree symbols will get scrambled. Most other database systems (such as Specify) use UTF-8 by default.
 </p>
 <p>
-  If you load your dataset and don't see any labels, go straight to field mappings and refresh the mappings. This should at least give you a start. You can can then endsWith
-  the field mappings further manually if needs be (see Data fields below).
+  If you load your dataset and don't see any labels, go straight to field mappings and refresh the mappings. This should at least give you a start. You can can then edit
+  the field mappings manually if needed (see Data fields below).
 </p>
 <p>
   <em>
@@ -47,13 +47,13 @@
 </p>
 <p>
   For insect labels you can include a field called 'shortLocality' for an abbreviated form of the locality for printing on the label 
-  (insect labels have severe space limitations). This should include everything from country down to the specific locality as you would like it on the label, 
-  but not the coordinates or coordinate metadata, which get their own line. 
+  (insect labels have severe space limitations). This field should include everything from country down to the specific locality as you would like it on the label, 
+  but not the coordinates or coordinate metadata, which get their own line and must be mapped to the label coordinates fields. 
 </p>
 
 <h5>Taxon name fields</h5>
 <p>
-  Taxon names can be stored in many different ways. The tool gives priority to names stored in individual rank fields, i.e. family,
+  Taxon names can be stored in a multitude of ways in a dataset. The tool gives priority to names stored in individual rank fields, i.e. family,
   genus, species, etc (down to subforma for plants). Alternatively you can use one field for the taxon name and store the identified 
   name there regardless of its rank (a separate field, taxonRank, can be included). It is also recommended to include separate
   fields for the taxon author, qualifiers, certainty, etc. You can also include identification remarks, literature sources, and so on.
@@ -62,7 +62,7 @@
 <h5>The example dataset</h5>
 <p>
   When you click on the link for the example dataset you will be taken to a Google Sheet which includes fields that will be
-  picked up by the tool, and some example records. Take a few moments to go through the field headings to see the comments 
+  picked up by the tool, with some example records. Take a few moments to look through the comments in the field headings
   describing how each field should be used. You are welcome to make a copy of this sheet for your own use (File >> Make a copy).
 </p>
 <p>
@@ -71,17 +71,17 @@
 <p>
   The spreadsheet includes a field called 'print', which can be used for flagging and filtering records for printing. 
   <a href="https://youtu.be/SYSevA4znlc?si=oO6e0d_pxyUikpEd" target="_blank">This 3min video</a> shows how to filter Google Sheets. To print labels 
-  for filtered records you will need to copy and paste them into a separate spreadsheet before downloading
+  for filtered records only you will need to copy and paste them into a separate spreadsheet before downloading
   the CSV file. Unfortunately Google Sheets exports everything in a spreadsheet, ignoring any filters applied. You can add as 
-  many filtering columns as you need to your spreadsheet. You may want fields for institution where the specimens 
-  are deposited, and date deposited, for example, for printing labels for batches of specimens as you deposit them.
+  many filtering columns as you need to your spreadsheet, such as fields for institution where the specimens 
+  are deposited, and date deposited, for printing labels for batches of specimens as you deposit them.
 </p>
 
 <h4>Duplicate labels</h4>
 <p>
-  If you want to duplicate labels for each specimen in a series (e.g. several insects of the same species collected together, 
-  or duplicate herbarium specimens), you will need to include a field in your dataset with a count (call the field 'count'). If you 
-  have a field with counts of specimens per age/sex, the tool will deduce counts from that field, if you don't already have a count field. 
+  If you want duplicate labels for each specimen in a series (e.g. several insects of the same species collected together, 
+  or duplicate herbarium specimens), you will need to include a field in your dataset with a count (call the field 'count' or 'specimenCount'). If you 
+  have a field with counts of specimens per age/sex or a 'dups' field, the tool will try to deduce counts from that field, if you don't already have a count field. 
 </p>
 
 <h4>Label options</h4>
@@ -92,8 +92,8 @@
 </p>
 <p>
   <em>
-    It is strongly recommended that you <strong>print</strong> a small number of test labels to check that your design 
-    works well when     physically printed before you print large batches of actual specimen labels. 
+    It is strongly recommended that you <strong>print a small number of test labels</strong> to check that your design 
+    works well when physically printed before you print large batches of real specimen labels. 
   </em>
 </p>
 
@@ -101,7 +101,7 @@
 <p>
   When you click the print button the browser will open the standard print dialog. Make sure to set the page size
   and margins appropriately before printing. You can either print directly from here or you can save the labels as a PDF
-  for later printing. It is recommended to use the 'Save as PDF' option rather than 'Microsoft Print to PDF'
+  for checking and printing. It is recommended to use the 'Save as PDF' option rather than 'Microsoft Print to PDF'
   as this gives better results. 
 </p>
 <p>

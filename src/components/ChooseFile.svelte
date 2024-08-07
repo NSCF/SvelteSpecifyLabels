@@ -145,6 +145,7 @@
     text-align: center;
     color: gray;
     border-radius: 7px;
+    cursor: pointer;
   }
 
   .import-cta {
