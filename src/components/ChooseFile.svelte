@@ -139,7 +139,7 @@
   }
 
   .fileDropBox {
-    margin-left:100px;
+    /* margin-left:100px; */
     width: 20em;
     text-align: center;
     color: gray;

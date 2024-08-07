@@ -16,6 +16,10 @@
   CSV format, otherwise special characters like degree symbols will get scrambled. Most other database systems (such as Specify) use UTF-8 by default.
 </p>
 <p>
+  If you load your dataset and don't see any labels, go straight to field mappings and refresh the mappings. This should at least give you a start. You can can then endsWith
+  the field mappings further manually if needs be (see Data fields below).
+</p>
+<p>
   <em>
     Note that no specimen data are stored or sent over the internet when using this tool. The source code is 
     <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">available on Github</a> and can be checked

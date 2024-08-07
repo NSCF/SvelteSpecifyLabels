@@ -28,7 +28,7 @@
     <a href="/" use:link>{langs['home'][$settings.lang]}</a>
     <a href="https://nscf.org.za/learn-more-about-us" target="_blank">{langs['aboutNSCF'][$settings.lang]}</a>
     <a href="/info" use:link>{langs['info'][$settings.lang]}</a>
-    <button class="secondary-button" on:click={handLangButtonClick}>{$settings.lang}</button>
+    <!-- <button class="secondary-button" on:click={handLangButtonClick}>{$settings.lang}</button> -->
   </nav>
 </div>
 
@@ -43,7 +43,7 @@
     text-decoration: none;
   }
 
-  .secondary-button {
+  /* .secondary-button {
     background-color: transparent; 
     border: 1px solid transparent; 
     color:grey;
@@ -51,7 +51,7 @@
 
   .secondary-button:hover {
     border: 1px solid gray
-  }
+  } */
 
   nav {
     margin: 0
