@@ -82,22 +82,33 @@
       </div>
     </div>
     <div id="filing" class="" style="width:100%; border-top:1px solid black;">
-      <div class="" style="display: flex; justify-content:space-between; width:100%;z-index:10!">
-        <div style="width:15%">Family:</div>
-        <div style="width:30%;">{labelRecord.familyCode || ''}</div>
-        <div style="width:25%; white-space: nowrap;">Genus:</div>
-        <div style="width:30%;">{labelRecord.genusCode || ''}</div>
+      <div class="" style="width:100%;display:flex;justify-content:space-between;">
+        {#if labelRecord.familyCode}
+          <div style="width:30%">Family: {labelRecord.familyCode}</div>
+        {/if}
+        {#if labelRecord.genusCode}
+          <div style="width:30%; white-space: nowrap;">Genus: {labelRecord.genusCode}</div>
+        {/if}
       </div>
-      <div class="" style="width:100%;display:flex;justify-content:space-between;align-items:center;height:35px">
+      <div class="" style="width:100%;display:flex;justify-content:space-between;align-items:center;height:35px;margin-top:{$settings.includeQRCode ? '5px': '0'}; ">
         <div>{labelRecord.catalogNumber}</div>
         {#if $settings.includeQRCode}
-          <img style="height: 100%;margin-right:20px" alt="QR code" bind:this={qrImg}/>
+          <img style="height: 100%;margin-right:20px;" alt="QR code" bind:this={qrImg}/>
         {:else if $settings.includeBarcode}
-          <svg alt="barcode" style="z-index: 0;" bind:this={barcodeImg}/>
+          <svg alt="barcode" style="" bind:this={barcodeImg}/>
         {/if}
       </div>
       <div>Project: {labelRecord.project || ''}</div>
-      <div>Dups: {labelRecord.duplicates || ''}</div> 
+      <div style="display: flex; justify-content:space-between">
+        <div>
+          Dups: {labelRecord.duplicates || ''}
+        </div> 
+        <div>
+          {#if labelRecord.permitNumber}
+            Permit: {labelRecord.permitNumber}
+          {/if}
+        </div>
+      </div>
     </div>
   </div>
 </div>
