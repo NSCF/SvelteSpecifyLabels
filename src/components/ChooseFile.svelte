@@ -114,7 +114,8 @@
     on:click={_ => hiddenInput.click()}
     ondragover="return false"
   >
-    <p>{langs['box'][$settings.lang]}</p>
+    <h2 class="import-cta">{langs['load'][$settings.lang]}</h2>
+    <p class="import-detail">{langs['box'][$settings.lang]}</p>
   </div>
 </div>
 <input type="file" bind:this={hiddenInput} style="visibility:hidden" on:change={handleFileSelected}>
@@ -146,9 +147,15 @@
     border-radius: 7px;
   }
 
-  p {
-    margin-top: 5em;
-    margin-bottom: 5em;
+  .import-cta {
+    color: var(--color);
+    text-decoration: underline;
+    margin-top: 2em;
+  }
+
+  .import-detail {
+    
+    margin-bottom: 2em;
     margin-left: 2em;
     margin-right: 2em;
     pointer-events: none;

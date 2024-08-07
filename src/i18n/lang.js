@@ -19,6 +19,11 @@ const langs = {
     afr: 'Oor hierdie hulpmiddel',
     zul: '',
   },
+  load: {
+    en: 'Load some data',
+    afr: 'Laai bietjie data',
+    zul: '',
+  },
   box: {
     en:'Drag and drop a CSV file with your label data here or click to select from your hard drive',
     afr: "Sleep en los 'n CSV-lêer met jou etiketdata hier of klik om van jou hardeskyf te kies",
