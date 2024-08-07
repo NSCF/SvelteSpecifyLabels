@@ -15,14 +15,14 @@
   $: if (labelRecord || $settings.includeTaxonAuthorities || $settings.italics) labelDet =  getLabelDet(labelRecord, $settings.includeTaxonAuthorities, true, $settings.italics)
 
   $: if($settings.includeQRCode && $settings.qrCodeErrorLevel && qrImg && labelRecord && labelRecord.catalogNumber) {
-    QRCode.toDataURL('PRE0023456-0', { margin: 0, errorCorrectionLevel: $settings.qrCodeErrorLevel }, function (error, url) {
+    QRCode.toDataURL(labelRecord.catalogNumber, { margin: 0, errorCorrectionLevel: $settings.qrCodeErrorLevel }, function (error, url) {
       if (error) console.error(error)
       if (url) qrImg.src = url
     })
   }
 
   $: if ($settings.includeBarcode && !$settings.includeQRCode && barcodeImg && labelRecord && labelRecord.catalogNumber) {
-    JsBarcode(barcodeImg, 'PRE0023456-0', {width:1, height:20, margin: 0, displayValue: false} )
+    JsBarcode(barcodeImg, labelRecord.catalogNumber, {width:0.8, height:30, margin: 0, displayValue: false} )
   }
 
 </script>
