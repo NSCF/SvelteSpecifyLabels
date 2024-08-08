@@ -23,6 +23,7 @@ export default {
 		includeTaxonAuthorities: false,
 		excludeNoCatnums: false,
     includeFieldNumber: false,
+		includeCollectorInSort: false,
 		underline: false,
     italics: false,
 		addPrintedDate: false,

@@ -119,6 +119,11 @@ const langs = {
     afr: "Sluit etikette sonder rekordnommers uit",
     zul: '',
   },
+  sortOnCollectors: {
+    en: "Include collector names in sort",
+    afr: "Sluit in versaamelaers in sorteer",
+    zul: '',
+  },
   fieldNumber: {
     en: 'Include field number',
     afr: 'Sluit in veld nommer',

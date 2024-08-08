@@ -154,6 +154,11 @@
     {langs['excludeCatNums'][$settings.lang]}
   </label>
   <br/>
+  <label style="display:inline">
+    <input type=checkbox bind:checked={$settings.includeCollectorInSort} on:change={_ => dispatch('calc_labels')}>
+    {langs['sortOnCollectors'][$settings.lang]}
+  </label>
+  <br/>
   {#if $settings.type != 'herbarium'}
     <label style="display:inline">
       <input type=checkbox bind:checked={$settings.includeFieldNumber}>
