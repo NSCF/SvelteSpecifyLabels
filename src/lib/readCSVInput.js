@@ -1,11 +1,13 @@
 import Papa from 'papaparse'
 
 
-export default function(file) {
+
+export default function(file, encoding = '') {
   return new Promise((resolve, reject) => {
 
     Papa.parse(file, { 
       header: true,
+      encoding,
       skipEmptyLines: true,
       complete: async results => {
 

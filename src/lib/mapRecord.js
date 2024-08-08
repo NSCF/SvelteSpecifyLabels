@@ -90,7 +90,6 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, 
         mappedRecord.verbatimLongitude += appendSymbol + mappedRecord.ew ? mappedRecord.ew.toUpperCase() : ''
       }
     }
-
   }
   
   if(!mappedRecord.fullCoordsString) {

@@ -1,9 +1,11 @@
 <script>
+  import chardet from 'chardet';
   import {getContext, createEventDispatcher } from 'svelte';
   import CloseIcon from './CloseIcon.svelte';
   import langs from '../i18n/lang';
 	import readCSV from '../lib/readCSVInput'
 	import readJSON from '../lib/readJSONInput'
+  import readFileAsUint8Array from '../lib/readFileAsUint8Array'
 
   const dispatch = createEventDispatcher();
   const settings = getContext('settings')
@@ -43,6 +45,8 @@
   }
 
   async function readDataFromFile(file) {
+
+    if (!file) return
 		
     let rawData
     
@@ -55,12 +59,18 @@
 			}
 		}
 		else {
-			try {
-				rawData = await readCSV(file)
-			}
-			catch(err) {
-				throw(err)
-			}
+
+      const uint8Array = await readFileAsUint8Array(file)
+      const encoding = chardet.detect(uint8Array);
+      console.log('encoding is', encoding)
+    
+      try {
+        rawData = await readCSV(file, encoding)
+      }
+      catch(err) {
+        throw(err)
+      }
+			
 		}
 
     let title = file.name.replace(/\.[a-z]+$/i, '').trim()
@@ -149,7 +159,7 @@
   }
 
   .import-cta {
-    color: var(--color);
+    /* color: var(--color); */
     text-decoration: underline;
     margin-top: 2em;
   }

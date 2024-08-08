@@ -69,7 +69,7 @@
           {:else}
             <div></div>
           {/if}
-          <div>{labelRecord.collectionDate}</div>
+          <div>{labelRecord.collectionDate || ''}</div>
         </div>
       </div>
       <div class="" style="display: flex; justify-content:space-between;" >
