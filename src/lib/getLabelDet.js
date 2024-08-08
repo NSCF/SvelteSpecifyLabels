@@ -51,7 +51,6 @@ export default function getLabelDet(labelRecord, includeAuthority, includeInfras
       labelDet = getDetStringFromScientificName(labelRecord, includeAuthority, addItalics)
     }
     
-
     if (!labelDet) {
       labelDet = getDetStringFromRanks(labelRecord, includeAuthority, includeInfraspecificRanks, addItalics)
     }
