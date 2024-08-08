@@ -39,8 +39,6 @@
       ($settings.type != 'herbarium' && $settings.labelPerSpecimen && labelRecord.specimenCount)
   }
 
-  console.log(labelRecord.specimenCount)
-
 </script>
 
 
