@@ -11,10 +11,6 @@
   Start by loading in a CSV file with your data from the home page. <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">CSV</a> is the simplest and 
   easiest format for exchanging data between systems. There is a link to an example file you can use as a template (see below).
 </p>
-<p>If you are using Excel or Access to manage your specimen data then make sure to set the encoding to 
-  <a href="https://www.motionpoint.com/blog/the-importance-of-character-encoding-website-translation-user-experience" target="_blank">UTF-8</a> when you export your records to 
-  CSV format, otherwise special characters like degree symbols will get scrambled. Most other database systems (such as Specify) use UTF-8 by default.
-</p>
 <p>
   If you load your dataset and don't see any labels, go straight to field mappings and refresh the mappings. This should at least give you a start. You can can then edit
   the field mappings manually if needed (see Data fields below).
