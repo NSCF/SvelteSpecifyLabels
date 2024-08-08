@@ -47,10 +47,13 @@ export default function getLabelDet(labelRecord, includeAuthority, includeInfras
   else {
 
     //we prioritize rank fields over scientificName
-    labelDet = getDetStringFromRanks(labelRecord, includeAuthority, includeInfraspecificRanks, addItalics)
-
-    if (!labelDet && labelRecord.scientificName) {
+    if (labelRecord.scientificName) {
       labelDet = getDetStringFromScientificName(labelRecord, includeAuthority, addItalics)
+    }
+    
+
+    if (!labelDet) {
+      labelDet = getDetStringFromRanks(labelRecord, includeAuthority, includeInfraspecificRanks, addItalics)
     }
   }
 
