@@ -27,12 +27,7 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, 
 
   if (mappedRecord.recordNumber) {
     if(!isNaN(mappedRecord.recordNumber)) {
-      if (mappedRecord.primaryCollectorLastName) {
-        mappedRecord.recordNumber = mappedRecord.primaryCollectorLastName + ' ' + mappedRecord.recordNumber
-      }
-      else {
-        mappedRecord.recordNumber = 'coll. no. ' + mappedRecord.recordNumber
-      }
+      mappedRecord.recordNumber = Number(mappedRecord.recordNumber)
     }
   }
   

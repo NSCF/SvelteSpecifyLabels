@@ -47,7 +47,7 @@ const exampleData = [
   },
   {
     "catnum": "TM54321",
-    "collectorNo": "IE11-143",
+    "collectorNo": "143",
     "typestatus": "",
     "country": "South Africa",
     "admin1": "Northern Cape",

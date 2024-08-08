@@ -65,9 +65,17 @@
         <div>Coll: {labelRecord.recordedBy}{labelRecord.additionalCollectors ? ', with ' + labelRecord.additionalCollectors : ''}</div>
         <div style="display: flex; justify-content:space-between">
           {#if labelRecord.recordNumber}
-            <div >{labelRecord.recordNumber[0].toUpperCase() + labelRecord.recordNumber.substring(1)}</div>
+            {#if typeof labelRecord.recordNumber == 'number'}
+              {#if labelRecord.primaryCollectorLastName}
+              <div>{labelRecord.primaryCollectorLastName} {labelRecord.recordNumber}</div>
+              {:else}
+              <div>Coll. no. {labelRecord.recordNumber}</div>
+              {/if}
+            {:else}
+            <div>{labelRecord.recordNumber}</div>
+            {/if}
           {:else}
-            <div></div>
+          <div></div><!-- placeholder for the flex -->
           {/if}
           <div>{labelRecord.collectionDate || ''}</div>
         </div>

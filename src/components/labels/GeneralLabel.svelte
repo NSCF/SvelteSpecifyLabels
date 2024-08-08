@@ -27,6 +27,26 @@
     return `${month}, ${year}`
   }
 
+  const collectorNumberString = _ => {
+    let collectorNumberString = ''
+    if (labelRecord && labelRecord.recordNumber) {
+      if (typeof labelRecord.recordNumber == 'number') {
+        if (labelRecord.primaryCollectorLastName) {
+          collectorNumberString += labelRecord.primaryCollectorLastName + ' ' + labelRecord.recordNumber
+        }
+        else {
+          collectorNumberString += ' coll. no. ' + labelRecord.recordNumber
+        }
+      }
+      else {
+        collectorNumberString = labelRecord.recordNumber
+      }
+    }
+
+    return collectorNumberString
+
+  }
+
 </script>
 
 <div class="label" 
@@ -64,9 +84,10 @@
             {#if labelRecord.recordNumber || labelRecord.fieldNumber}
               <div class:bolder={!labelRecord.catalogNumber && !$settings.underline} class:underline={!labelRecord.catalogNumber && $settings.underline}>
                 {#if $settings.includeFieldNumber && labelRecord.fieldNumber}
-                <span>{labelRecord.fieldNumber}{labelRecord.recordNumber? ' / ' : ''}</span>
+                <span>{labelRecord.fieldNumber}{labelRecord.recordNumber? ' / ' +  labelRecord.recordNumber: ''}</span>
+                {:else}
+                <span>{collectorNumberString()}</span>
                 {/if}
-                <span>{labelRecord.recordNumber || ''}</span>
               </div>
             {/if}
             {#if labelRecord.catalogNumber}
@@ -164,9 +185,10 @@
             {#if labelRecord.recordNumber}
               <div class:bolder={!labelRecord.catalogNumber && !$settings.underline} class:underline={!labelRecord.catalogNumber && $settings.underline}>
                 {#if $settings.includeFieldNumber && labelRecord.fieldNumber}
-                  <span>{labelRecord.fieldNumber}{labelRecord.recordNumber? ' / ' : ''}</span>
+                  <span>{labelRecord.fieldNumber}{labelRecord.recordNumber? ' / ' + labelRecord.recordNumber : ''}</span>
+                {:else}
+                  <span>{collectorNumberString()}</span>
                 {/if}
-                <span>{labelRecord.recordNumber}</span>
               </div>
             {/if}
             {#if labelRecord.catalogNumber}
@@ -225,9 +247,10 @@
           {:else if labelRecord.recordNumber || labelRecord.fieldNumber}
             <div class:bolder={!$settings.underline} class:underline={$settings.underline}>
               {#if $settings.includeFieldNumber && labelRecord.fieldNumber}
-              <span>{labelRecord.fieldNumber}{labelRecord.recordNumber ? ' / ' : ''}</span>
+              <span>{labelRecord.fieldNumber}{labelRecord.recordNumber ? ' / ' + labelRecord.recordNumber : ''}</span>
+              {:else}
+              <span>{collectorNumberString()}</span>
               {/if}
-              <span>{labelRecord.recordNumber}</span>
             </div>            
           {/if}
         </div>
