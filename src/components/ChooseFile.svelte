@@ -60,9 +60,16 @@
 		}
 		else {
 
-      const uint8Array = await readFileAsUint8Array(file)
+      // we need this because of Excel. Thank you Microsoft...
+      let uint8Array
+      try {
+        uint8Array = await readFileAsUint8Array(file)
+      }
+      catch(err){
+        throw(err)
+      }
+      
       const encoding = chardet.detect(uint8Array);
-      console.log('encoding is', encoding)
     
       try {
         rawData = await readCSV(file, encoding)

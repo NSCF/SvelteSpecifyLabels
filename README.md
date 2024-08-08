@@ -12,7 +12,7 @@ This is not a label designing tool like we have in most collection management da
 
 You will need to have the following software downloaded AND installed on your machine (downloading and installing are not the same thing):
 
-- Node.js: [https://nodejs.org/](https://nodejs.org/)
+- Node.js: [https://nodejs.org/](https://nodejs.org/) version 18 (LTS) or later
 - git: [https://git-scm.com/download](https://git-scm.com/download)
 
 Create a folder on your hard drive (name it whatever you like), then open that folder. Click in the address bar of the folder and type `cmd` and hit enter to open a command window. Copy paste the following command into the command window and press enter: `git clone https://github.com/NSCF/SvelteSpecifyLabels.git`. This will download the label tool onto your machine.
