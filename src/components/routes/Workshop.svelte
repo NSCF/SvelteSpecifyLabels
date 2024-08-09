@@ -1,5 +1,5 @@
 <script>
-  import Settings from '../Settings.svelte'
+  import SettingsIndividual from '../SettingsIndividual.svelte'
   import HerbariumLabel from "../labels/HerbariumLabel.svelte";
   import exampleData from "../../exampleDataPlants";
   import getFieldMappings from "../../lib/getFieldMappings";
@@ -25,7 +25,7 @@
   }
 
 </script>
-<Settings />
+<SettingsIndividual />
 <div id="label" style="color: black;">
   <HerbariumLabel labelRecord={mappedData[recordIndex]}/>
   <div style="display: flex; align-items:center; gap:1em">

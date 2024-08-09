@@ -1,9 +1,10 @@
 <script>
   import { getContext } from 'svelte'
-  import { link } from 'svelte-spa-router'
+  import { push, link } from 'svelte-spa-router'
   import Header from '../Header.svelte';
-  import Settings from '../Settings.svelte';
-	import LabelLayout from '../LabelLayout.svelte'
+  import BackButton from '../BackButton.svelte';
+  import SettingsIndividual from '../SettingsIndividual.svelte';
+  import Label from '../Label.svelte';
   import getFieldMappings from '../../lib/getFieldMappings'
   import reconcileFieldMappings from '../../lib/reconcileFieldMappings'
   import makeLabelData from '../../lib/makeLabelData'
@@ -12,11 +13,14 @@
   import exampleData from '../../exampleData'
   import exampleDataPlants from '../../exampleDataPlants'
 
-  let labelData = []
-
   const rawData = getContext('data')
   const settings = getContext('settings')
   const fieldMappings = getContext('mappings')
+  const labelData = getContext('labelData')
+
+  let recordIndex = 0
+  let labelWidth =  '9cm'
+  let zoom = 1.0
 
   // back to home if we have no raw data
   if ($rawData.length == 0) {
@@ -44,7 +48,7 @@
     }
   }
 
-  labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage, $settings.includeCollectorInSort)
+  $labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage, $settings.includeCollectorInSort)
   
   const handleTypeChange = _ => {
     if ($settings.type == 'herbarium') {
@@ -66,22 +70,16 @@
       reconcileFieldMappings($fieldMappings[$settings.type], $rawData[0])
     }
 
-    labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage, $settings.includeCollectorInSort)
+    $labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage, $settings.includeCollectorInSort)
 
   }
 
   const handleCalcLabels = _ => {
-    labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage, $settings.includeCollectorInSort)
+    $labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage, $settings.includeCollectorInSort)
   }
 
-  const showPrint = _ => {
-		localStorage.setItem('labelSettings', JSON.stringify($settings))
-    localStorage.setItem('fieldMappings', JSON.stringify($fieldMappings))
-		window.print()
-	}
-
   window.showData = _ => {
-		console.log(labelData)
+		console.log($labelData)
 	}
 
   const reset = _ => {
@@ -96,27 +94,68 @@
         }
 			}
 		}
+
 	}
 
-</script>
-<div class="container">
+  const nextRecord = _ => {
+    if (recordIndex < $labelData.length - 1){
+      recordIndex++
+    }
+  }
 
-</div>
-<div class="topstuff">
+  const previousRecord = _ => {
+    if (recordIndex > 0){
+      recordIndex--
+    }
+  }
+
+  //unfortunately we need this twice, here and in LabelLayout
+  const getLabelWidth = _ => {
+    if ($settings.type == 'general') {
+      return $settings.labelWidth + 'cm'
+    }
+    else {
+      return '9cm'
+    }
+  }
+
+  $: $settings.type, labelWidth = getLabelWidth()
+
+
+</script>
+<div style="height: 95vh; display: flex; flex-direction: column;--zoom:{zoom}">
   <Header />
-  <Settings on:calc_labels={handleCalcLabels} on:type-change={handleTypeChange} />
-  <div style="display:flex; justify-content: space-between">
-    <div style="display:flex; flex-direction:row;">
-      <button class="secondary-button" on:click={reset} >{langs['reset'][$settings.lang]}</button>
-      <a href="/mappings" style="margin:0.5rem 0; padding:1rem 2rem" use:link>{langs['mappings'][$settings.lang]}</a>
+  <div style="width:100%;flex:1 1 0; min-height:0;display:flex;">
+    <SettingsIndividual on:calc_labels={handleCalcLabels} on:type-change={handleTypeChange} />
+    <div style="width: 50%; display:flex; flex-direction:column;align-items:center;">
+      <div style="width: 100%; display:flex; justify-content:space-between;">
+        <button class="secondary-button" on:click={reset} >{langs['reset'][$settings.lang]}</button>
+        <a href="/mappings" style="margin:0.5rem 0; padding:1rem 2rem" use:link>{langs['mappings'][$settings.lang]}</a>
+      </div>
+      <div class="zoom" style="width: { labelWidth }; flex:1 1 0; min-height:0;display:flex;flex-direction:column;justify-content:center;">
+        <Label labelRecord={$labelData[recordIndex]} />
+      </div>
+      <div style="position:relative;width:100%;display:flex;justify-content:center;align-items:center;gap:1em">
+        <button class="arrow-button" on:click={previousRecord} disabled={recordIndex == 0}><svg xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 -960 960 960" ><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg></button>
+        <span>{recordIndex + 1}</span>
+        <button class="arrow-button" on:click={nextRecord} disabled={recordIndex == $labelData.length - 1}><svg xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 -960 960 960"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg></button>
+        {#if $settings.type != 'herbarium'}
+          {#if zoom >= 2.0}
+            <button class="arrow-button" style="position:absolute;top:5px;right:5px;" on:click={_ => zoom = 1.0}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400ZM280-540v-80h200v80H280Z"/></svg></button>
+          {:else}
+            <button class="arrow-button" style="position:absolute;top:5px;right:5px;" on:click={_ => zoom += .5 }><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Zm-40-60v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z"/></svg></button>
+          {/if}
+        {/if}
+      </div>
     </div>
-    <button on:click={showPrint} disabled={!labelData.length}>{langs['printButton'][$settings.lang]}</button>
+  </div>
+  <div style="display:flex; justify-content:space-between">
+    <BackButton />
+    <button on:click={_ => push('/preview')}>Preview and print</button>
   </div>
   <hr/>
 </div>
-<div class="label-section">
-  <LabelLayout inputData={labelData} />
-</div>
+
 
 <style>
 
@@ -134,16 +173,27 @@
     margin: 0;
   }
 
-  @media print {    
-    .topstuff
-    {
-      display: none !important;
-    }
+  .arrow-button {
+    color: #5f6368;
+    padding: 4px;
+    background-color: transparent; 
+    border: none; 
+  } 
+
+  svg path {
+    fill: currentColor;
   }
 
-  @page { 
-    marks: crop; 
+  .arrow-button:disabled {
+    color:lightgrey;
   }
 
+  .arrow-button:hover:disabled {
+    cursor: auto;
+  }
+
+  .zoom {
+    transform: scale(var(--zoom));
+  }
 
 </style>

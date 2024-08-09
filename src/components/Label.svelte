@@ -1,22 +1,9 @@
 <script>
   import { onMount, getContext } from "svelte";
-  import getLabelDet from "../lib/getLabelDet";
 
   export let labelRecord
-
-  const makeLabel = _ => {
-    return labelRecord && (labelRecord.fullLocality || 
-    labelRecord.fullCoordsString ||
-    labelRecord.collectionDate ||
-    labelRecord.recordedBy ||
-    labelRecord.occurrenceRemarks ||
-    labelRecord.verbatimIdentification ||
-    labelRecord.scientificName ||
-    getLabelDet(labelRecord)
-  )
-  } 
-
   const settings = getContext('settings')
+
 
   const labelComponents = {
     general: async _ => await import('../components/labels/GeneralLabel.svelte'),
@@ -34,24 +21,21 @@
 
   $: $settings.type, getLabel()
 
-  const multipleLabels = _ => {
-    return ($settings.type == 'herbarium' && $settings.labelsPerHerbariumSpecimen && labelRecord.specimenCount) || 
-      ($settings.type != 'herbarium' && $settings.labelPerSpecimen && labelRecord.specimenCount)
-  }
+  const makeLabel = _ => {
+    return labelRecord && (labelRecord.fullLocality || 
+    labelRecord.fullCoordsString ||
+    labelRecord.collectionDate ||
+    labelRecord.recordedBy ||
+    labelRecord.occurrenceRemarks ||
+    labelRecord.verbatimIdentification )
+  } 
 
 </script>
 
-
-{#if makeLabel}
-  {#if ($settings.labelPerSpecimen || $settings.labelsPerHerbariumSpecimen) && multipleLabels() }
-    {#each Array(labelRecord.specimenCount) as i}
-      <svelte:component this={LabelDetail} {labelRecord} />
-    {/each}
-  {:else}
-    <svelte:component this={LabelDetail} {labelRecord} />
-  {/if}
+{#if makeLabel()}
+  <svelte:component this={LabelDetail} {labelRecord} />
 {:else}
-  <div>insufficent data to make label...</div>
+  <div>insufficent data for label...</div>
   <br />
 {/if}
 

@@ -25,10 +25,12 @@
 
 	let rawData = writable([])
 	let fieldMappings = writable({})
+	let labelData = writable([])
 
 	setContext('data', rawData)
 	setContext('settings', settings)
 	setContext('mappings', fieldMappings)
+	setContext('labelData', labelData)
 
 </script>
 

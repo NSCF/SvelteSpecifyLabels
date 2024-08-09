@@ -4,6 +4,7 @@
   import mapRecord from "../../lib/mapRecord";
   import FieldMappingIndividual from "../FieldMappingIndividual.svelte";
   import FieldMappingSelect from "../FieldMappingSelect.svelte";
+  import BackButton from "../BackButton.svelte";
   import getFieldMappings from "../../lib/getFieldMappings";
   import langs from "../../i18n/lang";
 
@@ -51,7 +52,7 @@
 <h2>{langs['mappings'][$settings.lang]}</h2>
 <p style="max-width:1000px;">{langs['mappingHelp'][$settings.lang]}</p>
 <div style="display: flex; justify-content:space-between">
-  <button id="back-button" on:click={_ => pop()}>{langs['back'][$settings.lang]}</button>
+  <BackButton />
   <button on:click={refreshMappings}>{langs['refreshMappings'][$settings.lang]}</button>
 </div>
 <div style="width: 100%; display:flex; justify-content:center; margin-bottom:2em; ">
@@ -80,16 +81,6 @@
 
   .preview-border {
     border:1px solid gray; 
-  }
-
-  #back-button {
-    background-color: LightGray; 
-    color: dimgray; 
-    border:none;
-  }
-
-  #back-button:hover {
-    background-color: silver; 
   }
   
 </style>
