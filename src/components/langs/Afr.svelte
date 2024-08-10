@@ -18,6 +18,10 @@
   datastelsels (soos Specify) gebruik UTF-8 as standaard.
 </p>
 <p>
+  As jy jou datastel laai en geen etikette sien nie, gaan na veldpassings en verfris die skakels. Dit behoort jou ten minste 'n etiket te gee 
+  om mee te begin. Jy kan dan wysigveranderings maak aan veldveldpassings soos nodig (sien Datavelde hieronder).
+</p>
+<p>
   <em>
     Let daarop dat geen data gestoor of oor die internet gestuur word wanneer hierdie hulpmiddel gebruik word nie. 
     Die oorspronklike kode is <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">beskikbaar op Github</a> en iemand wat 
@@ -42,7 +46,15 @@
   Onthou dat die velde wat jy op die etiket insluit, jou keuse is. Die hulpmiddel benodig ten minste een veld, soos 
   ligging of taksonnaam, om 'n etiket te genereer, maar andersins is jy vry om te kies en keur soos jy wil. 
 </p>
-
+<p>
+  Vir herbarium-etikette kan jy ook velde soos 'dups' insluit om instansies te lys waarheen duplikate gestuur word, 
+  en familie- en genusnommer/kode-velde, as jy dit vir liasseringsdoeleindes wil gebruik.
+</p>
+<p>
+  Vir insek-etikette kan jy 'n veld genaamd 'shortLocality' insluit vir 'n verkorte vorm van die ligging (Insek-etikette 
+  het ernstige spasiebeperkings). Hierdie veld moet alles insluit van land tot die spesifieke ligging soos jy dit op die 
+  etiket wil hê, maar nie die koördinate of koördinaatmetadata nie. Laasgenoemde kry hul eie lyn en word verbind met etiketkoördinaatvelde.
+  </p>
 <h5>Taksonnaamvelde</h5>
 <p>
   Taksonname kan op baie verskillende maniere gestoor word. Die hulpmiddel gee prioriteit aan name wat in individuele 
