@@ -104,7 +104,7 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, 
     if(coords && mappedRecord.coordsUncertainty != null) {
       if (isNaN(mappedRecord.coordsUncertainty)){
         if (['m', 'km', 'mi'].some(x => mappedRecord.coordsUncertainty.includes(x))) {
-          coords += '±' + mappedRecord.coordsUncertainty
+          coords += ' ±' + mappedRecord.coordsUncertainty
         }
         else {
           coords += ' (' + mappedRecord.coordsUncertainty + ')'
@@ -112,7 +112,7 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, 
       }
       else if (mappedRecord.coordsUncertaintyUnit) {
         let uncertainty = `${mappedRecord.coordsUncertainty}${mappedRecord.coordsUncertaintyUnit}`
-        coords = coords + '±' + uncertainty
+        coords = coords + ' ±' + uncertainty
       }
     }
     

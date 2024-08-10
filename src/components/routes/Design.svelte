@@ -2,7 +2,7 @@
   import { getContext } from 'svelte'
   import { push, link } from 'svelte-spa-router'
   import Header from '../Header.svelte';
-  import BackButton from '../BackToDesignButton.svelte';
+  import StartOverButton from '../StartOverButton.svelte';
   import SettingsIndividual from '../SettingsIndividual.svelte';
   import Label from '../Label.svelte';
   import getFieldMappings from '../../lib/getFieldMappings'
@@ -128,8 +128,8 @@
   <div style="width:100%;flex:1 1 0; min-height:0;display:flex;">
     <SettingsIndividual on:calc_labels={handleCalcLabels} on:type-change={handleTypeChange} />
     <div style="width: 50%; display:flex; flex-direction:column;align-items:center;">
-      <div style="width: 100%; display:flex; justify-content:space-between;">
-        <button class="secondary-button" on:click={reset} >{langs['reset'][$settings.lang]}</button>
+      <div style="width: 100%; display:flex; justify-content:flex-end;">
+        <!-- <button class="secondary-button" on:click={reset} >{langs['reset'][$settings.lang]}</button> -->
         <a href="/mappings" style="margin:0.5rem 0; padding:1rem 2rem" use:link>{langs['mappings'][$settings.lang]}</a>
       </div>
       <div  style="width: { labelWidth }; flex:1 1 0; min-height:0;display:flex;flex-direction:column;justify-content:center;color:black;">
@@ -157,7 +157,7 @@
     </div>
   </div>
   <div style="display:flex; justify-content:space-between">
-    <BackButton />
+    <StartOverButton />
     <button on:click={_ => push('/preview')}>{langs['preview'][$settings.lang]}</button>
   </div>
   <hr/>
@@ -165,16 +165,6 @@
 
 
 <style>
-
-  .secondary-button {
-    background-color: transparent; 
-    border: 1px solid transparent; 
-    color:grey;
-  }
-
-  .secondary-button:hover {
-    border: 1px solid gray
-  }
 
   hr {
     margin: 0;

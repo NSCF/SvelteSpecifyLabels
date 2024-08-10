@@ -4,6 +4,11 @@ const langs = {
     afr: "Etikette",
     zul: '',
   }, 
+  startOver: {
+    en: 'Start over',
+    afr: 'Begin oor',
+    zul: '',
+  },
   home: {
     en: 'Home',
     afr: 'Tuis',
