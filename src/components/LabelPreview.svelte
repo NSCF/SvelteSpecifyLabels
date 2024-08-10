@@ -35,7 +35,7 @@
 
 <div style="width:100%; height:100%; display:flex;flex-direction:column;align-items:center;color:black;--zoom:{$settings.type == 'general' ? $settings.generalLabelZoom : 1 }">
   <div  style="width: { labelWidth }; flex:1 1 0; min-height:0;display:flex;flex-direction:column;justify-content:center;">
-    <div class="zoom">
+    <div class="zoom" >
       <Label labelRecord={$labelData[recordIndex]} on:label-rendered />
     </div>
   </div>
