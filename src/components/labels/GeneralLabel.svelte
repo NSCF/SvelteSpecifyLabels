@@ -1,11 +1,12 @@
 <script>
   import CutMarks from "../CutMarks.svelte";
-  import { getContext } from "svelte";
+  import { getContext, createEventDispatcher } from "svelte";
   import getLabelDet from '../../lib/getLabelDet'
   import QRCode from 'qrcode'
 
   export let labelRecord
 
+  const dispatch = createEventDispatcher()
   const settings = getContext('settings')
 
   let labelDet = null
@@ -47,6 +48,10 @@
 
   }
 
+  const labelRendered = _ => {
+    dispatch('label-rendered')
+  }
+
 </script>
 
 <div class="label" 
@@ -55,7 +60,8 @@
   --font-size: { $settings.fontSize + 'pt'}; 
   --line-height: {$settings.lineHeight + '%'};
   --label-width: { $settings.labelWidth + 'cm' };
-  " >
+  " 
+  use:labelRendered>
   {#if $settings.showStorage}
     {#if labelRecord.storageBox}
       <div style="padding:4px;">Box: {labelRecord.storageBox} -- cut this off label</div>

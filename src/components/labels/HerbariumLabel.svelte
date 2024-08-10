@@ -1,8 +1,10 @@
 <script>
-  import { getContext } from "svelte";
+  import { getContext, createEventDispatcher } from "svelte";
   import getLabelDet from '../../lib/getLabelDet'
   import QRCode from 'qrcode'
   import JsBarcode from "jsbarcode";
+
+  const dispatch = createEventDispatcher()
 
   export let labelRecord
 
@@ -25,12 +27,17 @@
     JsBarcode(barcodeImg, labelRecord.catalogNumber, {width:0.8, height:30, margin: 0, displayValue: false} )
   }
 
+  const labelRendered = _ => {
+    dispatch('label-rendered')
+  }
+
 </script>
 
 <div id="label" 
   style="--font: {$settings.herbarimLabelFont};
   --label-width: {$settings.defaults.herbarium}
-  ">
+  "
+  use:labelRendered>
   {#if $settings.showHerbariumCollection}
     <div id="header">
       <div id="title"  class:bolder={!$settings.underline} class:underline={$settings.underline} style="font-size:12pt">{$settings.herbariumCollection || ''}</div>
