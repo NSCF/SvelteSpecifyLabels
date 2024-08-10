@@ -51,8 +51,6 @@
   
   const handleTypeChange = _ => {
 
-    zoom = 1
-
     if ($settings.type == 'herbarium') {
       if ($rawData == exampleData) {
         $rawData = exampleDataPlants
