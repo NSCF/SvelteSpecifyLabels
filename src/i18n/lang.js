@@ -198,6 +198,11 @@ const langs = {
     afr: "Stellings is getstoor as jy uitdruk",
     zul: '',
   },
+  preview: {
+    en: "Preview and print",
+    afr: "Voorskou en uitdruk",
+    zul: '',
+  },
   printButton: {
     en: "Let's print these labels...",
     afr: "Lat ons druk etikette...",
@@ -206,6 +211,11 @@ const langs = {
   reset: {
     en: "Reset",
     afr: "Herstel",
+    zul: '',
+  },
+  resetAll: {
+    en: "Reset all",
+    afr: "Herstel alles",
     zul: '',
   },
   mappings: {
@@ -221,6 +231,11 @@ const langs = {
   refreshMappings: {
     en: "Refresh mappings",
     afr: "Herhaal passings",
+    zul: '',
+  },
+  design: {
+    en: 'Design',
+    afr: 'Ontwerp',
     zul: '',
   },
   back: {

@@ -22,7 +22,7 @@
 
 </script>
 
-<div style="display:flex; height:2em; align-items:center; margin-bottom: 2em;">
+<div style="display:flex; height:2em; align-items:center;">
   <select class:placeholder-option={!mappedDatasetField} style="margin:0; margin-left: 1em;" bind:value={mappedDatasetField} >
     <option value="">Choose a dataset field</option>
     {#each Object.keys(record).filter(recordField => !Object.values($fieldMappings[$settings.type]).includes(recordField))  as recordField}

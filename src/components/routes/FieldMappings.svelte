@@ -1,10 +1,10 @@
 <script>
   import { onMount, getContext } from "svelte";
-  import { pop, replace} from 'svelte-spa-router'
+  import { push, replace } from 'svelte-spa-router'
   import mapRecord from "../../lib/mapRecord";
   import FieldMappingIndividual from "../FieldMappingIndividual.svelte";
   import FieldMappingSelect from "../FieldMappingSelect.svelte";
-  import BackButton from "../BackButton.svelte";
+  import BackToDesignButton from "../BackToDesignButton.svelte";
   import getFieldMappings from "../../lib/getFieldMappings";
   import langs from "../../i18n/lang";
 
@@ -42,7 +42,7 @@
   $: $settings, mappedRecord = mapRecord($rawData[0], $fieldMappings[$settings.type])
   $: $fieldMappings[$settings.type], mappedRecord = mapRecord($rawData[0], $fieldMappings[$settings.type])
 
-  const refreshMappings = _ => {
+  const resetMappings = _ => {
     localStorage.removeItem('fieldMappings')
     $fieldMappings[$settings.type] = getFieldMappings($rawData[0])
   }
@@ -52,8 +52,8 @@
 <h2>{langs['mappings'][$settings.lang]}</h2>
 <p style="max-width:1000px;">{langs['mappingHelp'][$settings.lang]}</p>
 <div style="display: flex; justify-content:space-between">
-  <BackButton />
-  <button on:click={refreshMappings}>{langs['refreshMappings'][$settings.lang]}</button>
+  <BackToDesignButton />
+  <button on:click={_ => push('/preview')}>{langs['preview'][$settings.lang]}</button>
 </div>
 <div style="width: 100%; display:flex; justify-content:center; margin-bottom:2em; ">
   <div style="width: {$settings.type == 'herbarium' ? 'fit-content' : $settings.labelWidth + 'cm'}">
@@ -62,7 +62,10 @@
     </div>
   </div>
 </div>
-<FieldMappingSelect record={$rawData[0]} {excludeFromMappings} />
+<div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:2em;">
+  <FieldMappingSelect record={$rawData[0]} {excludeFromMappings} />
+  <button class="secondary-button" on:click={resetMappings}>{langs['resetAll'][$settings.lang]}</button>
+</div>
 <div style="display: flex; width: 100%; flex-wrap: wrap;">
   {#each Object.keys($fieldMappings[$settings.type]) as labelField}
   {#if $fieldMappings[$settings.type][labelField] && !excludeFromMappings.includes(labelField)}
@@ -81,6 +84,16 @@
 
   .preview-border {
     border:1px solid gray; 
+  }
+
+  .secondary-button {
+    background-color: LightGray; 
+    color: dimgray; 
+    border:none;
+  }
+
+  .secondary-button:hover {
+    background-color: silver; 
   }
   
 </style>

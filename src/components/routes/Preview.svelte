@@ -3,7 +3,7 @@
   import { pop, replace } from 'svelte-spa-router'
   import Header from '../Header.svelte';
   import SettingsCollective from '../SettingsCollective.svelte'
-  import BackButton from '../BackButton.svelte';
+  import BackToDesignButton from "../BackToDesignButton.svelte";
   import LabelLayout from '../LabelLayout.svelte'
   import langs from '../../i18n/lang';
 
@@ -31,7 +31,7 @@
 <div class="topstuff">
   <Header />
   <div style="display:flex; justify-content:space-between">
-    <BackButton />
+    <BackToDesignButton />
     <button on:click={showPrint} disabled={!$labelData.length}>{langs['printButton'][$settings.lang]}</button>
   </div>
   <div style="margin-top: 1em;margin-bottom:1em;">

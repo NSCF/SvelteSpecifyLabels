@@ -40,5 +40,6 @@ export default {
 				insect: '2cm',
 				herbarium: '9cm'
 			}
-		}
+		},
+		generalLabelZoom: 1
 }
