@@ -89,7 +89,7 @@ export const fieldsMappings = {
   identificationConfidence:['confidence', 'detconfidence', 'detcertainty'],
   identificationMethod:['Determinations/Method', 'detMethod', 'idmethod'],
   identificationReferences: ['detReferences', 'detrefs'],
-  identifiedBy:['detBy'],
+  identifiedBy:['detBy', 'determinedby'],
   detByLast:['lastname'],
   detByFirst: ['firstname'],
   detByInitials: ['inital', 'initials', 'middleinitial'],
