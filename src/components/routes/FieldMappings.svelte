@@ -1,49 +1,37 @@
 <script>
   import { onMount, getContext } from "svelte";
   import { push, replace } from 'svelte-spa-router'
-  import mapRecord from "../../lib/mapRecord";
+  import LabelPreview from "../LabelPreview.svelte";
   import FieldMappingIndividual from "../FieldMappingIndividual.svelte";
   import FieldMappingSelect from "../FieldMappingSelect.svelte";
   import BackToDesignButton from "../BackToDesignButton.svelte";
   import getFieldMappings from "../../lib/getFieldMappings";
   import langs from "../../i18n/lang";
+  import makeLabelData from '../../lib/makeLabelData'
 
   const rawData = getContext('data')
   const settings = getContext('settings')
   const fieldMappings = getContext('mappings')
+  const labelData = getContext('labelData')
+
+  let recordIndex = 0
 
   if (!$fieldMappings || !$rawData.length) {
     replace('/')
   }
+  else {
+    $labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage, $settings.includeCollectorInSort)
+  }
 
-  let mappedRecord
   let bottomDiv
   let hideBottomDiv = true
   let dontShowAgain = false
 
-  const labelComponents = {
-    general: async _ => await import('../labels/GeneralLabel.svelte'),
-    herbarium: async _ => await import('../labels/HerbariumLabel.svelte'),
-  }
-
-  let LabelDetail 
-
-  const getLabel = async _ => {
-    const result = await labelComponents[$settings.type]()
-    LabelDetail = result.default
-  }
-
-  onMount(getLabel)
-  
-  $: $settings.type, getLabel()
-
   // deprecated fields
   const excludeFromMappings = ['detByLast', 'detByFirst', 'detByInitials', 
-  'fullLocality', 'fullCoordsString', 'llunit', 'ns', 'ew', 'detYear', 
-  'detMonth', 'detDay', 'year', 'month', 'day']
+  'fullLocality', 'fullCoordsString', 'llunit', 'ns', 'ew']
 
-  $: $settings, mappedRecord = mapRecord($rawData[0], $fieldMappings[$settings.type])
-  $: $fieldMappings[$settings.type], mappedRecord = mapRecord($rawData[0], $fieldMappings[$settings.type])
+  $: $fieldMappings[$settings.type], $labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage, $settings.includeCollectorInSort)
 
   const resetMappings = _ => {
     localStorage.removeItem('fieldMappings')
@@ -63,9 +51,7 @@
       behavior: 'smooth' // Optional: Add smooth scrolling effect
     });
     dontShowAgain = true
-  }
-
-  
+  }  
 
 </script>
 <svelte:document on:scroll={_ => dontShowAgain = true} />
@@ -75,11 +61,9 @@
   <BackToDesignButton />
   <button on:click={_ => push('/preview')}>{langs['preview'][$settings.lang]}</button>
 </div>
-<div style="width: 100%; display:flex; justify-content:center; margin-bottom:2em; ">
-  <div style="width: {$settings.type == 'herbarium' ? 'fit-content' : $settings.labelWidth + 'cm'}">
-    <div class="label-preview" class:preview-border={$settings.type != 'herbarium'}  >
-      <svelte:component this = {LabelDetail} labelRecord={mappedRecord} on:label-rendered={getHideBottomDiv} />
-    </div>
+<div style="width: 100%;height:12cm;display:flex;flex-direction:column;align-items:center; margin-bottom:2em;">
+  <div style="width:50%;flex:1 1 0; min-height:0;">
+    <LabelPreview on:label-rendered={getHideBottomDiv} />
   </div>
 </div>
 <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:2em;" bind:this={bottomDiv}>
@@ -100,16 +84,6 @@
 </div>
 
 <style>
-
-  .label-preview {
-    color: black;
-    padding:4px; 
-    border-radius: 4px;
-  }
-
-  .preview-border {
-    border:1px solid gray; 
-  }
 
   .secondary-button {
     background-color: LightGray; 
@@ -139,6 +113,7 @@
 
   .down-arrow {
     position: relative;
+    left: -2.5em;
     background-color: transparent;
     padding: 0;
     border: none;

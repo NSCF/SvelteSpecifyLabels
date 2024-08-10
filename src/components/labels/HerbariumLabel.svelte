@@ -90,7 +90,7 @@
       <div class="" style="display: flex; justify-content:space-between;" >
         {#if labelRecord.identifiedBy}
         <div>Det: {labelRecord.identifiedBy} </div>
-        <div>{labelRecord.dateIdentified}</div>
+        <div>{labelRecord.dateIdentified ||''}</div>
         {:else}
         <div>Det:</div>
         {/if}

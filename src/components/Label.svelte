@@ -33,9 +33,9 @@
 </script>
 
 {#if makeLabel()}
-  <svelte:component this={LabelDetail} {labelRecord} />
+  <svelte:component this={LabelDetail} {labelRecord} on:label-rendered />
 {:else}
-  <div>insufficent data for label...</div>
+  <div>insufficent data for label, check the field mappings...</div>
   <br />
 {/if}
 
