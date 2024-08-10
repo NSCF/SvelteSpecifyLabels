@@ -1,17 +1,17 @@
 export const fieldsMappings = { 
   //this uses DwC, mostly...
-  catalogNumber: ['Catalog Number', 'CatNum', 'catnum', 'barcode'], 
+  catalogNumber: ['Catalog Number', 'CatNum', 'catnum', 'barcode', 'specimenbarcode'], 
   recordNumber:['Field Number', 'collNum', 'collNo', 'collectorNo', 'collectornumber', 'collectorCode', 'number'],
   project: ['projectname', 'survey', 'fieldtrip', 'trip'],
   duplicates: ['dups', 'dup'],
   geography: ['Orig. Prov', 'countryprovince'],
-  country: [],
-  stateProvince: ['province', 'state', 'admin1', 'majorarea'],
+  country: ['countryname'],
+  stateProvince: ['province', 'state', 'admin1', 'majorarea', 'majoradminname'],
   admin1Type: ['stateProvinceType', 'statetype', 'provincetype'], //specific for Arthrobase extracts
   county: ['district', 'municipality', 'admin2', 'minorarea'],
   admin2Type: ['districttype', 'countytype', 'municipalitytype', 'admin2type' ], //specific for Arthrobase extracts
   verbatimLocality:[],
-  locality: ['localityname', 'localitystring', 'locnotes'],
+  locality: ['localityname', 'localitystring', 'locnotes', 'localitynotes'],
   fullLocality: [], 
   fullCoordsString: [],
   verbatimCoordinates: ['Orig Coords', 'verbatimCoords', 'original coords', 'verbatimcoordinates'], //odd mapping here due to field usage in Specify
@@ -35,19 +35,19 @@ export const fieldsMappings = {
   gridReference:['grid', 'qds', 'gridref', 'qdgs'],
   labelElevation: [],
   verbatimElevation: ['elevation', 'altitude', 'Verbatim Elev'],
-  minElevationMeters:['Min Elevation in meters', 'minElev'],
-  maxElevationMeters:['Max Elevation in meters', 'maxElev'],
-  habitat: ['habitattxt'],
-  description: ['plantdesc'],
+  minElevationMeters:['Min Elevation in meters', ], // not 'minElev', 'minelevation' because they can be in other units
+  maxElevationMeters:['Max Elevation in meters'], //ditto
+  habitat: ['habitattxt', 'habitattext'],
+  description: ['plantdesc', 'descriptiontext'],
   fieldNumber: ['eventcode', 'sitecode', 'eventnumber', 'sitenumber', 'site/eventcode', 'site/eventnumber'],
   collectionDate: ['verbatimEventDate','dateCollected', 'eventDate', 'collectingDate', 'date'],
   collectionStartDate: ['startdate','collectingstartdate'],
   collectionEndDate: ['enddate', 'collectingenddate'],
   collectionStartTime: ['starttime', 'collectingstarttime'],
   collectionEndTime: ['endtime', 'collectingendtime'],
-  year: ['collyy'],
-  month: ['collmm'],
-  day: ['colldd'],
+  year: ['collyy', 'collectionyear'],
+  month: ['collmm', 'collectionmonth'],
+  day: ['colldd', 'collectionday'],
   permitNumber: ['permit', 'permitcode', 'permitnumber', 'permitno'],
   recordedBy: ['Collectors [Aggregated]', 'collector', 'collectors', 'collectedby', 'namestring'],
   primaryCollectorLastName: ['primaryCollector'],
@@ -94,9 +94,9 @@ export const fieldsMappings = {
   detByFirst: ['firstname'],
   detByInitials: ['inital', 'initials', 'middleinitial'],
   dateIdentified: ['Determined Date', 'detdate'],
-  detYear: ['detyy'],
-  detMonth:['detmm'],
-  detDay: ['detdd'],
+  detYear: ['detyy', 'determinationyear'],
+  detMonth:['detmm', 'determinationmonth'],
+  detDay: ['detdd', 'determinationday'],
   identificationRemarks: ['Determinations/Remarks', 'Determinations Remarks', 'detRemarks', 'detNotes', 'detNote'],
 
   //type data
