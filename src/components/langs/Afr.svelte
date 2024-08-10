@@ -18,7 +18,7 @@
   datastelsels (soos Specify) gebruik UTF-8 as standaard.
 </p>
 <p>
-  As jy jou datastel laai en geen etikette sien nie, gaan na veldpassings en verfris die skakels. Dit behoort jou ten minste 'n etiket te gee 
+  As jy jou datastel laai en geen etikette sien nie, gaan na veldpassings en verfris die passings. Dit behoort jou ten minste 'n etiket te gee 
   om mee te begin. Jy kan dan wysigveranderings maak aan veldveldpassings soos nodig (sien Datavelde hieronder).
 </p>
 <p>
