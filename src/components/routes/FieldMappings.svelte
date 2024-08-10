@@ -1,5 +1,5 @@
 <script>
-  import { onMount, getContext } from "svelte";
+  import { getContext } from "svelte";
   import { push, replace } from 'svelte-spa-router'
   import LabelPreview from "../LabelPreview.svelte";
   import FieldMappingIndividual from "../FieldMappingIndividual.svelte";
@@ -13,8 +13,6 @@
   const settings = getContext('settings')
   const fieldMappings = getContext('mappings')
   const labelData = getContext('labelData')
-
-  let recordIndex = 0
 
   if (!$fieldMappings || !$rawData.length) {
     replace('/')
