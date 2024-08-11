@@ -104,9 +104,9 @@
 
 
 </script>
-<div style="height: 95vh; display: flex; flex-direction: column;">
+<div style="height: 95vh; display: flex; flex-direction: column;align-items:center;">
   <Header />
-  <div style="width:100%;flex:1 1 0; min-height:0;display:flex;">
+  <div style="width:100%; max-width:1280px; flex:1 1 0; min-height:0; display:flex;">
     <SettingsIndividual on:calc_labels={handleCalcLabels} on:type-change={handleTypeChange} />
     <div style="width: 50%; display:flex; flex-direction:column;align-items:center;">
       <div style="width: 100%; display:flex; justify-content:flex-end;">
@@ -116,7 +116,7 @@
       <LabelPreview />
     </div>
   </div>
-  <div style="display:flex; justify-content:space-between">
+  <div style="width:100%;max-width:1280px;display:flex; justify-content:space-between">
     <StartOverButton />
     <button on:click={_ => push('/preview')}>{langs['preview'][$settings.lang]}</button>
   </div>
