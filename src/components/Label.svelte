@@ -1,9 +1,9 @@
 <script>
   import { onMount, getContext } from "svelte";
+  import getLabelDet from "../lib/getLabelDet";
 
   export let labelRecord
   const settings = getContext('settings')
-
 
   const labelComponents = {
     general: async _ => await import('../components/labels/GeneralLabel.svelte'),
@@ -26,8 +26,8 @@
     labelRecord.fullCoordsString ||
     labelRecord.collectionDate ||
     labelRecord.recordedBy ||
-    labelRecord.occurrenceRemarks ||
-    labelRecord.verbatimIdentification )
+    labelRecord.occurrenceRemarks || (
+      $settings.detLabel || $settings.detLabelOnly) && (labelRecord.verbatimIdentification || labelRecord.scientificName || getLabelDet(labelRecord)))
   } 
 
 </script>

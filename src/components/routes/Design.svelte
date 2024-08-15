@@ -99,10 +99,6 @@
 	}
 
 
-
-
-
-
 </script>
 <div style="height: 95vh; display: flex; flex-direction: column;align-items:center;">
   <Header />
@@ -116,7 +112,7 @@
       <LabelPreview />
     </div>
   </div>
-  <div style="width:100%;max-width:1280px;display:flex; justify-content:space-between">
+  <div style="width:100%; max-width:1280px;display:flex; justify-content:space-between">
     <StartOverButton />
     <button on:click={_ => push('/preview')}>{langs['preview'][$settings.lang]}</button>
   </div>
