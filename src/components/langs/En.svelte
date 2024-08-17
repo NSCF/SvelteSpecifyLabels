@@ -1,15 +1,17 @@
-<h3>Quick and easy specimen labels</h3>
+<script>
+  import exampleDataURL from '../../lib/exampleDataURL'
+</script>
+
+<h3>Overview</h3>
 <p>
-  Simply add your dataset, select the label type you want, and 
+  Simply add your specimen records with standard fields for locality, date, taxon name, etc, select the label type you want, and 
   tweak the settings as needed. The labels have been designed to meet the needs of most collection types and adhere to best practices. 
 </p>
 
-<h3>How to use this tool</h3>
-
-<h4>Loading your data</h4>
+<h3>Loading your data</h3>
 <p>
   Start by loading in a CSV file with your data from the home page. <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">CSV</a> is the simplest and 
-  easiest format for exchanging data between systems. There is a link to an example file you can use as a template (see below).
+  safest format for exchanging data between systems.  Here is <a href={exampleDataURL} target="_blank">an example file</a> you can use if you don't have one already.
 </p>
 <p>
   If you load your dataset and don't see any labels, go straight to field mappings and refresh the mappings. This should at least give you a start. You can can then edit
@@ -23,7 +25,7 @@
   </em>
 </p>
 
-<h4>Data fields</h4>
+<h3>Data fields</h3>
 <p>
   The tool makes use of standard data fields like locality, date, taxon name, etc. and uses <a href="https://dwc.tdwg.org/terms/" target="_blank">Darwin Core field names</a>
   as far as possible. When you load your data the tool does its best to map the fields from your dataset to the label fields. For example, if you have a field called 'localityname'
@@ -34,7 +36,7 @@
   as you see fit. You can also read up on the Darwin Core term definitions in the mapping section using the links provided.
 </p>
 <p>
-  Remember that the fields you include on the label are up to you. The tool requires at lease one field like locality or taxon name in 
+  Remember that the fields you include on the label are up to you. The tool requires at least one field like locality or taxon name in 
   order to generate a label, but other than that you are free to pick and choose as you like.
 </p>
 <p>
@@ -57,12 +59,12 @@
 
 <h5>The example dataset</h5>
 <p>
-  When you click on the link for the example dataset you will be taken to a Google Sheet which includes fields that will be
-  picked up by the tool, with some example records. Take a few moments to look through the comments in the field headings
+  The <a href={exampleDataURL} target="_blank">example dataset</a> is a Google Sheet which includes fields that will be
+  picked up by the tool and some example records. Take a few moments to look through the comments in the field headings
   describing how each field should be used. You are welcome to make a copy of this sheet for your own use (File >> Make a copy).
 </p>
 <p>
-  To make labels from a Google Sheet you need to download the data in CSV format. Go to File >> Download, and select 'Comma separated values (.csv)'. 
+  To make labels from a Google Sheet you first need to download the data in CSV format. Go to File >> Download, and select 'Comma separated values (.csv)'. 
 </p>
 <p>
   The spreadsheet includes a field called 'print', which can be used for flagging and filtering records for printing. 
@@ -73,29 +75,30 @@
   are deposited, and date deposited, for printing labels for batches of specimens as you deposit them.
 </p>
 
-<h4>Duplicate labels</h4>
+<h3>Duplicate labels</h3>
 <p>
   If you want duplicate labels for each specimen in a series (e.g. several insects of the same species collected together, 
   or duplicate herbarium specimens), you will need to include a field in your dataset with a count (call the field 'count' or 'specimenCount'). If you 
-  have a field with counts of specimens per age/sex or a 'dups' field, the tool will try to deduce counts from that field, if you don't already have a count field. 
+  have a field with counts of specimens per age/sex or a 'duplicates' field (herbarium labels), the tool will try to deduce counts from that field, if you don't 
+  already have a count field. 
 </p>
 
-<h4>Label options</h4>
+<h3>Label options</h3>
 <p>
-  Once you've added your data you will see a list of options for customizing your label design. When you click the print label button 
+  Once you've added your data you will see a list of options for customizing your label design. When you click the print button 
   your choices (and field mappings) will be saved for the next time you want to print labels. Use a small dataset to get the label design right before 
   generating large batches of labels.
 </p>
 <p>
   <em>
-    It is strongly recommended that you <strong>print a small number of test labels</strong> to check that your design 
-    works well when physically printed before you print large batches of real specimen labels. 
+    We recommend that you <strong>print a small number of test labels</strong> to check that your design 
+    works well on paper before you print large batches of real specimen labels. 
   </em>
 </p>
 
-<h4>Printing labels</h4>
+<h3>Printing labels</h3>
 <p>
-  When you click the print button the browser will open the standard print dialog. Make sure to set the page size
+  When you click the print button from the preview screen the browser will open the standard print dialog. Make sure to set the page size
   and margins appropriately before printing. You can either print directly from here or you can save the labels as a PDF
   for checking and printing. It is recommended to use the 'Save as PDF' option rather than 'Microsoft Print to PDF'
   as this gives better results. 
@@ -116,9 +119,10 @@
   Several members of the NSCF community provided inputs and suggestions on label design, layout and 
   functionality of this tool.
 </p>
-<h4>Translations were provided by:</h4>
+<h5>Translations (not on the live site yet) were provided by:</h5>
 <ul>
   <li>afr: Adriaan Jordaan, Christiaan Steenkamp, Hester Steyn, Ian Engelbrecht</li>
+  <li>zul: volunteers welcome</li>
 </ul>
 <p>If you'd like to contribute a language translation to broaden the range of languages the tool is available in, 
   please see the instructions <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">on the Github page</a>, 

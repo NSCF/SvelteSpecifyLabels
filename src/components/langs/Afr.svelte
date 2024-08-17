@@ -1,3 +1,7 @@
+<script>
+  import exampleDataURL from '../../lib/exampleDataURL'
+</script>
+
 <h3>Skep etikette vinnig en maklik</h3>
 <p>
   Trek eenvoudig jou datastel in, kies die etikettipe en pas die stellings aan soos nodig. Die etikette is ontwerp om te voldoen aan die vereistes 
@@ -6,7 +10,7 @@
 
 <h3>Hoe om die hulpmiddel te gebruik</h3>
 
-<h4>Laai jou data</h4>
+<h3>Laai jou data</h3>
 <p>
   Begin deur 'n CSV-lêer met jou data op die tuisblad te laai. <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">CSV</a>
   is die eenvoudigste en maklikste formaat vir die uitruil van data. Daar is 'n skakel na 'n lêer wat as templaatvoorbeeld 
@@ -29,7 +33,7 @@
   </em>
 </p>
 
-<h4>Datavelde</h4>
+<h3>Datavelde</h3>
 <p>
   Hierdie hulpmiddel gebruik standaard datavelde soos ligging, datum, taksonnaam, ens. en maak gebruik van 
   <a href="https://dwc.tdwg.org/terms/" target="_blank">Darwin Core-velde</a> so ver as moontlik. Wanneer jy jou data laai, probeer die hulpmiddel om 
@@ -84,14 +88,14 @@
   etikette te druk vir groepe eksemplare soos dit in die versameling opgeneem word.
 </p>
 
-<h4>Duplikaat etikette</h4>
+<h3>Duplikaat etikette</h3>
 <p>
   As jy duplikaat etikette vir elke eksemplaar in 'n reeks wil hê (bv. verskeie insekte van dieselfde spesie wat saam versamel is, 
   of duplikate van herbarium eksemplare), sal jy 'n veld by jou datastel moet voeg met 'n aantal (noem die veld 'count'). 
   Indien jy nie 'n spesifieke aantalveld het nie, sal die instrument die veld met aantal eksemplare per ouderdom/geslag gebruik. 
 </p>
 
-<h4>Etiket opsies</h4>
+<h3>Etiket opsies</h3>
 <p>
   Sodra jy jou datastel ingetrek het, sal jy 'n lys opsies sien om jou etiketontwerp aan te pas. Wanneer jy op die druk etiket-knoppie kliek, 
   sal jou keuses (en veldskakels) gestoor word vir die volgende keer wanneer jy etikette wil druk. Gebruik 'n klein 
@@ -104,7 +108,7 @@
   </em>
 </p>
 
-<h4>Druk van etikette</h4>
+<h3>Druk van etikette</h3>
 <p>
   Wanneer jy op die drukknoppie kliek, sal die blaaier die standaard drukdialoog oopmaak. Maak seker dat jy toepaslike bladsygrootte 
   en kantlyne kies voordat jy druk. Jy kan of direk druk of die etikette as 'n PDF stoor en later druk. Dit word aanbeveel dat die 
@@ -126,7 +130,8 @@
   Verskeie lede van die NSCF-gemeenskap het insette en voorstelle oor etiketontwerp, uitleg en funksionaliteit 
   vir hierdie hulpmiddel bygedra.
 </p>
-<h4>Vertaling is verskaf deur:</h4>
+
+<h5>Vertaling is verskaf deur:</h5>
 <ul>
   <li>afr: Adriaan Jordaan, Christiaan Steenkamp, Hester Steyn, Ian Engelbrecht, Google Translate</li>
   <li>zul: Help ons asseblief!</li>

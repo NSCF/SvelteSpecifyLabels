@@ -25,9 +25,9 @@
     <a class="logo" style="display: flex;align-items:center" href="/" use:link><img src="/logo.png" width="50px" height="60px" alt=""><span style="color:#2e3238;font-size:3em; font-family:Cedarville Cursive, cursive; margin-left:.2em; margin-top:15px;">{langs['header'][$settings.lang]}</span></a>
   </div>
   <nav style="display: flex; gap:2em">
-    <a href="/" use:link>{langs['home'][$settings.lang]}</a>
-    <a href="https://nscf.org.za/learn-more-about-us" target="_blank">{langs['aboutNSCF'][$settings.lang]}</a>
     <a href="/info" use:link>{langs['info'][$settings.lang]}</a>
+    <a href="https://nscf.org.za/learn-more-about-us" target="_blank">{langs['aboutNSCF'][$settings.lang]}</a>
+    <a href="/" use:link>{langs['home'][$settings.lang]}</a>
     <!-- <button class="secondary-button" on:click={handLangButtonClick}>{$settings.lang}</button> -->
   </nav>
 </div>

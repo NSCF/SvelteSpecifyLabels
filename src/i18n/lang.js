@@ -20,8 +20,8 @@ const langs = {
     zul: '',
   },
   info: {
-    en: 'About this tool',
-    afr: 'Oor hierdie hulpmiddel',
+    en: 'How to make labels',
+    afr: 'Hoe om etikette te maak',
     zul: '',
   },
   load: {

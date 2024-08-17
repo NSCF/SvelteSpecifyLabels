@@ -6,7 +6,6 @@
   import langs from '../../i18n/lang';
 
   let title = "NSCF labels"
-  let exampleDataURL = 'https://docs.google.com/spreadsheets/d/17GK3ET4YRysCzieaSZAwn4mOyt3dBvTwlocZSIVPFgc/edit?usp=sharing'
 
   const rawData = getContext('data')
   const settings = getContext('settings')	
@@ -28,8 +27,7 @@
 <Header />
 <div style="max-width:1200px; margin:auto">
   <ChooseFile on:data={handleFileDataAndTitle} />
-  <div style="width:100%; display: flex; justify-content:flex-end; gap:2em;">
-    <a href={exampleDataURL} target="_blank">{langs['exampleData'][$settings.lang]}</a>
+  <div style="width:100%; display: flex; justify-content:center; gap:2em;">
     <a href="/design" use:link  on:click|preventDefault={_ => push('/design')}>{langs['exampleLabels'][$settings.lang]}</a>
   </div>
 </div>

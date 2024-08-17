@@ -151,13 +151,13 @@
   }
 
  .wrapper {
-    width:500px;
-    margin:0 auto;
+    width:100%;
+    margin: auto;
     margin-top:40px;
   }
 
   .fileDropBox {
-    /* margin-left:100px; */
+    margin: auto;
     width: 20em;
     text-align: center;
     color: gray;
