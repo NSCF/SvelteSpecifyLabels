@@ -107,13 +107,16 @@
     <div style="width: 50%; display:flex; flex-direction:column;align-items:center;">
       <div style="width: 100%; display:flex; justify-content:flex-end;">
         <!-- <button class="secondary-button" on:click={reset} >{langs['reset'][$settings.lang]}</button> -->
-        <a href="/mappings" style="margin:0.5rem 0; padding:1rem 2rem" use:link>{langs['mappings'][$settings.lang]}</a>
+        <!-- <a href="/mappings" style="margin:0.5rem 0; padding:1rem 2rem" use:link>{langs['mappings'][$settings.lang]}</a> -->
       </div>
       <LabelPreview />
     </div>
   </div>
   <div style="width:100%; max-width:1280px;display:flex; justify-content:space-between">
-    <StartOverButton />
+    <div>
+      <StartOverButton />
+      <button on:click={_ => push('/mappings')}>{langs['mappings'][$settings.lang]}</button>
+    </div>
     <button on:click={_ => push('/preview')}>{langs['preview'][$settings.lang]}</button>
   </div>
   <hr/>
