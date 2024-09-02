@@ -2,28 +2,22 @@
   import exampleDataURL from '../../lib/exampleDataURL'
 </script>
 
-<h3>Skep etikette vinnig en maklik</h3>
+<h3>Oorsig</h3>
 <p>
-  Trek eenvoudig jou datastel in, kies die etikettipe en pas die stellings aan soos nodig. Die etikette is ontwerp om te voldoen aan die vereistes 
+  Trek eenvoudig jou rekords in met standaardvelde vir lokaliteit, datum, taksonnaam ens., kies die etikettipe 
+  en pas die stellings aan soos nodig. Die etikette is ontwerp om te voldoen aan die vereistes 
   van die meeste versamelingstipes en volg die beste praktyke.
 </p>
-
-<h3>Hoe om die hulpmiddel te gebruik</h3>
 
 <h3>Laai jou data</h3>
 <p>
   Begin deur 'n CSV-lêer met jou data op die tuisblad te laai. <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">CSV</a>
-  is die eenvoudigste en maklikste formaat vir die uitruil van data. Daar is 'n skakel na 'n lêer wat as templaatvoorbeeld 
-  gebruik kan word (sien hieronder).
-</p>
-<p>Indien jy Excel of Access gebruik om jou data te verwerk, maak seker dat jy die enkodering stel op 
-  <a href="https://www.motionpoint.com/blog/the-importance-of-character-encoding-website-translation-user-experience" target="_blank">UTF-8</a> 
-  wanneer jy die rekords in CSV-formaat skryf, anders sal spesiale karakters soos grade verander word. Meeste ander 
-  datastelsels (soos Specify) gebruik UTF-8 as standaard.
+  is die eenvoudigste en maklikste formaat vir die uitruil van data. Hier is 'n <a href={exampleDataURL} target="_blank">voorbeeld</a> wat jy kan 
+  gebruik indien jy nie reeds een het nie.
 </p>
 <p>
   As jy jou datastel laai en geen etikette sien nie, gaan na veldpassings en verfris die passings. Dit behoort jou ten minste 'n etiket te gee 
-  om mee te begin. Jy kan dan wysigveranderings maak aan veldveldpassings soos nodig (sien Datavelde hieronder).
+  om mee te begin. Jy kan dan veranderings maak aan veldpassings soos nodig (sien Datavelde hieronder).
 </p>
 <p>
   <em>
@@ -59,6 +53,7 @@
   het ernstige spasiebeperkings). Hierdie veld moet alles insluit van land tot die spesifieke ligging soos jy dit op die 
   etiket wil hê, maar nie die koördinate of koördinaatmetadata nie. Laasgenoemde kry hul eie lyn en word verbind met etiketkoördinaatvelde.
   </p>
+
 <h5>Taksonnaamvelde</h5>
 <p>
   Taksonname kan op baie verskillende maniere gestoor word. Die hulpmiddel gee prioriteit aan name wat in individuele 
@@ -70,7 +65,7 @@
 
 <h5>Die voorbeelddatastel</h5>
 <p>
-  Wanneer jy op die skakel vir die voorbeelddatastel kliek, sal jy na 'n Google Sheet geneem word wat velde insluit 
+  Die <a href={exampleDataURL} target="_blank">voorbeelddata</a> is a Google Sheet wat velde insluit 
   wat deur die hulpmiddel herken sal word, asook 'n paar voorbeelde van rekords. Neem 'n paar oomblikke om deur die 
   veldopskrifte te gaan en lees die opmerkings wat beskryf hoe elke veld gebruik moet word. Jy is welkom om 'n kopie
   van hierdie bladsy vir eie gebruik te maak (File >> Make a copy).
@@ -97,13 +92,13 @@
 
 <h3>Etiket opsies</h3>
 <p>
-  Sodra jy jou datastel ingetrek het, sal jy 'n lys opsies sien om jou etiketontwerp aan te pas. Wanneer jy op die druk etiket-knoppie kliek, 
+  Sodra jy jou datastel ingetrek het, sal jy 'n lys opsies sien om jou etiketontwerp aan te pas. Wanneer jy op drukknoppie kliek, 
   sal jou keuses (en veldskakels) gestoor word vir die volgende keer wanneer jy etikette wil druk. Gebruik 'n klein 
   datastel om die etiketontwerp baas te raak, voordat jy groot groepe etikette maak.
 </p>
 <p>
   <em>
-    Dit word sterk aanbeveel dat jy 'n klein aantal toetsetikette druk om seker te maak dat jou ontwerp goed werk, 
+    Dit word sterk aanbeveel dat jy 'n <strong>klein aantal toetsetikette</strong> druk om seker te maak dat jou ontwerp goed werk, 
     voordat jy groot groepe finale etikette druk. 
   </em>
 </p>
@@ -131,10 +126,10 @@
   vir hierdie hulpmiddel bygedra.
 </p>
 
-<h5>Vertaling is verskaf deur:</h5>
+<h5>Vertalings (verskyn nog nie op webwerf nie) is verskaf deur:</h5>
 <ul>
-  <li>afr: Adriaan Jordaan, Christiaan Steenkamp, Hester Steyn, Ian Engelbrecht, Google Translate</li>
-  <li>zul: Help ons asseblief!</li>
+  <li>afr: Adriaan Jordaan, Christiaan Steenkamp, Hester Steyn, Ian Engelbrecht</li>
+  <li>zul: vrywilligers welkom</li>
 </ul>
 <p>As jy 'n vertaling wil bydra om die aantal tale waarin die instrument beskikbaar is te vermeerder, sien asseblief die 
   instruksies <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">op die Github-bladsy</a>, en skep 'n 
