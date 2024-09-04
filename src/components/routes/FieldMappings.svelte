@@ -34,6 +34,7 @@
   const resetMappings = _ => {
     localStorage.removeItem('fieldMappings')
     $fieldMappings[$settings.type] = getFieldMappings($rawData[0])
+    $labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage, $settings.includeCollectorInSort)
   }
 
   const getHideBottomDiv = _ => {

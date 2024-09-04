@@ -6,9 +6,9 @@ export const fieldsMappings = {
   duplicates: ['dups', 'dup'],
   geography: ['Orig. Prov', 'countryprovince'],
   country: ['countryname'],
-  stateProvince: ['province', 'state', 'admin1', 'majorarea', 'majoradminname'],
+  stateProvince: ['province', 'state', 'admin1', 'majorarea', 'majoradminname', 'major'],
   admin1Type: ['stateProvinceType', 'statetype', 'provincetype'], //specific for Arthrobase extracts
-  county: ['district', 'municipality', 'admin2', 'minorarea'],
+  county: ['district', 'municipality', 'admin2', 'minorarea', 'minor'],
   admin2Type: ['districttype', 'countytype', 'municipalitytype', 'admin2type' ], //specific for Arthrobase extracts
   verbatimLocality:[],
   locality: ['localityname', 'localitystring', 'locnotes', 'localitynotes'],
@@ -45,9 +45,9 @@ export const fieldsMappings = {
   collectionEndDate: ['enddate', 'collectingenddate'],
   collectionStartTime: ['starttime', 'collectingstarttime'],
   collectionEndTime: ['endtime', 'collectingendtime'],
-  year: ['collyy', 'collectionyear'],
-  month: ['collmm', 'collectionmonth'],
-  day: ['colldd', 'collectionday'],
+  year: ['collyy', 'collectionyear', 'collyear'],
+  month: ['collmm', 'collectionmonth', 'collmonth'],
+  day: ['colldd', 'collectionday', 'collday'],
   permitNumber: ['permit', 'permitcode', 'permitnumber', 'permitno'],
   recordedBy: ['Collectors [Aggregated]', 'collector', 'collectors', 'collectedby', 'namestring'],
   primaryCollectorLastName: ['primaryCollector'],
@@ -94,9 +94,9 @@ export const fieldsMappings = {
   detByFirst: ['firstname'],
   detByInitials: ['inital', 'initials', 'middleinitial'],
   dateIdentified: ['Determined Date', 'detdate'],
-  detYear: ['detyy', 'determinationyear'],
-  detMonth:['detmm', 'determinationmonth'],
-  detDay: ['detdd', 'determinationday'],
+  detYear: ['detyy', 'determinationyear', 'detday'],
+  detMonth:['detmm', 'determinationmonth', 'detmonth'],
+  detDay: ['detdd', 'determinationday', 'detyear'],
   identificationRemarks: ['Determinations/Remarks', 'Determinations Remarks', 'detRemarks', 'detNotes', 'detNote'],
 
   //type data

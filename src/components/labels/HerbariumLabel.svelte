@@ -24,7 +24,7 @@
   }
 
   $: if ($settings.includeBarcode && !$settings.includeQRCode && barcodeImg && labelRecord && labelRecord.catalogNumber) {
-    JsBarcode(barcodeImg, labelRecord.catalogNumber, {width:0.8, height:30, margin: 0, displayValue: false} )
+    JsBarcode(barcodeImg, labelRecord.catalogNumber, { width:1.2, height:30, margin: 0, displayValue: false} )
   }
 
   const labelRendered = _ => {
@@ -40,7 +40,7 @@
   use:labelRendered>
   {#if $settings.showHerbariumCollection}
     <div id="header">
-      <div id="title"  class:bolder={!$settings.underline} class:underline={$settings.underline} style="font-size:12pt">{$settings.herbariumCollection || ''}</div>
+      <div id="title"  class:bolder={!$settings.underline} class:underline={$settings.underline} style="font-size:1.2em">{$settings.herbariumCollection || ''}</div>
       {#if $settings.herbariumInstitution}
         <div id="subtitle"  class:bolder={!$settings.underline} class:underline={$settings.underline}>{$settings.herbariumInstitution}</div>
       {/if}
@@ -110,7 +110,7 @@
         {#if $settings.includeQRCode}
           <img style="height: 100%;margin-right:20px;" alt="QR code" bind:this={qrImg}/>
         {:else if $settings.includeBarcode}
-          <svg alt="barcode" style="" bind:this={barcodeImg}/>
+          <svg alt="barcode" style="image-rendering: crisp-edges;" bind:this={barcodeImg}/>
         {/if}
       </div>
       <div>Project: {labelRecord.project || ''}</div>
@@ -138,7 +138,7 @@
     flex-direction:column;
     align-items:center;
     font-family: var(--font, sans-serif);
-    font-size: 10pt;
+    font-size: 8pt;
     /* border-top:1px dashed gray; */
     /* border-bottom:1px dashed gray; */
     break-inside:avoid;
