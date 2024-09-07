@@ -50,7 +50,7 @@
   }
 </script>
 
-<label for={id}>{labelString}</label>
+<label for={id} style="text-wrap:nowrap;">{labelString}</label>
 <div style="display: flex;">
   <input type="number" name={id}
     min={min}

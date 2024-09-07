@@ -114,7 +114,7 @@
     </div>
     {#if $labelSettings.font in fontWeights}
     <div>
-      <label for="font-weight">{langs['fontWeight'][$appSettings.lang]}</label>
+      <label for="font-weight" style="text-wrap:nowrap">{langs['fontWeight'][$appSettings.lang]}</label>
       <select id="font-weight" bind:value={$labelSettings.fontWeight}>
         {#each fontWeights[$labelSettings.font] as weightOption}
         <option value={weightOption}>{weightOption}</option>

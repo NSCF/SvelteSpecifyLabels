@@ -107,10 +107,10 @@
 	// }
 
 </script>
-<div style="height: 95vh; display: flex; flex-direction: column;align-items:center;">
+<div style="height:95vh; display:flex; flex-direction:column; align-items:center;">
   <Header />
   <div id="main" style="width:100%; max-width:1280px; flex:1 1 0; min-height:0; display:flex;">
-    <div id="settings">
+    <div id="settings" style="display: flex; align-items:center; margin-right:5px;">
       {#if $appSettings.labelType == 'general'}
         <GeneralLabelSettings />
       {:else if $appSettings.labelType == 'herbarium'}
@@ -121,7 +121,7 @@
       <LabelPreview />
     </div>
   </div>
-  <div style="width:100%; max-width:1280px;display:flex; justify-content:space-between">
+  <div style="width:100%; max-width:1280px; display:flex; justify-content:space-between">
     <div>
       <StartOverButton />
       <button on:click={_ => push('/mappings')}>{langs['mappings'][$appSettings.lang]}</button>
