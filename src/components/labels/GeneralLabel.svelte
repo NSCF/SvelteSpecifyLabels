@@ -1,5 +1,5 @@
 <script>
-  import CutMarks from "../CutMarks.svelte";
+  import CutMarks from "../misc/CutMarks.svelte";
   import { getContext, createEventDispatcher } from "svelte";
   import getLabelDet from '../../lib/getLabelDet'
   import QRCode from 'qrcode'
@@ -7,15 +7,15 @@
   export let labelRecord
 
   const dispatch = createEventDispatcher()
-  const settings = getContext('settings')
+  const labelSettings = getContext('generalLabelSettings')
 
   let labelDet = null
   let img
 
-  $: if (labelRecord || $settings.includeTaxonAuthorities || $settings.italics) labelDet =  getLabelDet(labelRecord, $settings.includeTaxonAuthorities, false, $settings.italics)
+  $: if (labelRecord || $labelSettings.includeTaxonAuthorities || $labelSettings.italics) labelDet =  getLabelDet(labelRecord, $labelSettings.includeTaxonAuthorities, false, $labelSettings.italics)
 
-  $: if($settings.includeQRCode && $settings.qrCodeErrorLevel && img && labelRecord && labelRecord.catalogNumber) {
-    QRCode.toDataURL(labelRecord.catalogNumber, { margin: 0, errorCorrectionLevel: $settings.qrCodeErrorLevel }, function (error, url) {
+  $: if($labelSettings.includeQRCode && $labelSettings.qrCodeErrorLevel && img && labelRecord && labelRecord.catalogNumber) {
+    QRCode.toDataURL(labelRecord.catalogNumber, { margin: 0, errorCorrectionLevel: $labelSettings.qrCodeErrorLevel }, function (error, url) {
       if (error) console.error(error)
       if (url) img.src = url
     })
@@ -55,14 +55,14 @@
 </script>
 
 <div class="label" 
-  style="--font: {$settings.font}; 
-  --font-weight: {$settings.fontWeight};
-  --font-size: { $settings.fontSize + 'pt'}; 
-  --line-height: {$settings.lineHeight + '%'};
-  --label-width: { $settings.labelWidth + 'cm' };
+  style="--font: {$labelSettings.font}; 
+  --font-weight: {$labelSettings.fontWeight};
+  --font-size: { $labelSettings.fontSize + 'pt'}; 
+  --line-height: {$labelSettings.lineHeight + '%'};
+  --label-width: { $labelSettings.labelWidth + 'cm' };
   " 
   use:labelRendered>
-  {#if $settings.showStorage}
+  {#if $labelSettings.showStorage}
     {#if labelRecord.storageBox}
       <div style="padding:4px;">Box: {labelRecord.storageBox} -- cut this off label</div>
     {:else}
@@ -70,14 +70,14 @@
     {/if}
   <CutMarks char={'—'}/>
   {/if}
-  {#if !$settings.detLabelOnly}
-    {#if $settings.showInstitution}
-      <div style="width:100%; text-align:center;margin-bottom:.5em;" class:bolder={!$settings.underline} class:underline={$settings.underline}>
-        {$settings.collectionName || ''}
+  {#if !$labelSettings.detLabelOnly}
+    {#if $labelSettings.showInstitution}
+      <div style="width:100%; text-align:center;margin-bottom:.5em;" class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>
+        {$labelSettings.collectionName || ''}
       </div>
     {/if}
     <div class="label-part">
-      {#if $settings.includePunch}
+      {#if $labelSettings.includePunch}
         <div class="labelpunch">
           <svg height="10" width="10">
             <circle cx="5" cy="5" r="2" fill="black" />
@@ -88,8 +88,8 @@
         {#if labelRecord.catalogNumber || labelRecord.recordNumber || labelRecord.fieldNumber}
           <div style="display:flex; flex-direction:row-reverse; justify-content:space-between;margin-right:1em">
             {#if labelRecord.recordNumber || labelRecord.fieldNumber}
-              <div class:bolder={!labelRecord.catalogNumber && !$settings.underline} class:underline={!labelRecord.catalogNumber && $settings.underline}>
-                {#if $settings.includeFieldNumber && labelRecord.fieldNumber}
+              <div class:bolder={!labelRecord.catalogNumber && !$labelSettings.underline} class:underline={!labelRecord.catalogNumber && $labelSettings.underline}>
+                {#if $labelSettings.includeFieldNumber && labelRecord.fieldNumber}
                 <span>{labelRecord.fieldNumber}{labelRecord.recordNumber? ' / ' +  labelRecord.recordNumber: ''}</span>
                 {:else}
                 <span>{collectorNumberString()}</span>
@@ -97,7 +97,7 @@
               </div>
             {/if}
             {#if labelRecord.catalogNumber}
-              <div class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</div>
+              <div class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>{labelRecord.catalogNumber}</div>
             {/if}
           </div>
         {/if}
@@ -165,16 +165,16 @@
             {/if}
           </div>
         {/if}
-        {#if $settings.addPrintedDate}
-          <div class:bolder={!$settings.underline} class:underline={$settings.underline} >Printed on {$settings.printerModel ? $settings.printerModel : ''} {getPrintDateString()}</div>
+        {#if $labelSettings.addPrintedDate}
+          <div class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline} >Printed on {$labelSettings.printerModel ? $labelSettings.printerModel : ''} {getPrintDateString()}</div>
         {/if}
-        {#if labelRecord.project && $settings.includeProject}
-          <div class:bolder={!$settings.underline} class:underline={$settings.underline} >{labelRecord.project}</div>
+        {#if labelRecord.project && $labelSettings.includeProject}
+          <div class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline} >{labelRecord.project}</div>
         {/if}
       </div>
-      {#if labelRecord.catalogNumber && $settings.includeQRCode && !($settings.detLabelOnly || $settings.qrCodeOnDetLabels)}
+      {#if labelRecord.catalogNumber && $labelSettings.includeQRCode && !($labelSettings.detLabelOnly || $labelSettings.qrCodeOnDetLabels)}
         <div style="margin:.25em;">
-          <img width={$settings.qrCodeDims} height={$settings.qrCodeDims} bind:this={img} alt="QR code"/>
+          <img width={$labelSettings.qrCodeDims} height={$labelSettings.qrCodeDims} bind:this={img} alt="QR code"/>
         </div>
       {/if}
     </div>
@@ -183,14 +183,14 @@
     <CutMarks char={'—'} />
     <div class="label-part">
       <div class="labeltext">
-        <div class="inlineblock" class:bolder={!$settings.underline} class:underline={$settings.underline}>
+        <div class="inlineblock" class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>
           Collecting events:
         </div>
         {#if labelRecord.catalogNumber || labelRecord.recordNumber || labelRecord.fieldNumber}
           <div style="display:flex; flex-direction:row-reverse; justify-content:space-between;margin-right:1em">
             {#if labelRecord.recordNumber}
-              <div class:bolder={!labelRecord.catalogNumber && !$settings.underline} class:underline={!labelRecord.catalogNumber && $settings.underline}>
-                {#if $settings.includeFieldNumber && labelRecord.fieldNumber}
+              <div class:bolder={!labelRecord.catalogNumber && !$labelSettings.underline} class:underline={!labelRecord.catalogNumber && $labelSettings.underline}>
+                {#if $labelSettings.includeFieldNumber && labelRecord.fieldNumber}
                   <span>{labelRecord.fieldNumber}{labelRecord.recordNumber? ' / ' + labelRecord.recordNumber : ''}</span>
                 {:else}
                   <span>{collectorNumberString()}</span>
@@ -198,7 +198,7 @@
               </div>
             {/if}
             {#if labelRecord.catalogNumber}
-              <div class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</div>
+              <div class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>{labelRecord.catalogNumber}</div>
             {/if}
           </div>
         {/if}
@@ -224,17 +224,17 @@
       </div>
     </div>
   {/if}
-  {#if ($settings.detLabel || $settings.detLabelOnly) && labelDet} <!-- Apologies to readers for these, detLabel flags whether to add the label, labelDet is what goes on the label -->
-    {#if !$settings.detLabelOnly}
+  {#if ($labelSettings.detLabel || $labelSettings.detLabelOnly) && labelDet} <!-- Apologies to readers for these, detLabel flags whether to add the label, labelDet is what goes on the label -->
+    {#if !$labelSettings.detLabelOnly}
       <CutMarks char={'—'}/>
     {/if}
-    {#if $settings.detLabelOnly && $settings.showInstitution}
-      <div style="width:100%; text-align:center;margin-bottom:.5em;" class:bolder={!$settings.underline} class:underline={$settings.underline}>
-        {$settings.collectionName || ''}
+    {#if $labelSettings.detLabelOnly && $labelSettings.showCollectionName}
+      <div style="width:100%; text-align:center;margin-bottom:.5em;" class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>
+        {$labelSettings.collectionName || ''}
       </div>
     {/if}
     <div class="label-part det-label">
-      {#if $settings.includePunch}
+      {#if $labelSettings.includePunch}
         <div class="labelpunch">
           <svg height="10" width="10">
             <circle cx="5" cy="5" r="2" fill="black" />
@@ -249,10 +249,10 @@
             <div /> <!-- a placeholder -->
           {/if}
           {#if labelRecord.catalogNumber}
-            <div class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.catalogNumber}</div>
+            <div class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>{labelRecord.catalogNumber}</div>
           {:else if labelRecord.recordNumber || labelRecord.fieldNumber}
-            <div class:bolder={!$settings.underline} class:underline={$settings.underline}>
-              {#if $settings.includeFieldNumber && labelRecord.fieldNumber}
+            <div class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>
+              {#if $labelSettings.includeFieldNumber && labelRecord.fieldNumber}
               <span>{labelRecord.fieldNumber}{labelRecord.recordNumber ? ' / ' + labelRecord.recordNumber : ''}</span>
               {:else}
               <span>{collectorNumberString()}</span>
@@ -261,7 +261,7 @@
           {/if}
         </div>
         <div class="clearfloat">
-          <span class="inlineblock" class:bolder={!$settings.underline} class:underline={$settings.underline}>{@html labelDet}</span>
+          <span class="inlineblock" class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>{@html labelDet}</span>
         </div>
         <div>
           {#if labelRecord.identifiedBy || labelRecord.dateIdentified}
@@ -279,9 +279,9 @@
           </div>
         {/if}
       </div>
-      {#if labelRecord.catalogNumber && $settings.includeQRCode && ($settings.detLabelOnly || $settings.qrCodeOnDetLabels) }
+      {#if labelRecord.catalogNumber && $labelSettings.includeQRCode && ($labelSettings.detLabelOnly || $labelSettings.qrCodeOnDetLabels) }
         <div style="margin:.25em;">
-          <img width={$settings.qrCodeDims} height={$settings.qrCodeDims} bind:this={img} alt="QR code"/>
+          <img width={$labelSettings.qrCodeDims} height={$labelSettings.qrCodeDims} bind:this={img} alt="QR code"/>
         </div>
       {/if}
     </div>

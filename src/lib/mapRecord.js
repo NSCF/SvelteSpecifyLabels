@@ -3,7 +3,7 @@ import addRomanNumeralDates from './addRomanNumeralDates.js'
 
 
 //takes a record from the input dataset and returns the object needed by the label
-export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, appendGridRefToCoordsString) {
+export default function mapRecord(record, fieldMappings, abbreviateCountries, useRomanNumeralMonths, appendGridRefToCoordsString) {
 
   let mappedRecord = {}
   for (const [labelfield, recordField] of Object.entries(fieldMappings)){
@@ -19,11 +19,13 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, 
   
   if(mappedRecord.geography == null){
     
-    if (/^\s*South\s+Africa\s*$/i.test(mappedRecord.country)){
-      mappedRecord.country = 'RSA'
-    }
-    if (/congo/i.test(mappedRecord.country) && /democratic/i.test(mappedRecord.country)){
-      mappedRecord.country = 'DRC'
+    if (abbreviateCountries) {
+      if (/^\s*South\s+Africa\s*$/i.test(mappedRecord.country)){
+        mappedRecord.country = 'RSA'
+      }
+      if (/congo/i.test(mappedRecord.country) && /democratic/i.test(mappedRecord.country)){
+        mappedRecord.country = 'DRC'
+      }
     }
 
     if(mappedRecord.stateProvince && mappedRecord['admin1Type']){

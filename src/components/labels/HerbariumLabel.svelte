@@ -8,22 +8,22 @@
 
   export let labelRecord
 
-  const settings = getContext('settings')
+  const labelSettings = getContext('herbariumLabelSettings')
 
   let labelDet = null
   let qrImg
   let barcodeImg
 
-  $: if (labelRecord || $settings.includeTaxonAuthorities || $settings.italics) labelDet =  getLabelDet(labelRecord, $settings.includeTaxonAuthorities, true, $settings.italics)
+  $: if (labelRecord || $labelSettings.includeTaxonAuthorities || $labelSettings.italics) labelDet =  getLabelDet(labelRecord, $labelSettings.includeTaxonAuthorities, true, $labelSettings.italics)
 
-  $: if($settings.includeQRCode && $settings.qrCodeErrorLevel && qrImg && labelRecord && labelRecord.catalogNumber) {
-    QRCode.toDataURL(labelRecord.catalogNumber, { margin: 0, errorCorrectionLevel: $settings.qrCodeErrorLevel }, function (error, url) {
+  $: if($labelSettings.includeQRCode && $labelSettings.qrCodeErrorLevel && qrImg && labelRecord && labelRecord.catalogNumber) {
+    QRCode.toDataURL(labelRecord.catalogNumber, { margin: 0, errorCorrectionLevel: $labelSettings.qrCodeErrorLevel }, function (error, url) {
       if (error) console.error(error)
       if (url) qrImg.src = url
     })
   }
 
-  $: if ($settings.includeBarcode && !$settings.includeQRCode && barcodeImg && labelRecord && labelRecord.catalogNumber) {
+  $: if ($labelSettings.includeBarcode && !$labelSettings.includeQRCode && barcodeImg && labelRecord && labelRecord.catalogNumber) {
     JsBarcode(barcodeImg, labelRecord.catalogNumber, { width:1.2, height:30, margin: 0, displayValue: false} )
   }
 
@@ -34,15 +34,17 @@
 </script>
 
 <div id="label" 
-  style="--font: {$settings.herbarimLabelFont};
-  --label-width: {$settings.defaults.herbarium}
+  style="--font: {$labelSettings.font};
+  --font-size: {$labelSettings.fontSize + 'pt'};
+  --label-width: {$labelSettings.labelWidth};
+  --label-height: {$labelSettings.labelSize == 'standard'? '9.5cm' : '12cm'}
   "
   use:labelRendered>
-  {#if $settings.showHerbariumCollection}
+  {#if $labelSettings.showCollectionName}
     <div id="header">
-      <div id="title"  class:bolder={!$settings.underline} class:underline={$settings.underline} style="font-size:1.2em">{$settings.herbariumCollection || ''}</div>
-      {#if $settings.herbariumInstitution}
-        <div id="subtitle"  class:bolder={!$settings.underline} class:underline={$settings.underline}>{$settings.herbariumInstitution}</div>
+      <div id="title"  class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline} style="font-size:1.2em">{$labelSettings.collectionName || ''}</div>
+      {#if $labelSettings.institutionName}
+        <div id="subtitle"  class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>{$labelSettings.institutionName}</div>
       {/if}
     </div>
   {/if}
@@ -50,7 +52,7 @@
     <div id="taxon">
       <div style="width: 100%;">
         <div style="display:flex; justify-content:space-between">
-          <div style="text-transform:uppercase" class="one-line-condensed" class:bolder={!$settings.underline} class:underline={$settings.underline}>{labelRecord.family || 'No family'}</div>
+          <div style="text-transform:uppercase" class="one-line-condensed" class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>{labelRecord.family || 'No family'}</div>
         </div>
         <div>{@html labelDet || ''} </div>
       </div>
@@ -105,11 +107,11 @@
           <div style="width:30%; white-space: nowrap;">Genus: {labelRecord.genusCode}</div>
         {/if}
       </div>
-      <div class="" style="width:100%;display:flex;justify-content:space-between;align-items:center;height:35px;margin-top:{$settings.includeQRCode ? '5px': '0'}; ">
+      <div class="" style="width:100%;display:flex;justify-content:space-between;align-items:center;height:35px;margin-top:{$labelSettings.includeQRCode ? '5px': '0'}; ">
         <div>{labelRecord.catalogNumber}</div>
-        {#if $settings.includeQRCode}
+        {#if $labelSettings.includeQRCode}
           <img style="height: 100%;margin-right:20px;" alt="QR code" bind:this={qrImg}/>
-        {:else if $settings.includeBarcode}
+        {:else if $labelSettings.includeBarcode}
           <svg alt="barcode" style="image-rendering: crisp-edges;" bind:this={barcodeImg}/>
         {/if}
       </div>
@@ -132,13 +134,13 @@
 
   #label {
     width: var(--label-width, 9cm);
-    height:9.5cm;
+    height: var(--label-height, 9.5cm);
     padding:.5em;
     display:flex; 
     flex-direction:column;
     align-items:center;
     font-family: var(--font, sans-serif);
-    font-size: 8pt;
+    font-size: var(--font-size, 10pt);
     /* border-top:1px dashed gray; */
     /* border-bottom:1px dashed gray; */
     break-inside:avoid;

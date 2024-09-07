@@ -1,27 +1,42 @@
 <script>
   import { getContext } from 'svelte';
   import { pop, replace } from 'svelte-spa-router'
-  import Header from '../Header.svelte';
-  import SettingsCollective from '../SettingsCollective.svelte'
-  import BackToDesignButton from "../BackToDesignButton.svelte";
-  import LabelLayout from '../LabelLayout.svelte'
+  import makeLabelData from '../../lib/makeLabelData';
+  import Header from '../misc/Header.svelte';
+  import CollectiveSettings from '../settings/CollectiveSettings.svelte'
+  import BackToDesignButton from "../misc/BackToDesignButton.svelte";
+  import LabelLayout from '../labels/LabelLayout.svelte'
   import langs from '../../i18n/lang';
 
   const rawData = getContext('data')
   const labelData = getContext('labelData')
-  const settings = getContext('settings')
+  const appSettings = getContext('appSettings')
+  const generalLabelSettings = getContext('generalLabelSettings')
+  const herbariumLabelSettings = getContext('herbariumLabelSettings')
   const fieldMappings = getContext('mappings')
+
+  const abbreviateCountries = $appSettings.labelType == 'general' || $appSettings.labelType == 'insect'
+
+  let labelSettings
+  if ($appSettings.labelType == 'general') {
+    labelSettings = generalLabelSettings
+  }
+  if ($appSettings.labelType == 'herbarium') {
+    labelSettings = herbariumLabelSettings
+  }
 
   if ($labelData.length == 0) {
     replace('/')
   }
 
   const handleCalcLabels = _ => {
-    $labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage, $settings.includeCollectorInSort)
+    $labelData = makeLabelData($rawData, $fieldMappings[$appSettings.labelType], abbreviateCountries, $labelSettings.useRomanNumeralMonths, $labelSettings.excludeNoCatnums, $labelSettings.showStorage || false, $labelSettings.includeCollectorInSort)
   }
 
   const showPrint = _ => {
-		localStorage.setItem('labelSettings', JSON.stringify($settings))
+		localStorage.setItem('appSettings', JSON.stringify($appSettings))
+    localStorage.setItem('generalLabelSettings', JSON.stringify($generalLabelSettings))
+    localStorage.setItem('herbariumLabelSettings', JSON.stringify($herbariumLabelSettings))
     localStorage.setItem('fieldMappings', JSON.stringify($fieldMappings))
 		window.print()
 	}
@@ -32,10 +47,10 @@
   <Header />
   <div style="display:flex; justify-content:space-between">
     <BackToDesignButton />
-    <button on:click={showPrint} disabled={!$labelData.length}>{langs['printButton'][$settings.lang]}</button>
+    <button on:click={showPrint} disabled={!$labelData.length}>{langs['printButton'][$appSettings.lang]}</button>
   </div>
   <div style="margin-top: 1em;margin-bottom:1em;">
-    <SettingsCollective on:calc_labels={handleCalcLabels} />
+    <CollectiveSettings on:calc_labels={handleCalcLabels} />
   </div>
 </div>
 <div class="labels">

@@ -1,14 +1,14 @@
 <script>
   import chardet from 'chardet';
   import {getContext, createEventDispatcher } from 'svelte';
-  import CloseIcon from './CloseIcon.svelte';
+  import CloseIcon from './misc/CloseIcon.svelte';
   import langs from '../i18n/lang';
 	import readCSV from '../lib/readCSVInput'
 	import readJSON from '../lib/readJSONInput'
   import readFileAsUint8Array from '../lib/readFileAsUint8Array'
 
   const dispatch = createEventDispatcher();
-  const settings = getContext('settings')
+  const appSettings = getContext('appSettings')
 
   const fileMIMETypes = ['text/csv', 'application/vnd.ms-excel', 'text/json', 'application/json']
 
@@ -131,11 +131,11 @@
     on:click={_ => hiddenInput.click()}
     ondragover="return false"
   >
-    <h2 class="import-cta">{langs['load'][$settings.lang]}</h2>
-    <p class="import-detail">{langs['box'][$settings.lang]}</p>
+    <h2 class="import-cta">{langs['load'][$appSettings.lang]}</h2>
+    <p class="import-detail">{langs['box'][$appSettings.lang]}</p>
   </div>
 </div>
-<input type="file" bind:this={hiddenInput} style="visibility:hidden" on:change={handleFileSelected}>
+<input type="file" bind:this={hiddenInput} style="display:none" on:change={handleFileSelected}>
 <dialog style="background-color: #FFCC66;" bind:this={dialog}>
   <div style="display:flex; width:100%; justify-content:flex-end;">
     <button style="background-color: transparent; border:none; padding:0; margin:0" on:click={_ => dialog.close()}><CloseIcon /></button>
@@ -153,7 +153,7 @@
  .wrapper {
     width:100%;
     margin: auto;
-    margin-top:40px;
+    margin-top:5px;
   }
 
   .fileDropBox {
@@ -161,6 +161,7 @@
     width: 20em;
     text-align: center;
     color: gray;
+    background-color: var(--color-bg);
     border-radius: 7px;
     cursor: pointer;
   }
@@ -172,7 +173,6 @@
   }
 
   .import-detail {
-    
     margin-bottom: 2em;
     margin-left: 2em;
     margin-right: 2em;

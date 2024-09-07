@@ -1,29 +1,37 @@
 <script>
   import { getContext } from 'svelte'
   import { push, link } from 'svelte-spa-router'
-  import Header from '../Header.svelte';
-  import StartOverButton from '../StartOverButton.svelte';
-  import SettingsIndividual from '../SettingsIndividual.svelte';
-  import LabelPreview from '../LabelPreview.svelte';
+  import Header from '../misc/Header.svelte';
+  import LabelPreview from '../labels/LabelPreview.svelte';
+  import GeneralLabelSettings from '../settings/GeneralLabelSettings.svelte';
+  import HerbariumLabelSettings from '../settings/HerbariumLabelSettings.svelte';
+  import StartOverButton from '../misc/StartOverButton.svelte';
   import getFieldMappings from '../../lib/getFieldMappings'
   import reconcileFieldMappings from '../../lib/reconcileFieldMappings'
   import makeLabelData from '../../lib/makeLabelData'
-  import defaultSettings from '../../lib/settings'
+  import defaultSettings from '../../settings'
   import langs from '../../i18n/lang';
   import exampleData from '../../exampleData'
   import exampleDataPlants from '../../exampleDataPlants'
 
   const rawData = getContext('data')
-  const settings = getContext('settings')
+  const appSettings = getContext('appSettings')
+  const generalLabelSettings = getContext('generalLabelSettings')
+  const herbariumLabelSettings = getContext('herbariumLabelSettings')
   const fieldMappings = getContext('mappings')
   const labelData = getContext('labelData')
 
-  let recordIndex = 0
-  let labelWidth =  '9cm'
+  let labelSettings
+  if ($appSettings.labelType == 'general') {
+    labelSettings = generalLabelSettings
+  }
+  if ($appSettings.labelType == 'herbarium') {
+    labelSettings = herbariumLabelSettings
+  }
 
   // back to home if we have no raw data
   if ($rawData.length == 0) {
-    if ($settings.type == 'herbarium') {
+    if ($appSettings.labelType == 'herbarium') {
       $rawData = exampleDataPlants
     }
     else {
@@ -35,23 +43,24 @@
     const savedFieldMappingsJSON = localStorage.getItem("fieldMappings")
     if (savedFieldMappingsJSON) {
       let savedFieldMappings = JSON.parse(savedFieldMappingsJSON)
-      if (!savedFieldMappings[$settings.type]) {
-        savedFieldMappings = { [$settings.type]: savedFieldMappings}
+      if (!savedFieldMappings[$appSettings.labelType]) {
+        savedFieldMappings = { [$appSettings.labelType]: savedFieldMappings}
       }
-      reconcileFieldMappings(savedFieldMappings[$settings.type], $rawData[0])
+      reconcileFieldMappings(savedFieldMappings[$appSettings.labelType], $rawData[0])
       $fieldMappings = savedFieldMappings
-    }
-    else {
-      const newFieldMappings = getFieldMappings($rawData[0])
-      $fieldMappings = { [$settings.type]: newFieldMappings}
     }
   }
 
-  $labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage, $settings.includeCollectorInSort)
+  if (!$fieldMappings[$appSettings.labelType]) {
+    $fieldMappings[$appSettings.labelType] = getFieldMappings($rawData[0])
+  }
+
+  const abbreviateCountries = $appSettings.labelType == 'general' || $appSettings.labelType == 'insect'
+  $labelData = makeLabelData($rawData, $fieldMappings[$appSettings.labelType], abbreviateCountries, $labelSettings.useRomanNumeralMonths, $labelSettings.excludeNoCatnums, $labelSettings.showStorage, $labelSettings.includeCollectorInSort)
   
   const handleTypeChange = _ => {
 
-    if ($settings.type == 'herbarium') {
+    if ($appSettings.labelType == 'herbarium') {
       if ($rawData == exampleData) {
         $rawData = exampleDataPlants
       }
@@ -62,20 +71,20 @@
       }
     }
 
-    if (!$fieldMappings[$settings.type]) {
+    if (!$fieldMappings[$appSettings.labelType]) {
       const newFieldMappings = getFieldMappings($rawData[0])
-      $fieldMappings[$settings.type] = newFieldMappings
+      $fieldMappings[$appSettings.labelType] = newFieldMappings
     }
     else {
-      reconcileFieldMappings($fieldMappings[$settings.type], $rawData[0])
+      reconcileFieldMappings($fieldMappings[$appSettings.labelType], $rawData[0])
     }
 
-    $labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage, $settings.includeCollectorInSort)
+    $labelData = makeLabelData($rawData, $fieldMappings[$appSettings.labelType], abbreviateCountries, $labelSettings.useRomanNumeralMonths, $labelSettings.excludeNoCatnums, $labelSettings.showStorage, $labelSettings.includeCollectorInSort)
 
   }
 
   const handleCalcLabels = _ => {
-    $labelData = makeLabelData($rawData, $fieldMappings[$settings.type], $settings.useRomanNumeralMonths, $settings.excludeNoCatnums, $settings.showStorage, $settings.includeCollectorInSort)
+    $labelData = makeLabelData($rawData, $fieldMappings[$appSettings.labelType], abbreviateCountries, $labelSettings.useRomanNumeralMonths, $labelSettings.excludeNoCatnums, $labelSettings.showStorage || null, $labelSettings.includeCollectorInSort)
   }
 
   window.showData = _ => {
@@ -83,41 +92,41 @@
 	}
 
   //keep this in case
-  const reset = _ => {
-		if (localStorage.getItem("labelSettings") != null) {
-			const savedSettings = JSON.parse(localStorage.getItem("labelSettings"))
-			for (const [key, val] of Object.entries(savedSettings)) {
-				if (key in $settings) {
-					$settings[key] = val
-				}
-        else if (key in defaultSettings) {
-          $settings[key] = defaultSettings[key]
-        }
-			}
-		}
-
-	}
-
+  // const reset = _ => {
+	// 	if (localStorage.getItem("labelSettings") != null) {
+	// 		const savedSettings = JSON.parse(localStorage.getItem("labelSettings"))
+	// 		for (const [key, val] of Object.entries(savedSettings)) {
+	// 			if (key in $settings) {
+	// 				$settings[key] = val
+	// 			}
+  //       else if (key in defaultSettings) {
+  //         $settings[key] = defaultSettings[key]
+  //       }
+	// 		}
+	// 	}
+	// }
 
 </script>
 <div style="height: 95vh; display: flex; flex-direction: column;align-items:center;">
   <Header />
-  <div style="width:100%; max-width:1280px; flex:1 1 0; min-height:0; display:flex;">
-    <SettingsIndividual on:calc_labels={handleCalcLabels} on:type-change={handleTypeChange} />
-    <div style="width: 50%; display:flex; flex-direction:column;align-items:center;">
-      <div style="width: 100%; display:flex; justify-content:flex-end;">
-        <!-- <button class="secondary-button" on:click={reset} >{langs['reset'][$settings.lang]}</button> -->
-        <!-- <a href="/mappings" style="margin:0.5rem 0; padding:1rem 2rem" use:link>{langs['mappings'][$settings.lang]}</a> -->
-      </div>
+  <div id="main" style="width:100%; max-width:1280px; flex:1 1 0; min-height:0; display:flex;">
+    <div id="settings">
+      {#if $appSettings.labelType == 'general'}
+        <GeneralLabelSettings />
+      {:else if $appSettings.labelType == 'herbarium'}
+        <HerbariumLabelSettings />
+      {/if}
+    </div>
+    <div style="width: 100%; display:flex; justify-content:center;">
       <LabelPreview />
     </div>
   </div>
   <div style="width:100%; max-width:1280px;display:flex; justify-content:space-between">
     <div>
       <StartOverButton />
-      <button on:click={_ => push('/mappings')}>{langs['mappings'][$settings.lang]}</button>
+      <button on:click={_ => push('/mappings')}>{langs['mappings'][$appSettings.lang]}</button>
     </div>
-    <button on:click={_ => push('/preview')}>{langs['preview'][$settings.lang]}</button>
+    <button on:click={_ => push('/preview')}>{langs['preview'][$appSettings.lang]}</button>
   </div>
   <hr/>
 </div>

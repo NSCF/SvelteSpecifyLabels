@@ -1,16 +1,16 @@
 <script>
   import { getContext } from "svelte";
-  import darwinCoreFields from "../lib/dwcFields";
-  import LinkIcon from "./LinkIcon.svelte";
-  import CloseIcon from "./CloseIcon.svelte";
-  import langs from "../i18n/lang";
+  import darwinCoreFields from "../../lib/dwcFields";
+  import LinkIcon from "../misc/LinkIcon.svelte";
+  import CloseIcon from "../misc/CloseIcon.svelte";
+  import langs from "../../i18n/lang";
 
   export let record
   export let labelField
   export let lang
 
   const fieldMappings = getContext('mappings')
-  const settings = getContext('settings')
+  const appSettings = getContext('appSettings')
 
 </script>
 
@@ -19,13 +19,13 @@
   {#if darwinCoreFields.includes(labelField)}
   <a style="position: relative; top: 4px;" href={"https://dwc.tdwg.org/terms/#dwc:" + labelField} target=”_blank”><LinkIcon /></a>
   {/if}
-  <select style="display: inline; color: black; margin:0; margin-left:1em;" bind:value={$fieldMappings[$settings.type][labelField]}>
+  <select style="display: inline; color: black; margin:0; margin-left:1em;" bind:value={$fieldMappings[$appSettings.labelType][labelField]}>
     <option value="">{langs['remove'][lang]}</option>
     {#each Object.keys(record) as datasetField}
     <option value={datasetField}>{datasetField}</option>
     {/each}
   </select>
-  <button class="close-button" on:click={_ => $fieldMappings[$settings.type][labelField] = null}><CloseIcon/></button>
+  <button class="close-button" on:click={_ => $fieldMappings[$appSettings.labelType][labelField] = null}><CloseIcon/></button>
 </label>
 
 <style>
