@@ -35,18 +35,18 @@ const langs = {
     zul: '',
   }, 
   wet: {
-    en: 'General/wet',
-    afr: 'Algemeen/nat',
+    en: 'General/wet labels',
+    afr: 'Algemeen/nat etikette',
     zul: '',
   },
   herbarium: {
-    en: 'Herbarium',
-    afr: 'Herbarium',
+    en: 'Herbarium labels',
+    afr: 'Herbarium etikette',
     zul: '',
   },
   insect:  {
-    en: 'Ento',
-    afr: 'Insek',
+    en: 'Ento labels',
+    afr: 'Insek etikette',
     zul: '',
   },
   coming:  {
@@ -157,6 +157,11 @@ const langs = {
   printer: {
     en: 'Printer make and model',
     afr: 'Drukker maak en model',
+    zul: '',
+  },
+  labelSize: {
+    en: 'Label size',
+    afr: 'Etiket groote',
     zul: '',
   },
   font: {

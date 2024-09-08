@@ -1,8 +1,8 @@
 <script>
   import { onMount, getContext } from "svelte";
-  import Header from "../Header.svelte";
+  import Header from "../misc/Header.svelte";
 
-  const settings = getContext('settings')
+  const appSettings = getContext('appSettings')
 
   const langComponents = {
     en: async _ => await import('../langs/En.svelte'),
@@ -12,13 +12,13 @@
   let Lang 
 
   const getLang = async _ => {
-    const result = await langComponents[$settings.lang]()
+    const result = await langComponents[$appSettings.lang]()
     Lang = result.default
   }
 
   onMount(getLang)
 
-  $: $settings.lang, getLang()
+  $: $appSettings.lang, getLang()
 
 </script>
 

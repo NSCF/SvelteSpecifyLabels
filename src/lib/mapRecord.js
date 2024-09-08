@@ -3,27 +3,13 @@ import addRomanNumeralDates from './addRomanNumeralDates.js'
 
 
 //takes a record from the input dataset and returns the object needed by the label
-export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, appendGridRefToCoordsString) {
+export default function mapRecord(record, fieldMappings, abbreviateCountries, useRomanNumeralMonths, appendGridRefToCoordsString) {
 
   let mappedRecord = {}
   for (const [labelfield, recordField] of Object.entries(fieldMappings)){
     mappedRecord[labelfield] = record[recordField] && record[recordField].trim? record[recordField].trim() : record[recordField]
   }
 
-  if(mappedRecord.catalogNumber){
-
-    //remove prefixed zeros from number
-    let patt = /\d+$/
-    let matches = mappedRecord.catalogNumber.match(patt)
-    if(matches && matches.length){
-      let number = Number(matches[0])
-      mappedRecord.catalogNumber = mappedRecord.catalogNumber.replace(matches[0], number.toString())
-    }
-    
-    if(mappedRecord.catalogNumber.includes('-zzz')){
-      mappedRecord.catalogNumber = mappedRecord.catalogNumber.replace('-zzz', '-Her')
-    }
-  }
 
   if (mappedRecord.recordNumber) {
     if(!isNaN(mappedRecord.recordNumber)) {
@@ -33,11 +19,13 @@ export default function mapRecord(record, fieldMappings, useRomanNumeralMonths, 
   
   if(mappedRecord.geography == null){
     
-    if (/^\s*South\s+Africa\s*$/i.test(mappedRecord.country)){
-      mappedRecord.country = 'RSA'
-    }
-    if (/congo/i.test(mappedRecord.country) && /democratic/i.test(mappedRecord.country)){
-      mappedRecord.country = 'DRC'
+    if (abbreviateCountries) {
+      if (/^\s*South\s+Africa\s*$/i.test(mappedRecord.country)){
+        mappedRecord.country = 'RSA'
+      }
+      if (/congo/i.test(mappedRecord.country) && /democratic/i.test(mappedRecord.country)){
+        mappedRecord.country = 'DRC'
+      }
     }
 
     if(mappedRecord.stateProvince && mappedRecord['admin1Type']){

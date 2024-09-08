@@ -3,32 +3,47 @@
 	import { writable } from 'svelte/store';
 	import Router from 'svelte-spa-router'
 	import routes from '../lib/routes';
-  import defaultSettings from '../lib/settings'
+	import reconcileStoredSettings from '../lib/reconcileStoredSettings'
 
+	import defaultAppSettings from '../settings/appSettings'
+	import defaultGeneralLabelSettings from '../settings/generalLabelSettings'
+	import defaultHerbariumLabelSettings from '../settings/herbariumLabelSettings'
 
-	const defaultSettingsCopy = {} //because it changes
-	for (const [key, val] of Object.entries(defaultSettings)){
-		defaultSettingsCopy[key] = val
-	}
-
+	// we need this for legacy purposes, because the structure of settings changed...
 	if (localStorage.getItem("labelSettings") != null) {
 		// so we can handle evolution of settings...
 		const savedSettings = JSON.parse(localStorage.getItem("labelSettings"))
 		for (const [key, val] of Object.entries(savedSettings)) {
-			if (key in defaultSettings) {
-				defaultSettingsCopy[key] = val
+			if (key in defaultAppSettings) {
+				defaultAppSettings[key] = val
 			}
+			if (key in defaultGeneralLabelSettings) {
+				defaultGeneralLabelSettings[key] = val
+			}
+			//but not herbariumLabelSettings, as we've changed those field names...
 		}
+		localStorage.removeItem('labelSettings')
+		localStorage.setItem('appSettings', JSON.stringify(defaultAppSettings))
+		localStorage.setItem('generalLabelSettings', JSON.stringify(defaultGeneralLabelSettings))
 	}
 
-	let settings = writable(defaultSettingsCopy)
+	//now we do the same for the new settings
+	reconcileStoredSettings('appSettings', defaultAppSettings)
+	reconcileStoredSettings('generalLabelSettings', defaultGeneralLabelSettings)
+	reconcileStoredSettings('herbariumLabelSettings', defaultHerbariumLabelSettings)
+
+	const appSettings = writable(defaultAppSettings)
+	const generalLabelSettings = writable(defaultGeneralLabelSettings)
+	const herbariumLabelSettings = writable(defaultHerbariumLabelSettings) 
 
 	let rawData = writable([])
 	let fieldMappings = writable({})
 	let labelData = writable([])
 
 	setContext('data', rawData)
-	setContext('settings', settings)
+	setContext('appSettings', appSettings)
+	setContext('generalLabelSettings', generalLabelSettings)
+	setContext('herbariumLabelSettings', herbariumLabelSettings)
 	setContext('mappings', fieldMappings)
 	setContext('labelData', labelData)
 
