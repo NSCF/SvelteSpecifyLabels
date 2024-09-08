@@ -26,7 +26,7 @@
     </div>
     <label style="display:inline">
       <input type=checkbox bind:checked={$labelSettings.detLabel}>
-      {langs['dets'][$appSettings.lang]}
+      {langs['detsOnly'][$appSettings.lang]}
     </label>
     <br/>
     <label style="display:inline">
@@ -63,7 +63,7 @@
   <div style="display:flex; gap:5px">
     <div>
       <label for="label-size">{langs['labelSize'][$appSettings.lang]}</label>
-      <select id="label-size" bind:value={$labelSettings.labelSize}>
+      <select id="label-size" bind:value={$labelSettings.labelSize} disabled={$labelSettings.detLabel}>
         <option value="standard">Standard</option>
         <option value="large">Extra height</option>
       </select>
