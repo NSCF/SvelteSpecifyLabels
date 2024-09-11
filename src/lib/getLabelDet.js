@@ -12,7 +12,7 @@ const rankParts = ['subsp', 'var', 'subvar', 'f', 'subf']
 const prefixQualifiers = ['aff.', 'cf.', 'nr']
 const suffixQualifiers = ['sensu lato', 'sensu stricto']
 
-const notItalics = [...Object.values(infraSpecificRanks), ...prefixQualifiers, ...suffixQualifiers, 'sp.', 'sp', 'ex', 'auct', 'auct.']
+const notItalics = [...Object.values(infraSpecificRanks), ...prefixQualifiers, ...suffixQualifiers, 'sp.', 'sp', 'ex', 'auct', 'auct.', '&', 'and', 'et', 'et.', 'al.', 'alia']
 
 export default function getLabelDet(labelRecord, includeAuthority, includeInfraspecificRanks, addItalics) { 
 
