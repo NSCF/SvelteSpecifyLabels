@@ -33,6 +33,7 @@
   $: $appSettings.labelType, getLabel()
 
   const makeLabel = _ => {
+    console.log('running makeLabel')
     return labelRecord && (labelRecord.fullLocality || 
     labelRecord.fullCoordsString ||
     labelRecord.collectionDate ||
