@@ -6,9 +6,6 @@ import exampleData from '../exampleDataPlants.js'
 const mappings = getFieldMappings(exampleData[0])
 
 const mapped = mapRecord(exampleData[5], mappings)
+mapped.verbatimIdentification = "Helichrysum cf. cordifolum Burt Davy"
 const labelDet = getLabelDet(mapped, false, true, true)
-
-for (let i = 0; i < exampleData.length; i++) {
-  const mapped = mapRecord(exampleData[i], mappings)
-  const labelDet = getLabelDet(mapped, false, true, true)
-}
+let i = 0

@@ -30,18 +30,20 @@ export default function getLabelDet(labelRecord, includeAuthority, includeInfras
       if (labelRecord.taxonRank && labelRecord.taxonRank == 'genus') {
         nameParts[0] = '<i>' + nameParts[0] + '</i>'
       }
-      else if (nameParts.length > 1 && nameParts[1] == nameParts[1].toLowerCase() && !nameParts[1].includes('sp.')) { //test if it's a species
+      else if (nameParts.length > 1 && isLowerCase(nameParts[1]) && !nameParts[1].includes('sp.') && !/['"]+/.test(nameParts[1])) { //test if it's a species
         for (let i = 0; i < nameParts.length; i++) {
           const namePart = nameParts[i]
-          if (notItalics.includes(namePart) || namePart != namePart.toLowerCase() || namePart.includes('sp.') || /['"]+/.test(namePart)) {
+          if (notItalics.includes(namePart)) {
             continue
           }
-          else {
+          else if (i == 0 || isLowerCase(namePart)) {
             nameParts[i] = '<i>' + namePart + '</i>'
           }
         }
       }
+
       labelDet = nameParts.join(' ')
+
     }
   }
   else {
@@ -60,15 +62,15 @@ export default function getLabelDet(labelRecord, includeAuthority, includeInfras
 
 }
 
-
-
-
-
 function isRankPart(namePart) {
   return rankParts.some(rank => {
     const re = new RegExp("^" + rank + "\.?$")
     return re.test(namePart)
   })
+}
+
+function isLowerCase(namePart) {
+  return namePart == namePart.toLowerCase()
 }
 
 
