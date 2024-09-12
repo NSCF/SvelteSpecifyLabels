@@ -176,6 +176,12 @@
 </div>
 
 <style>
+
+  label {
+    display: inline;
+    text-wrap: nowrap;
+  }
+
   .cols {
     width: 100%;
     margin-top: 2em;

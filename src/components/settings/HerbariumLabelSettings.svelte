@@ -89,6 +89,12 @@
 </div>
 
 <style>
+
+  label {
+    display: inline;
+    text-wrap: nowrap;
+  }
+
   .cols {
     width: 100%;
     margin-top: 2em;
@@ -97,4 +103,5 @@
     column-gap: 1em;
     margin-bottom: 1em;
   }
+
 </style>
