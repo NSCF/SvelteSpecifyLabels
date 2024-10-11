@@ -8,8 +8,8 @@
   import StartOverButton from '../misc/StartOverButton.svelte';
   import getFieldMappings from '../../lib/getFieldMappings'
   import reconcileFieldMappings from '../../lib/reconcileFieldMappings'
+  import makeLabel from '../../lib/toMakeOrNotToMakeLabel';
   import makeLabelData from '../../lib/makeLabelData'
-  import defaultSettings from '../../settings'
   import langs from '../../i18n/lang';
   import exampleData from '../../exampleData'
   import exampleDataPlants from '../../exampleDataPlants'
@@ -29,7 +29,6 @@
     labelSettings = herbariumLabelSettings
   }
 
-  // back to home if we have no raw data
   if ($rawData.length == 0) {
     if ($appSettings.labelType == 'herbarium') {
       $rawData = exampleDataPlants
@@ -57,6 +56,12 @@
 
   const abbreviateCountries = $appSettings.labelType == 'general' || $appSettings.labelType == 'insect'
   $labelData = makeLabelData($rawData, $fieldMappings[$appSettings.labelType], abbreviateCountries, $labelSettings.useRomanNumeralMonths, $labelSettings.excludeNoCatnums, $labelSettings.showStorage, $labelSettings.includeCollectorInSort)
+  
+  // it might be a completely new dataset and the previous mappings dont work, so we attempt to remap the fields
+  if (!$labelData.some(record => makeLabel(record, $labelSettings))) {
+    $fieldMappings[$appSettings.labelType] = getFieldMappings($rawData[0])
+    $labelData = makeLabelData($rawData, $fieldMappings[$appSettings.labelType], abbreviateCountries, $labelSettings.useRomanNumeralMonths, $labelSettings.excludeNoCatnums, $labelSettings.showStorage, $labelSettings.includeCollectorInSort)
+  }
   
   const handleTypeChange = _ => {
 

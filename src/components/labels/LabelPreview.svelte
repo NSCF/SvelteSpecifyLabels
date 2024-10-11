@@ -7,6 +7,8 @@
   const herbariumLabelSettings = getContext('herbariumLabelSettings')
   const labelData = getContext('labelData')
 
+  $: labelData, console.log('label data calling from LabelPreview')//, console.log('records:', $labelData.length)
+
   let recordIndex = 0
 
   let labelSettings

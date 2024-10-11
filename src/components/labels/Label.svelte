@@ -1,7 +1,7 @@
 <!-- Note this always needs to be in a container with label-width set -->
 <script>
   import { onMount, getContext } from "svelte";
-  import getLabelDet from "../../lib/getLabelDet";
+  import makeLabel from '../../lib/toMakeOrNotToMakeLabel'
 
   export let labelRecord
   const appSettings = getContext('appSettings')
@@ -32,22 +32,14 @@
 
   $: $appSettings.labelType, getLabel()
 
-  const makeLabel = _ => {
-    console.log('running makeLabel')
-    return labelRecord && (labelRecord.fullLocality || 
-    labelRecord.fullCoordsString ||
-    labelRecord.collectionDate ||
-    labelRecord.recordedBy ||
-    labelRecord.occurrenceRemarks || (
-      $labelSettings.detLabel || $labelSettings.detLabelOnly) && (labelRecord.verbatimIdentification || labelRecord.scientificName || getLabelDet(labelRecord)))
-  } 
+
 
 </script>
 
-{#if makeLabel()}
+{#if makeLabel(labelRecord, $labelSettings)}
   <svelte:component this={LabelDetail} {labelRecord} on:label-rendered />
 {:else}
-  <div>insufficent label data, check the field mappings...</div>
+  <div>insufficent label data for this record</div>
   <br />
 {/if}
 

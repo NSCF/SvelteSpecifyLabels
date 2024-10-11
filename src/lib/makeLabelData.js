@@ -1,4 +1,3 @@
-import sortLabelData from './sortLabelData.js'
 import {sortOnAll} from './sortLabelData.js'
 import mapRecord from './mapRecord.js'
 
