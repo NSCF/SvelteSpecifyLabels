@@ -1,7 +1,9 @@
 <script>
-  import { getContext } from "svelte";
+  import { createEventDispatcher, getContext } from "svelte";
   import darwinCoreFields from "../../lib/dwcFields";
   import LinkIcon from "../misc/LinkIcon.svelte";
+
+  const dispatch = createEventDispatcher()
 
   export let record
   export let excludeFromMappings
@@ -17,6 +19,7 @@
       $fieldMappings[$appSettings.labelType][labelFieldToMap] = mappedDatasetField
       labelFieldToMap = ""
       mappedDatasetField = ""
+      dispatch('mapping-change')
     }
   }
 

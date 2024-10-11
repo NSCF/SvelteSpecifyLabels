@@ -112,7 +112,7 @@
             {/if}
           </div>
           <div class="" style="width:100%;display:flex;justify-content:space-between;align-items:center;height:35px;margin-top:{$labelSettings.includeQRCode ? '5px': '0'}; ">
-            <div>{labelRecord.catalogNumber}</div>
+            <div>{labelRecord.catalogNumber || ''}</div>
             {#if $labelSettings.includeQRCode}
               <img style="height: 100%;margin-right:20px;" alt="QR code" bind:this={qrImg}/>
             {:else if $labelSettings.includeBarcode}

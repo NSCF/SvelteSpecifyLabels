@@ -25,6 +25,8 @@
   let dontShowAgain = false
   let labelPreviewHeight
 
+  $: fieldMappings, console.log('field mappings changed')
+
   // deprecated fields
   const excludeFromMappings = ['detByLast', 'detByFirst', 'detByInitials', 
     'fullLocality', 'fullCoordsString', 'llunit', 'ns', 'ew']
@@ -48,6 +50,7 @@
     labelPreviewHeight = '10cm'
   }
 
+  // to catch a page refresh
   if (!$fieldMappings || !$rawData.length) {
     show = false
     replace('/')
@@ -76,6 +79,10 @@
     dontShowAgain = true
   }  
 
+  const handleMappingChange = _ => {
+    $labelData = makeLabelData($rawData, $fieldMappings[$appSettings.labelType], abbreviateCountries, $labelSettings.useRomanNumeralMonths, $labelSettings.excludeNoCatnums, $labelSettings.showStorage || false, $labelSettings.includeCollectorInSort)
+  }
+
 </script>
 
 <svelte:document on:scroll={_ => dontShowAgain = true} />
@@ -91,13 +98,13 @@
       <LabelPreview on:label-rendered={getHideBottomDiv} />
     </div>
     <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:2em;" bind:this={bottomDiv}>
-      <FieldMappingSelect record={$rawData[0]} {excludeFromMappings} />
+      <FieldMappingSelect record={$rawData[0]} {excludeFromMappings} on:mapping-change={handleMappingChange} />
       <button class="secondary-button" on:click={resetMappings}>{langs['resetAll'][$appSettings.lang]}</button>
     </div>
     <div style="display: flex; width: 100%; flex-wrap: wrap;">
       {#each Object.keys($fieldMappings[$appSettings.labelType]) as labelField}
         {#if $fieldMappings[$appSettings.labelType][labelField] && !excludeFromMappings.includes(labelField)}
-          <FieldMappingIndividual record={$rawData[0]} {labelField} lang={$appSettings.lang} />
+          <FieldMappingIndividual record={$rawData[0]} {labelField} lang={$appSettings.lang} on:mapping-change={handleMappingChange} />
         {/if}
       {/each}
     </div>

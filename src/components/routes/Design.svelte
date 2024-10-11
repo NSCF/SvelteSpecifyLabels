@@ -1,6 +1,6 @@
 <script>
   import { getContext } from 'svelte'
-  import { push, link } from 'svelte-spa-router'
+  import { push } from 'svelte-spa-router'
   import Header from '../misc/Header.svelte';
   import LabelPreview from '../labels/LabelPreview.svelte';
   import GeneralLabelSettings from '../settings/GeneralLabelSettings.svelte';
