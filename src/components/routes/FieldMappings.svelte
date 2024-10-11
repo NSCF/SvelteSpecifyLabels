@@ -24,8 +24,8 @@
   let hideBottomDiv = true
   let dontShowAgain = false
   let labelPreviewHeight
-
-  $: fieldMappings, console.log('field mappings changed')
+  let mainDiv //for getting the width...
+  let mainWidth
 
   // deprecated fields
   const excludeFromMappings = ['detByLast', 'detByFirst', 'detByInitials', 
@@ -86,7 +86,7 @@
 </script>
 
 <svelte:document on:scroll={_ => dontShowAgain = true} />
-<div style="max-width:1280px;margin:auto;">
+<div style="max-width:1280px; margin:auto;" bind:this={mainDiv}>
   {#if show}
     <h2>{langs['mappings'][$appSettings.lang]}</h2>
     <p style="max-width:1000px;">{langs['mappingHelp'][$appSettings.lang]}</p>
@@ -108,7 +108,7 @@
         {/if}
       {/each}
     </div>
-    <div class:hidden={hideBottomDiv || dontShowAgain} style="position:fixed;bottom:0;width:100%;display:flex;justify-content:center">
+    <div class:hidden={hideBottomDiv || dontShowAgain} style="position:fixed;bottom:0; width:{mainDiv ? mainDiv.offsetWidth + 'px' : '100%'}; display:flex; justify-content:center;">
       <button class='down-arrow' on:click={scrollBottom}>
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/></svg>
       </button>
@@ -146,7 +146,6 @@
 
   .down-arrow {
     position: relative;
-    left: -2.5em;
     background-color: transparent;
     padding: 0;
     border: none;
