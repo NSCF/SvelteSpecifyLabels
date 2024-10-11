@@ -31,18 +31,18 @@
 
 </script>
 
-<div style="display:flex; flex-direction:column; height:100%; color:black;--zoom:{$appSettings.labelType == 'general' ? $generalLabelSettings.zoom : 1 }">
+<div style="display:flex; flex-direction:column; height:100%; width:100%; color:black;--zoom:{$appSettings.labelType == 'general' ? $generalLabelSettings.zoom : 1 }">
   <div style="flex: 1 1 0; min-height: 0; display:flex; flex-direction:column; justify-content:center;">
-    <div class="zoom" class:border={$appSettings.labelType != 'herbarium'} style="width:{Number($labelSettings.labelWidth) + 0.1}cm; padding:.1cm;">
+    <div class="zoom" class:border={$appSettings.labelType != 'herbarium'} style="width:{Number($labelSettings.labelWidth) + 0.1}cm; padding:.1cm;margin:auto;">
       <Label labelRecord={$labelData[recordIndex]} on:label-rendered />
     </div>
   </div>
-  <div id="zoom-controls" style="position:relative;width:100%;display:flex;justify-content:center;align-items:center;gap:1em">
+  <div id="zoom-controls" style="width:100%;display:flex;justify-content:center;align-items:center;gap:1em">
     <button class="arrow-button" on:click={previousRecord} disabled={recordIndex == 0}><svg xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 -960 960 960" ><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg></button>
     <span>{recordIndex + 1}</span>
     <button class="arrow-button" on:click={nextRecord} disabled={recordIndex == $labelData.length - 1}><svg xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 -960 960 960"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg></button>
     {#if $appSettings.labelType != 'herbarium'}
-    <div style="position:absolute;top:5px;right:5px;display:flex;align-items:center;">
+    <div style="position:absolute;bottom:5px;right:5px;display:flex;align-items:center;">
       {#if $labelSettings.zoom > 1}
       <span style="margin-bottom: 10px;">X {$labelSettings.zoom}</span>
       {/if}

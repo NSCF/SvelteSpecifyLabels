@@ -122,7 +122,7 @@
         <HerbariumLabelSettings />
       {/if}
     </div>
-    <div style="width: 100%; display:flex; justify-content:center;">
+    <div id='preview-section' style="position:relative; width:100%; display:flex">
       <LabelPreview />
     </div>
   </div>

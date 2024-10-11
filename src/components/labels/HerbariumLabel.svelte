@@ -152,7 +152,7 @@
       </div>
       <div class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>{@html labelDet || ''}</div>
       <div style="display:flex;justify-content:space-between">
-        <div>Det.: {labelRecord.identifiedBy}</div>
+        <div>Det: {labelRecord.identifiedBy}</div>
         <div>{labelRecord.dateIdentified}</div>
       </div>
       {#if labelRecord.identificationRemarks}
