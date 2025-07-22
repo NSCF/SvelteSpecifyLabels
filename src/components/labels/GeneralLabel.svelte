@@ -62,6 +62,7 @@
   --label-width: { $labelSettings.labelWidth + 'cm' };
   " 
   use:labelRendered>
+  <!-- storage location indicator at the top -->
   {#if $labelSettings.showStorage}
     {#if labelRecord.storageBox}
       <div style="padding:4px;">Box: {labelRecord.storageBox} -- cut this off label</div>
@@ -70,6 +71,7 @@
     {/if}
   <CutMarks char={'—'}/>
   {/if}
+  <!-- main label -->
   {#if !$labelSettings.detLabelOnly}
     {#if $labelSettings.showInstitution}
       <div style="width:100%; text-align:center;margin-bottom:.5em;" class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>
@@ -179,6 +181,7 @@
       {/if}
     </div>
   {/if}
+  <!-- series / sample counts -->
   {#if labelRecord.seriesSampleCounts && Array.isArray(labelRecord.seriesSampleCounts) && labelRecord.seriesSampleCounts.length > 1} <!--this is customized for label data from Arthrobase-->
     <CutMarks char={'—'} />
     <div class="label-part">
@@ -224,6 +227,7 @@
       </div>
     </div>
   {/if}
+  <!-- determination label -->
   {#if ($labelSettings.detLabel || $labelSettings.detLabelOnly) && labelDet} <!-- Apologies to readers for these, detLabel flags whether to add the label, labelDet is what goes on the label -->
     {#if !$labelSettings.detLabelOnly}
       <CutMarks char={'—'}/>
@@ -270,6 +274,11 @@
             <span class="inlineblock">{labelRecord.dateIdentified || ''}</span>
           {/if}
         </div>
+        {#if $labelSettings.detLabelOnly}
+          <div>
+            {labelRecord.specimenStageSex || ''}
+          </div>
+        {/if}
         <div>
           {labelRecord.identificationRemarks || ''}
         </div>
