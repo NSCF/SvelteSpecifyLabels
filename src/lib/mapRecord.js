@@ -187,32 +187,41 @@ export default function mapRecord(record, fieldMappings, abbreviateCountries, us
 
   //we need this so we can break lines on full names
   if (mappedRecord.recordedBy) {
-    mappedRecord.recordedBy = mappedRecord.recordedBy.split(/\s*[;|]\s*/g).filter(x => x).map(x => x.trim()).filter(x => x)
-    //we need to transform full names into initials
-    let fixed = []
-    for (let name of mappedRecord.recordedBy) {
-      let parts = name.split(/\s*,\s*/g) //lets hope only two!!
-      if (parts[1]) {
-        let firstName = parts[1]
-        if (!/^[A-Z\s\.]+$/.test(firstName)) { //not initials
-          let firstNameParts = firstName.split(' ')
-          let initials = firstNameParts.map(x => x[0].toUpperCase()).join('.')
-          fixed.push(`${parts[0]}, ${initials}`)
+
+    // we can only fix initials if the user provides appropriate separators
+    if (mappedRecord.includes('|') || mappedRecord.includes(';')) {
+
+      mappedRecord.recordedBy = mappedRecord.recordedBy.split(/\s*[;|]\s*/g).filter(x => x).map(x => x.trim()).filter(x => x)
+
+      //we need to transform full names into initials
+      let fixed = []
+      for (let name of mappedRecord.recordedBy) {
+        let parts = name.split(/\s*,\s*/g) //lets hope only two!!
+        if (parts[1]) {
+          let firstName = parts[1]
+          if (!/^[A-Z\s\.]+$/.test(firstName)) { //not initials
+            let firstNameParts = firstName.split(' ')
+            let initials = firstNameParts.map(x => x[0].toUpperCase()).join('.')
+            fixed.push(`${parts[0]}, ${initials}`)
+          }
+          else {
+            fixed.push(`${parts[0]}, ${parts[1].replace(/\s+/g, '')}`) //contracts any initials
+          }
         }
         else {
-          fixed.push(`${parts[0]}, ${parts[1].replace(/\s+/g, '')}`) //contracts any initials
+          fixed.push(name)
         }
       }
-      else {
-        fixed.push(name)
+
+      for (let i = 0; i < fixed.length - 1; i++) {
+        fixed[i] = fixed[i] + ';'
       }
-    }
 
-    for (let i = 0; i < fixed.length - 1; i++) {
-      fixed[i] = fixed[i] + ';'
+      mappedRecord.recordedBy = fixed
     }
-
-    mappedRecord.recordedBy = fixed
+    else {
+      mappedRecord.recordedBy = [mappedRecord.recordedBy]
+    }
 
   }
 
