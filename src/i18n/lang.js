@@ -3,7 +3,7 @@ const langs = {
     en: "Labels",
     afr: "Etikette",
     zul: '',
-  }, 
+  },
   startOver: {
     en: 'Start over',
     afr: 'Begin oor',
@@ -13,7 +13,7 @@ const langs = {
     en: 'Home',
     afr: 'Tuis',
     zul: '',
-  }, 
+  },
   aboutNSCF: {
     en: 'About the NSCF',
     afr: 'Oor die NSCF',
@@ -30,10 +30,10 @@ const langs = {
     zul: '',
   },
   box: {
-    en:'Drag and drop a CSV file with your label data here or click to select from your hard drive',
+    en: 'Drag and drop a CSV file with your label data here or click to select from your hard drive',
     afr: "Sleep en los 'n CSV-lêer met jou etiketdata hier of klik om van jou hardeskyf te kies",
     zul: '',
-  }, 
+  },
   wet: {
     en: 'General/wet labels',
     afr: 'Algemeen/nat etikette',
@@ -44,21 +44,21 @@ const langs = {
     afr: 'Herbarium etikette',
     zul: '',
   },
-  insect:  {
+  insect: {
     en: 'Ento labels',
     afr: 'Insek etikette',
     zul: '',
   },
-  coming:  {
+  coming: {
     en: 'coming soon',
     afr: 'binnekort',
     zul: '',
   },
   count: {
-    en:"Duplicate labels using count", 
-    afr: "Dupliseer etikette gebasseer op telling", 
+    en: "Duplicate labels using count",
+    afr: "Dupliseer etikette gebasseer op telling",
     zul: '',
-  }, 
+  },
   romanNums: {
     en: 'Use Roman numerals for months',
     afr: 'Gebruik Romeinse syfers vir maande',
@@ -89,9 +89,14 @@ const langs = {
     afr: "Maaks slegs determinasie labels",
     zul: '',
   },
+  stageSexOnMain: {
+    en: "Include stage/sex on main label",
+    afr: "Sluit in stadium/geslag op hoof etikette",
+    zul: '',
+  },
   punch: {
-    en: "Include punch mark", 
-    afr: "Sluit in a gat merk", 
+    en: "Include punch mark",
+    afr: "Sluit in a gat merk",
     zul: '',
   },
   barcode: {
@@ -151,7 +156,7 @@ const langs = {
   },
   printDate: {
     en: 'Include printer model and date',
-    afr:'Sluit in drukkermodel en datum',
+    afr: 'Sluit in drukkermodel en datum',
     zul: '',
   },
   printer: {
@@ -190,8 +195,8 @@ const langs = {
     zul: '',
   },
   labelWidthUnit: {
-    en: "cm", 
-    afr: "sentimeter", 
+    en: "cm",
+    afr: "sentimeter",
     zul: '',
   },
   qrCodeSize: {

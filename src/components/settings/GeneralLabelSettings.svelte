@@ -42,6 +42,11 @@
     </label>
     <br/>
     <label style="display:inline">
+      <input type="checkbox" bind:checked={$labelSettings.includeStageSexOnMainLabel}>
+      {langs['stageSexOnMain'][$appSettings.lang]}
+    </label>
+    <br/>
+    <label style="display:inline">
       <input type="checkbox" bind:checked={$labelSettings.includePunch}>
       {langs['punch'][$appSettings.lang]}
     </label>

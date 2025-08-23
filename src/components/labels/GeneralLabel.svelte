@@ -140,20 +140,15 @@
             {labelRecord.eventRemarks || ''}
           {/if}
         </div>
-        {#if labelRecord.specimenCount}
+        {#if labelRecord.specimenCount && $labelSettings.includeStageSexOnMainLabel}
           {#if labelRecord.specimenStageSex && labelRecord.specimenStageSex.match(/(\d+)/g).reduce((x, y) => x + Number(y), 0) == Number(labelRecord.specimenCount)}
             <span class="inlineblock">{labelRecord.specimenStageSex}</span>
           {:else}
             <div>
-              <span class="padright">Specimens:&nbsp;{labelRecord.specimenCount}</span>
               {#if labelRecord.specimenStageSex}
                 <span class="inlineblock">({labelRecord.specimenStageSex})</span>
               {/if}
             </div>
-          {/if}
-        {:else} 
-          {#if labelRecord.specimenStageSex}
-            <span class="inlineblock">{labelRecord.specimenStageSex}</span>
           {/if}
         {/if}
         <div>
@@ -247,11 +242,13 @@
       {/if}
       <div class="labeltext">
         <div style="display:flex; justify-content:space-between;margin-right:1em">
+          <!-- type status -->
           {#if labelRecord.typeStatus}
             <div class="uppercase">{labelRecord.typeStatus}</div>
           {:else if labelRecord.catalogNumber || labelRecord.recordNumber}
             <div /> <!-- a placeholder -->
           {/if}
+          <!-- catalog and/or collector number -->
           {#if labelRecord.catalogNumber}
             <div class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>{labelRecord.catalogNumber}</div>
           {:else if labelRecord.recordNumber || labelRecord.fieldNumber}
@@ -264,9 +261,17 @@
             </div>            
           {/if}
         </div>
+        <!-- family if provided and different to the actual det -->
+        {#if labelRecord.family && labelRecord.family != labelDet}
+          <div class="clearfloat">
+            <span class="inlineblock" >{labelRecord.family.toUpperCase()}</span>
+          </div>
+        {/if}
+        <!-- taxon name with all the bells and whistles... -->
         <div class="clearfloat">
           <span class="inlineblock" class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>{@html labelDet}</span>
         </div>
+        <!-- det by and date -->
         <div>
           {#if labelRecord.identifiedBy || labelRecord.dateIdentified}
             <span>det: </span>
@@ -274,11 +279,10 @@
             <span class="inlineblock">{labelRecord.dateIdentified || ''}</span>
           {/if}
         </div>
-        {#if $labelSettings.detLabelOnly}
-          <div>
-            {labelRecord.specimenStageSex || ''}
-          </div>
-        {/if}
+        <!-- specimen stage and sex -->
+        <div>
+          {labelRecord.specimenStageSex || ''}
+        </div>
         <div>
           {labelRecord.identificationRemarks || ''}
         </div>
