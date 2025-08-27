@@ -189,7 +189,7 @@ export default function mapRecord(record, fieldMappings, abbreviateCountries, us
   if (mappedRecord.recordedBy) {
 
     // we can only fix initials if the user provides appropriate separators
-    if (mappedRecord.includes('|') || mappedRecord.includes(';')) {
+    if (mappedRecord.recordedBy.includes('|') || mappedRecord.recordedBy.includes(';')) {
 
       mappedRecord.recordedBy = mappedRecord.recordedBy.split(/\s*[;|]\s*/g).filter(x => x).map(x => x.trim()).filter(x => x)
 
