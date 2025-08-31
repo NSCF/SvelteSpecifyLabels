@@ -1,0 +1,12 @@
+{
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode", // Use the official Svelte formatter
+    "editor.formatOnSave": true
+  },
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "prettier.requireConfig": true
+}

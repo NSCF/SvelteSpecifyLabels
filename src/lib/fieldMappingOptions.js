@@ -1,7 +1,7 @@
-export const fieldsMappings = { 
+export const fieldsMappings = {
   //this uses DwC, mostly...
-  catalogNumber: ['Catalog Number', 'CatNum', 'catnum', 'barcode', 'specimenbarcode'], 
-  recordNumber:['Field Number', 'collNum', 'collNo', 'collectorNo', 'collectornumber', 'collectorCode', 'number'],
+  catalogNumber: ['Catalog Number', 'CatNum', 'catnum', 'barcode', 'specimenbarcode'],
+  recordNumber: ['Field Number', 'collNum', 'collNo', 'collectorNo', 'collectornumber', 'collectorCode', 'number'],
   project: ['projectname', 'survey', 'fieldtrip', 'trip'],
   duplicates: ['dups', 'dup'],
   geography: ['Orig. Prov', 'countryprovince'],
@@ -9,16 +9,16 @@ export const fieldsMappings = {
   stateProvince: ['province', 'state', 'admin1', 'majorarea', 'majoradminname', 'major'],
   admin1Type: ['stateProvinceType', 'statetype', 'provincetype'], //specific for Arthrobase extracts
   county: ['district', 'municipality', 'admin2', 'minorarea', 'minor'],
-  admin2Type: ['districttype', 'countytype', 'municipalitytype', 'admin2type' ], //specific for Arthrobase extracts
-  verbatimLocality:[],
+  admin2Type: ['districttype', 'countytype', 'municipalitytype', 'admin2type'], //specific for Arthrobase extracts
+  verbatimLocality: [],
   locality: ['localityname', 'localitystring', 'locnotes', 'localitynotes'],
-  fullLocality: [], 
+  fullLocality: [],
   fullCoordsString: [],
   verbatimCoordinates: ['Orig Coords', 'verbatimCoords', 'original coords', 'verbatimcoordinates'], //odd mapping here due to field usage in Specify
   verbatimLatitude: ['Lat1text', 'verbatimLat', 'verbatimlatitude', 'latitude', 'lat'],
   verbatimLongitude: ['Long1text', 'verbatimLong', 'verbatimlongitude', 'longitude', 'long'],
   decimalLatitude: ['Latitude1', 'ddLat', 'ddlat', 'declat', 'decimalLat', 'decimallatitude'],
-  decimalLongitude:['Longitude1', 'ddLong', 'ddLon', 'declong', 'decimalLong', 'decimalLon', 'decimallongitude'],
+  decimalLongitude: ['Longitude1', 'ddLong', 'ddLon', 'declong', 'decimalLong', 'decimalLon', 'decimallongitude'],
 
   // BRAHMS coordinates and altitude fields, here only so we can try get people off BRAHMS...
   llunit: [],
@@ -29,19 +29,19 @@ export const fieldsMappings = {
 
   // and back to sanity...
   coordsUncertainty: ['Max Uncertainty Est', 'uncertainty', 'llres'],
-  coordsUncertaintyUnit:['Max Uncertainty Est Unit',  'uncertaintyunit'],
+  coordsUncertaintyUnit: ['Max Uncertainty Est Unit', 'uncertaintyunit'],
   coordsSource: ['Lat/Long Method', 'georeferenceSources', 'georefSource', 'georefSources', 'coordsMethod', 'coordsSource'], //because its should not be a georeference!!
   verbatimSRS: ['Datum', 'geodeticDatum'],
-  gridReference:['grid', 'qds', 'gridref', 'qdgs'],
+  gridReference: ['grid', 'qds', 'gridref', 'qdgs'],
   labelElevation: [],
   verbatimElevation: ['elevation', 'altitude', 'Verbatim Elev'],
-  minElevationMeters:['Min Elevation in meters', ], // not 'minElev', 'minelevation' because they can be in other units
-  maxElevationMeters:['Max Elevation in meters'], //ditto
+  minElevationMeters: ['Min Elevation in meters',], // not 'minElev', 'minelevation' because they can be in other units
+  maxElevationMeters: ['Max Elevation in meters'], //ditto
   habitat: ['habitattxt', 'habitattext'],
   description: ['plantdesc', 'descriptiontext'],
   fieldNumber: ['eventcode', 'sitecode', 'eventnumber', 'sitenumber', 'site/eventcode', 'site/eventnumber'],
-  collectionDate: ['verbatimEventDate','dateCollected', 'eventDate', 'collectingDate', 'date'],
-  collectionStartDate: ['startdate','collectingstartdate'],
+  collectionDate: ['verbatimEventDate', 'dateCollected', 'eventDate', 'collectingDate', 'date'],
+  collectionStartDate: ['startdate', 'collectingstartdate'],
   collectionEndDate: ['enddate', 'collectingenddate'],
   collectionStartTime: ['starttime', 'collectingstarttime'],
   collectionEndTime: ['endtime', 'collectingendtime'],
@@ -54,12 +54,12 @@ export const fieldsMappings = {
   additionalCollectors: ['addcoll'], ///BRAHMS strikes again...
   samplingProtocol: ['collectionMethod', 'Collecting Information/Method', 'collectMethods', 'collectmethod', 'method'],
   eventConditions: ['conditions'],
-  eventRemarks:['collectingeventremarks'],
+  eventRemarks: ['collectingeventremarks'],
   specimenStageSex: ['Stage Sex Count', 'lifeStageSexCounts'],
-  sex:['Sex'],
+  sex: ['Sex'],
   lifeStage: ['stage'],
-  specimenCount:['count', 'counts', 'countamt', 'countamount', 'labelcount', 'labeltotal', 'sheets'],
-  seriesSampleCounts:[], //just for Arthrobase
+  specimenCount: ['count', 'counts', 'countamt', 'countamount', 'labelcount', 'labeltotal', 'sheets'],
+  seriesSampleCounts: [], //just for Arthrobase
   occurrenceRemarks: ['Remarks', 'Collection Object Remarks', 'Collection Object/Remarks', 'seriesNote', 'notes', 'note', 'specimenNotes', 'specimenNote'],
 
   //det stuff
@@ -67,7 +67,7 @@ export const fieldsMappings = {
   scientificName: ['Full Name', 'Taxon/Full Name', 'taxonname', 'taxon', 'canonicalName'], //because people use scientificName however they like...
   scientificNameAuthorship: ['author', 'authority', 'taxonauthor', 'taxonomicauthor', 'taxonAuthority', 'taxonomicAuthority', 'nameAuthority', 'nameAuthor'],
   taxonRank: ['rank'],
-  
+
   // we just use ranks here, because Darwin Core taxon fields are a mess...
   order: [],
   superfamily: [],
@@ -76,31 +76,31 @@ export const fieldsMappings = {
   tribe: [],
   subtribe: [],
   genus: ['genusname', 'gename'],
-  genusCode: ['gecode', 'gencode', 'dthno', 'genusnumber', 'apgno', 'genusno', 'apgnumber', 'genspec', 'genspecno','taxoncode'],
+  genusCode: ['gecode', 'gencode', 'dthno', 'genusnumber', 'apgno', 'genusno', 'apgnumber', 'genspec', 'genspecno', 'taxoncode'],
   species: ['specificEpithet', 'speciesname'],
-  subspecies:['infraspecificEpithet', 'sp1'],
+  subspecies: ['infraspecificEpithet', 'sp1', 'subsp'],
   variety: ['var', 'sp2'],
   subvariety: ['subvar'],
   forma: ['form', 'sp3'],
   subforma: ['subform', 'subf'],
 
-  identificationQualifier:['qualifier', 'prefix', 'prefixQualifier', 'taxonNamePrefix'],
-  suffixQualifier: ['suffix', 'taxonNameSuffix'], //not a dwc term, but should be 
-  identificationConfidence:['confidence', 'detconfidence', 'detcertainty'],
-  identificationMethod:['Determinations/Method', 'detMethod', 'idmethod'],
+  identificationQualifier: ['qualifier', 'prefix', 'prefixQualifier', 'taxonNamePrefix'],
+  suffixQualifier: ['suffix', 'taxonNameSuffix'], //not a dwc term, but should be
+  identificationConfidence: ['confidence', 'detconfidence', 'detcertainty'],
+  identificationMethod: ['Determinations/Method', 'detMethod', 'idmethod'],
   identificationReferences: ['detReferences', 'detrefs'],
-  identifiedBy:['detBy', 'determinedby'],
-  detByLast:['lastname'],
+  identifiedBy: ['detBy', 'determinedby'],
+  detByLast: ['lastname'],
   detByFirst: ['firstname'],
   detByInitials: ['inital', 'initials', 'middleinitial'],
   dateIdentified: ['Determined Date', 'detdate'],
   detYear: ['detyy', 'determinationyear', 'detday'],
-  detMonth:['detmm', 'determinationmonth', 'detmonth'],
+  detMonth: ['detmm', 'determinationmonth', 'detmonth'],
   detDay: ['detdd', 'determinationday', 'detyear'],
   identificationRemarks: ['Determinations/Remarks', 'Determinations Remarks', 'detRemarks', 'detNotes', 'detNote'],
 
   //type data
-  typeStatus: ['typestatus', 'typification', 'type'], 
+  typeStatus: ['typestatus', 'typification', 'type'],
   typeNumber: ['typenumber'],
 
   //storage
