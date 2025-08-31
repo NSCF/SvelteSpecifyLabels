@@ -1,6 +1,7 @@
 <script>
   import CutMarks from "../misc/CutMarks.svelte";
   import { getContext, createEventDispatcher } from "svelte";
+  import firstLetterLowerCase from '../../lib/firstLetterLowerCase'
   import getLabelDet from '../../lib/getLabelDet'
   import QRCode from 'qrcode'
 
@@ -135,7 +136,7 @@
         </div>
         <div class="labelrow">
           {#if labelRecord.samplingProtocol && labelRecord.eventRemarks}
-            <span class="inlineblock">{labelRecord.samplingProtocol} ({labelRecord.eventRemarks.toLowerCase()})</span>
+            <span class="inlineblock">{labelRecord.samplingProtocol} ({firstLetterLowerCase(labelRecord.eventRemarks)})</span>
           {:else}
             {labelRecord.eventRemarks || ''}
           {/if}
