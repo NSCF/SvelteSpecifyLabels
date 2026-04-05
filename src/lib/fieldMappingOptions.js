@@ -12,6 +12,7 @@ export const fieldsMappings = {
   admin2Type: ['districttype', 'countytype', 'municipalitytype', 'admin2type'], //specific for Arthrobase extracts
   verbatimLocality: [],
   locality: ['localityname', 'localitystring', 'locnotes', 'localitynotes'],
+  labelLocality: ['short locality'], // for insect labels
   fullLocality: [],
   fullCoordsString: [],
   verbatimCoordinates: ['Orig Coords', 'verbatimCoords', 'original coords', 'verbatimcoordinates'], //odd mapping here due to field usage in Specify

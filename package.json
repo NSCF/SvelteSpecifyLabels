@@ -21,6 +21,7 @@
     "jsbarcode": "^3.11.6",
     "papaparse": "^5.2.0",
     "qrcode": "^1.5.3",
-    "svelte-spa-router": "^4.0.1"
+    "svelte-spa-router": "^4.0.1",
+    "tippy.js": "^6.3.7"
   }
 }

@@ -1,0 +1,26 @@
+
+/* This is just the example from the documentation */
+.tippy-box[data-theme~='tomato'] {
+  background-color: tomato;
+  color: yellow;
+}
+
+.tippy-box[data-theme~='light-translucent'] {
+  background-color: rgba(255, 255, 255, 1.0);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgb(59, 59, 59);
+}
+
+
+.tippy-box[data-theme~='light-translucent'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: gray;
+}
+.tippy-box[data-theme~='light-translucent'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: gray;
+}
+.tippy-box[data-theme~='light-translucent'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: gray;
+}
+.tippy-box[data-theme~='light-translucent'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: gray;
+}
