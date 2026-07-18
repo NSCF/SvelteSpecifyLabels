@@ -1,6 +1,6 @@
 <script>
   import { onMount, getContext } from "svelte";
-  import { push, replace } from "svelte-spa-router";
+  import { pop, push, replace } from "svelte-spa-router";
   import LabelPreview from "../labels/LabelPreview.svelte";
   import FieldMappingIndividual from "../fieldMappings/FieldMappingIndividual.svelte";
   import FieldMappingSelect from "../fieldMappings/FieldMappingSelect.svelte";
@@ -97,7 +97,7 @@
       <button
         id="back-button"
         class="bg-[LightGray] text-[dimgray] border-none hover:bg-[silver] cursor-pointer"
-        on:click={(_) => push("/design")}>{$t("back", "Back")}</button
+        on:click={(_) => pop()}>{$t("back", "Back")}</button
       >
       <button on:click={(_) => push("/preview")}
         >{$t("preview", "Preview and print")}</button

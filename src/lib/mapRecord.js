@@ -104,11 +104,11 @@ export default function mapRecord(record, fieldMappings, abbreviateCountries, us
       }
     }
 
-    if (coords && mappedRecord.coordsSource) {
+    if (labelType != 'insect' && coords && mappedRecord.coordsSource) {
       coords += `  ${mappedRecord.coordsSource}`
     }
 
-    if (coords && mappedRecord.verbatimSRS) {
+    if (labelType != 'insect' && coords && mappedRecord.verbatimSRS) {
       coords += `  ${mappedRecord.verbatimSRS}`
     }
 
@@ -455,5 +455,3 @@ export default function mapRecord(record, fieldMappings, abbreviateCountries, us
   return mappedRecord
 
 }
-
-

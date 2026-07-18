@@ -3,7 +3,9 @@ import numberInputSettings from './numberInputSettings.js'
 export default {
   detLabel: true,
   detLabelOnly: false,
+  includeBarcode: true,
   includeQRCode: false,
+  barcodeOnMain: false,
   qrCodeErrorLevel: 'Q',
   qrCodeOnDetLabels: false,
   includeTaxonAuthorities: false,
@@ -12,7 +14,6 @@ export default {
   includeCollectorInSort: false,
   underline: false,
   italics: false,
-  includeProjectLabel: false,
   includeStageSexOnMainLabel: false,
   font: 'Roboto Condensed',
   fontSize: 4,
