@@ -6,7 +6,6 @@
   import FieldMappingSelect from "../fieldMappings/FieldMappingSelect.svelte";
   import getFieldMappings from "../../lib/getFieldMappings";
   import { t } from "../../i18n/lang";
-  import makeLabelData from "../../lib/makeLabelData";
 
   const rawData = getContext("data");
   const appSettings = getContext("appSettings");
@@ -60,29 +59,10 @@
   if (!$fieldMappings || !$rawData.length) {
     show = false;
     replace("/");
-  } else {
-    $labelData = makeLabelData(
-      $rawData,
-      $fieldMappings[$appSettings.labelType],
-      abbreviateCountries,
-      $labelSettings.useRomanNumeralMonths,
-      $labelSettings.excludeNoCatnums,
-      $labelSettings.showStorage || false,
-      $labelSettings.includeCollectorInSort,
-    );
   }
 
   const resetMappings = (_) => {
     $fieldMappings[$appSettings.labelType] = getFieldMappings($rawData[0]);
-    $labelData = makeLabelData(
-      $rawData,
-      $fieldMappings[$appSettings.labelType],
-      abbreviateCountries,
-      $labelSettings.useRomanNumeralMonths,
-      $labelSettings.excludeNoCatnums,
-      $labelSettings.showStorage || false,
-      $labelSettings.includeCollectorInSort,
-    );
   };
 
   const getHideBottomDiv = (_) => {
@@ -100,17 +80,7 @@
     dontShowAgain = true;
   };
 
-  const handleMappingChange = (_) => {
-    $labelData = makeLabelData(
-      $rawData,
-      $fieldMappings[$appSettings.labelType],
-      abbreviateCountries,
-      $labelSettings.useRomanNumeralMonths,
-      $labelSettings.excludeNoCatnums,
-      $labelSettings.showStorage || false,
-      $labelSettings.includeCollectorInSort,
-    );
-  };
+  const handleMappingChange = (_) => {};
 </script>
 
 <svelte:document on:scroll={(_) => (dontShowAgain = true)} />

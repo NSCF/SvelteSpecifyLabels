@@ -141,7 +141,7 @@
           <div class="">{labelRecord.notes || ""}</div>
           <div class="">
             <div>
-              Coll: {labelRecord.recordedBy}{labelRecord.additionalCollectors
+              Leg.: {labelRecord.recordedBy}{labelRecord.additionalCollectors
                 ? ", with " + labelRecord.additionalCollectors
                 : ""}
             </div>
@@ -154,7 +154,7 @@
                       {labelRecord.recordNumber}
                     </div>
                   {:else}
-                    <div>Coll. no. {labelRecord.recordNumber}</div>
+                    <div>No. {labelRecord.recordNumber}</div>
                   {/if}
                 {:else}
                   <div>{labelRecord.recordNumber}</div>

@@ -9,7 +9,6 @@
   import getFieldMappings from "../../lib/getFieldMappings";
   import reconcileFieldMappings from "../../lib/reconcileFieldMappings";
   import makeLabel from "../../lib/toMakeOrNotToMakeLabel";
-  import makeLabelData from "../../lib/makeLabelData";
   import { t } from "../../i18n/lang";
   import exampleData from "../../exampleData";
   import exampleDataPlants from "../../exampleDataPlants";
@@ -60,32 +59,13 @@
     $fieldMappings[$appSettings.labelType] = getFieldMappings($rawData[0]);
   }
 
-  const abbreviateCountries =
-    $appSettings.labelType == "general" || $appSettings.labelType == "insect";
-  $labelData = makeLabelData(
-    $rawData,
-    $fieldMappings[$appSettings.labelType],
-    abbreviateCountries,
-    $labelSettings.useRomanNumeralMonths,
-    $labelSettings.excludeNoCatnums,
-    $labelSettings.showStorage,
-    $labelSettings.includeCollectorInSort,
-    $appSettings.labelType,
-  );
-
   // it might be a completely new dataset and the previous mappings dont work, so we attempt to remap the fields
-  if (!$labelData.some((record) => makeLabel(record, $labelSettings))) {
+  $: if (
+    $rawData.length > 0 &&
+    $labelData.length > 0 &&
+    !$labelData.some((record) => makeLabel(record, $labelSettings))
+  ) {
     $fieldMappings[$appSettings.labelType] = getFieldMappings($rawData[0]);
-    $labelData = makeLabelData(
-      $rawData,
-      $fieldMappings[$appSettings.labelType],
-      abbreviateCountries,
-      $labelSettings.useRomanNumeralMonths,
-      $labelSettings.excludeNoCatnums,
-      $labelSettings.showStorage,
-      $labelSettings.includeCollectorInSort,
-      $appSettings.labelType,
-    );
   }
 
   const handleTypeChange = (_) => {
@@ -108,30 +88,6 @@
         $rawData[0],
       );
     }
-
-    $labelData = makeLabelData(
-      $rawData,
-      $fieldMappings[$appSettings.labelType],
-      abbreviateCountries,
-      $labelSettings.useRomanNumeralMonths,
-      $labelSettings.excludeNoCatnums,
-      $labelSettings.showStorage,
-      $labelSettings.includeCollectorInSort,
-      $appSettings.labelType,
-    );
-  };
-
-  const handleCalcLabels = (_) => {
-    $labelData = makeLabelData(
-      $rawData,
-      $fieldMappings[$appSettings.labelType],
-      abbreviateCountries,
-      $labelSettings.useRomanNumeralMonths,
-      $labelSettings.excludeNoCatnums,
-      $labelSettings.showStorage || null,
-      $labelSettings.includeCollectorInSort,
-      $appSettings.labelType,
-    );
   };
 
   window.showData = (_) => {
@@ -170,7 +126,7 @@
       <LabelPreview />
     </div>
   </div>
-  <div class="w-full max-w-[1280px] flex justify-between">
+  <div class="w-full max-w-[1280px] flex justify-between border-t pt-2">
     <div>
       <button id="back-button" class="btn-secondary" on:click={(_) => push("/")}
         >{$t("startOver", "Start over")}</button

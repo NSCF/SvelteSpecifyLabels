@@ -188,7 +188,7 @@
     {/if}
   </div>
   <p class="relative m-0 top-[-1em] text-[0.7em]">
-    {$t("saveSettings", "Settings are saved when you print")}
+    {$t("saveSettings", "Settings are saved when you preview/print")}
   </p>
   <br />
 </div>

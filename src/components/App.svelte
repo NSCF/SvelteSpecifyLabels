@@ -10,6 +10,7 @@
   import defaultHerbariumLabelSettings from "../settings/herbariumLabelSettings";
   import defaultEntoLabelSettings from "../settings/entoLabelSettings";
   import { locale, t } from "../i18n/lang";
+  import makeLabelData from "../lib/makeLabelData";
 
   // we need this for legacy purposes, because the structure of settings changed...
   if (localStorage.getItem("labelSettings") != null) {
@@ -79,6 +80,29 @@
   let rawData = writable([]);
   let fieldMappings = writable({});
   let labelData = writable([]);
+
+  $: labelSettingsStore =
+    $appSettings.labelType == "general"
+      ? generalLabelSettings
+      : $appSettings.labelType == "herbarium"
+        ? herbariumLabelSettings
+        : entoLabelSettings;
+
+  $: abbreviateCountries =
+    $appSettings.labelType == "general" || $appSettings.labelType == "insect";
+
+  $: if ($rawData.length > 0 && $fieldMappings[$appSettings.labelType]) {
+    $labelData = makeLabelData(
+      $rawData,
+      $fieldMappings[$appSettings.labelType],
+      abbreviateCountries,
+      $labelSettingsStore.useRomanNumeralMonths,
+      $labelSettingsStore.excludeNoCatnums,
+      $labelSettingsStore.showStorage,
+      $labelSettingsStore.includeCollectorInSort,
+      $appSettings.labelType,
+    );
+  }
 
   setContext("data", rawData);
   setContext("appSettings", appSettings);

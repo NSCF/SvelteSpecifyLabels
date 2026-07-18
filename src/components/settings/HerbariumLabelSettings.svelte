@@ -1,47 +1,66 @@
 <script>
-  import {getContext, createEventDispatcher} from 'svelte'
+  import { getContext } from "svelte";
   import { t } from "../../i18n/lang";
-  import numberInputSettings from '../../settings/numberInputSettings';
+  import numberInputSettings from "../../settings/numberInputSettings";
 
-  const dispatch = createEventDispatcher()
+  const appSettings = getContext("appSettings");
+  const labelSettings = getContext("herbariumLabelSettings");
 
-  const appSettings = getContext('appSettings')
-  const labelSettings = getContext('herbariumLabelSettings')
-
-  const fonts = ["Roboto Condensed", "Courier", 'PT Sans Narrow', 'Times New Roman', 'Arial']
-
+  const fonts = [
+    "Roboto Condensed",
+    "Courier",
+    "PT Sans Narrow",
+    "Times New Roman",
+    "Arial",
+  ];
 </script>
+
 <div class="w-full flex flex-col">
-  <div class="w-full mt-[2em] [column-count:2] [column-width:50%] gap-[1em] mb-[1em]">
+  <div
+    class="w-full mt-[2em] [column-count:2] [column-width:50%] gap-[1em] mb-[1em]"
+  >
     <div class="[break-inside:avoid]">
       <label class="inline whitespace-nowrap">
-        <input type=checkbox bind:checked={$labelSettings.showCollectionName}>
-        {$t('addCollName', 'Add my collection name')}
+        <input type="checkbox" bind:checked={$labelSettings.showCollectionName} />
+        {$t("addCollName", "Add my collection name")}
       </label>
-      <br/>
+      <br />
       {#if $labelSettings.showCollectionName}
-        <input type="text" bind:value={$labelSettings.collectionName} class="inline p-[10px] h-[10px]" placeholder={$t('collName', 'Collection name')}><br>
-        <input type="text" bind:value={$labelSettings.institutionName} class="inline p-[10px] h-[10px]" placeholder={$t('inst', 'Institution')}><br>
+        <input
+          type="text"
+          bind:value={$labelSettings.collectionName}
+          class="inline p-[10px] h-[10px]"
+          placeholder={$t("collName", "Collection name")}
+        /><br />
+        <input
+          type="text"
+          bind:value={$labelSettings.institutionName}
+          class="inline p-[10px] h-[10px]"
+          placeholder={$t("inst", "Institution")}
+        /><br />
       {/if}
     </div>
     <label class="inline whitespace-nowrap">
-      <input type=checkbox bind:checked={$labelSettings.detLabel}>
-      {$t('detsOnly', 'Make det labels only')}
+      <input type="checkbox" bind:checked={$labelSettings.detLabel} />
+      {$t("detsOnly", "Make det labels only")}
     </label>
-    <br/>
+    <br />
     <label class="inline whitespace-nowrap">
-      <input type=checkbox bind:checked={$labelSettings.includeBarcode}>
-      {$t('barcode', 'Include barcode')}
+      <input type="checkbox" bind:checked={$labelSettings.includeBarcode} />
+      {$t("barcode", "Include barcode")}
     </label>
-    <br/>
+    <br />
     <label class="inline whitespace-nowrap [break-after:never]">
-      <input type=checkbox bind:checked={$labelSettings.includeQRCode}> 
-      {$t('qrCode', 'Include QR code')}
+      <input type="checkbox" bind:checked={$labelSettings.includeQRCode} />
+      {$t("qrCode", "Include QR code")}
     </label>
-    <br/>
+    <br />
     <label class="inline whitespace-nowrap">
-      <input type=checkbox bind:checked={$labelSettings.useRomanNumeralMonths} on:change={_ => dispatch('calc_labels')}>
-      {$t('romanNums', 'Use Roman numerals for months')}
+      <input
+        type="checkbox"
+        bind:checked={$labelSettings.useRomanNumeralMonths}
+      />
+      {$t("romanNums", "Use Roman numerals for months")}
     </label>
     <br/>
     <label class="inline whitespace-nowrap">
@@ -84,6 +103,6 @@
       </select>
     </div>
   </div>
-  <p class="relative m-0 top-[-1em] text-[0.7em]">{$t('saveSettings', 'Settings are saved when you print')}</p>
+  <p class="relative m-0 top-[-1em] text-[0.7em]">{$t('saveSettings', 'Settings are saved when you preview/print')}</p>
   <br/>
 </div>

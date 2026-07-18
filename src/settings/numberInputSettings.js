@@ -5,7 +5,7 @@ export default {
     default: 12
   },
   lineHeight: {
-    min: 90,
+    min: 80,
     max: 120,
     default: 100,
     step: 5
@@ -18,8 +18,8 @@ export default {
   },
   qrCodeDims: {
     min: 25,
-    max:60,
-    default:30,
+    max: 60,
+    default: 30,
     step: 5
   }
 

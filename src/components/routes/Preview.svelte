@@ -1,7 +1,6 @@
 <script>
   import { getContext } from "svelte";
   import { pop, replace, push } from "svelte-spa-router";
-  import makeLabelData from "../../lib/makeLabelData";
   import Header from "../misc/Header.svelte";
   import CollectiveSettings from "../settings/CollectiveSettings.svelte";
   import LabelLayout from "../labels/LabelLayout.svelte";
@@ -14,9 +13,6 @@
   const herbariumLabelSettings = getContext("herbariumLabelSettings");
   const entoLabelSettings = getContext("entoLabelSettings");
   const fieldMappings = getContext("mappings");
-
-  const abbreviateCountries =
-    $appSettings.labelType == "general" || $appSettings.labelType == "insect";
 
   let labelSettings;
   if ($appSettings.labelType == "general") {
@@ -32,19 +28,6 @@
   if ($labelData.length == 0) {
     replace("/");
   }
-
-  const handleCalcLabels = (_) => {
-    $labelData = makeLabelData(
-      $rawData,
-      $fieldMappings[$appSettings.labelType],
-      abbreviateCountries,
-      $labelSettings.useRomanNumeralMonths,
-      $labelSettings.excludeNoCatnums,
-      $labelSettings.showStorage || false,
-      $labelSettings.includeCollectorInSort,
-      $appSettings.labelType,
-    );
-  };
 
   const showPrint = (_) => {
     localStorage.setItem("appSettings", JSON.stringify($appSettings));
@@ -67,18 +50,16 @@
 
 <div class="print:hidden">
   <Header />
-  <div class="flex justify-between">
-    <button
-      id="back-button"
-      class="btn-secondary"
-      on:click={(_) => push("/design")}>{$t("design", "Design")}</button
+  <div class="flex justify-between mt-2">
+    <button id="back-button" class="btn-secondary" on:click={(_) => pop()}
+      >{$t("back", "Back")}</button
     >
     <button on:click={showPrint} disabled={!$labelData.length}
       >{$t("printButton", "Let's print these labels...")}</button
     >
   </div>
   <div class="my-[1em]">
-    <CollectiveSettings on:calc_labels={handleCalcLabels} />
+    <CollectiveSettings />
   </div>
 </div>
 <div class="print:mt-[1em]">

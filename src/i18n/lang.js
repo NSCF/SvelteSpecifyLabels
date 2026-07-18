@@ -337,12 +337,12 @@ const langs = {
     por: 'Robustez',
   },
   saveSettings: {
-    en: "Settings are saved when you print",
-    afr: "Stellings is getstoor as jy uitdruk",
+    en: "Settings are saved when you preview/print",
+    afr: "Stellings word gestoor wanneer jy voorskou/druk",
     zul: '',
-    spa: 'Los ajustes se guardan al imprimir',
-    fra: 'Les paramètres sont enregistrés lors de l\'impression',
-    por: 'As definições são guardadas ao imprimir',
+    spa: 'Los ajustes se guardan al previsualizar/imprimir',
+    fra: "Les paramètres sont enregistrés lors de la prévisualisation/l'impression",
+    por: 'As definições são guardadas ao pré-visualizar/imprimir',
   },
   preview: {
     en: "Preview and print",
