@@ -152,18 +152,6 @@
   Vários membros da comunidade do NSCF forneceram contributos e sugestões sobre o desenho, esquema e funcionalidade
   desta ferramenta.
 </p>
-<h5>As traduções foram fornecidas por:</h5>
-<ul>
-  <li>
-    por: Tradução automática (IA)
-  </li>
-  <li>
-    afr: Adriaan Jordaan, Christiaan Steenkamp, Hester Steyn, Ian Engelbrecht
-  </li>
-  <li>zul: voluntários bem-vindos</li>
-</ul>
 <p>
-  Se desejar contribuir com uma tradução para alargar a gama de idiomas em que a ferramenta está disponível, consulte
-  as instruções <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">na página do GitHub</a>,
-  e crie um problema conforme indicado acima se necessitar de assistência técnica.
+  As traduções foram realizadas com recurso a IA e qualquer ajuda para as melhorar seria muito apreciada (com orientações fornecidas no <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">GitHub</a>).
 </p>

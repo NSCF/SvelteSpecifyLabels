@@ -173,17 +173,6 @@
   Several members of the NSCF community provided inputs and suggestions on label
   design, layout and functionality of this tool.
 </p>
-<h5>Translations (not on the live site yet) were provided by:</h5>
-<ul>
-  <li>
-    afr: Adriaan Jordaan, Christiaan Steenkamp, Hester Steyn, Ian Engelbrecht
-  </li>
-  <li>zul: volunteers welcome</li>
-</ul>
 <p>
-  If you'd like to contribute a language translation to broaden the range of
-  languages the tool is available in, please see the instructions <a
-    href="https://github.com/NSCF/SvelteSpecifyLabels"
-    target="_blank">on the Github page</a
-  >, and create an issue as above if you need technical assistance.
+  Translations were done with AI and assistance to improve would be greatly appreciated (with guidance provided on <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">GitHub</a>).
 </p>

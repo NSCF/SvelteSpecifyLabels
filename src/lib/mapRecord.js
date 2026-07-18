@@ -265,7 +265,7 @@ export default function mapRecord(record, fieldMappings, abbreviateCountries, us
 
   //we want em dashes instead of en dashes
   if (mappedRecord.collectionDate && mappedRecord.collectionDate.includes('-')) {
-    mappedRecord.collectionDate = mappedRecord.collectionDate.replace('-', '–')
+    mappedRecord.collectionDate = mappedRecord.collectionDate.replace('-', '—')
   }
 
   if (!mappedRecord.specimenStageSex) {

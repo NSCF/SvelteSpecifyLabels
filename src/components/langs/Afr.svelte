@@ -170,18 +170,6 @@
   Verskeie lede van die NSCF-gemeenskap het insette en voorstelle oor
   etiketontwerp, uitleg en funksionaliteit vir hierdie hulpmiddel bygedra.
 </p>
-
-<h5>Vertalings (verskyn nog nie op webwerf nie) is verskaf deur:</h5>
-<ul>
-  <li>
-    afr: Adriaan Jordaan, Christiaan Steenkamp, Hester Steyn, Ian Engelbrecht
-  </li>
-  <li>zul: vrywilligers welkom</li>
-</ul>
 <p>
-  As jy 'n vertaling wil bydra om die aantal tale waarin die instrument
-  beskikbaar is te vermeerder, sien asseblief die instruksies <a
-    href="https://github.com/NSCF/SvelteSpecifyLabels"
-    target="_blank">op die Github-bladsy</a
-  >, en skep 'n kwessie soos hierbo indien jy tegniese bystand benodig.
+  Vertalings is met behulp van KI gedoen en bystand om dit te verbeter sal baie waardeer word (met riglyne verskaf op <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">GitHub</a>).
 </p>
