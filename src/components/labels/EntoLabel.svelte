@@ -4,8 +4,7 @@
   import firstLetterLowerCase from "../../lib/firstLetterLowerCase";
   import getLabelDet from "../../lib/getLabelDet";
   import QRCode from "qrcode";
-  import { datamatrix } from "@bwip-js/browser";
-  import JsBarcode from "jsbarcode";
+  import { datamatrix, code128 } from "@bwip-js/browser";
 
   export let labelRecord;
 
@@ -30,23 +29,33 @@
   // Svelte actions for barcode and QR code rendering
   function renderBarcodeMain(node, catalogNumber) {
     if (catalogNumber) {
-      JsBarcode(node, catalogNumber, {
-        width: 0.75,
-        height: 8,
-        margin: 0,
-        displayValue: false,
-      });
+      let canvas = document.createElement("canvas");
+      try {
+        code128(canvas, {
+          text: catalogNumber,
+          includetext: false,
+          height: 6,
+        });
+        node.src = canvas.toDataURL("image/png");
+      } catch (e) {
+        console.error("code128 error", e);
+      }
     }
   }
 
   function renderBarcodeCatalog(node, catalogNumber) {
     if (catalogNumber) {
-      JsBarcode(node, catalogNumber, {
-        width: 1.0,
-        height: 15,
-        margin: 0,
-        displayValue: false,
-      });
+      let canvas = document.createElement("canvas");
+      try {
+        code128(canvas, {
+          text: catalogNumber,
+          includetext: false,
+          height: 7.5,
+        });
+        node.src = canvas.toDataURL("image/png");
+      } catch (e) {
+        console.error("code128 error", e);
+      }
     }
   }
 
@@ -317,15 +326,16 @@
                 </div>
               </div>
             {:else if $labelSettings.includeBarcode}
-              <div class="flex items-center justify-center w-full h-full">
+              <div
+                class="flex items-center justify-center w-full h-full border"
+              >
                 <div
-                  class="flex flex-col items-center justify-center select-none"
-                  style="transform: rotate(-90deg); transform-origin: center; width: 1.1cm; height: 0.3cm; flex-shrink: 0;"
+                  class="flex flex-col gap-[1px] items-center justify-center select-none border"
+                  style="transform: rotate(-90deg); transform-origin: center; width: 1.3cm; height: 0.35cm; flex-shrink: 0;"
                 >
                   <img
                     alt="barcode"
-                    class="object-contain"
-                    style="width: 1.1cm; height: 0.2cm;"
+                    style="width: 1.3cm; height: 0.18cm;"
                     use:renderBarcodeMain={labelRecord.catalogNumber}
                   />
                   <div
@@ -405,11 +415,11 @@
       {#if $labelSettings.includeQRCode}
         <img
           alt="QR code"
-          class="max-w-full max-h-[75%] object-contain"
+          class="max-w-full max-h-[50%] object-contain"
           use:renderQRCode={labelRecord.catalogNumber}
         />
         <div
-          class="w-full text-center font-mono leading-none mt-[1px] text-[3.5pt]"
+          class="w-full text-center font-mono leading-none mt-[1px] text-[120%]"
         >
           {labelRecord.catalogNumber}
         </div>
@@ -420,13 +430,13 @@
           use:renderBarcodeCatalog={labelRecord.catalogNumber}
         />
         <div
-          class="w-full text-center font-mono leading-none mt-[1px] text-[3.5pt]"
+          class="w-full text-center font-mono leading-none mt-[1px] text-[120%]"
         >
           {labelRecord.catalogNumber}
         </div>
       {:else}
         <div
-          class="w-full text-center font-mono font-bold text-[6pt] leading-none"
+          class="w-full text-center font-mono font-bold text-[120%] leading-none"
         >
           {labelRecord.catalogNumber}
         </div>
