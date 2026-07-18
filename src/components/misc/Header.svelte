@@ -5,11 +5,12 @@
 
   const appSettings = getContext("appSettings");
 
-  $: logoSrc = $appSettings.lang === 'fra'
-    ? '/logo_2_fr.png'
-    : ($appSettings.lang === 'spa' || $appSettings.lang === 'por')
-      ? '/logo_2_spa_por.png'
-      : '/logo_2.png';
+  $: logoSrc =
+    $appSettings.lang === "fra"
+      ? "/logo_2_fr.png"
+      : $appSettings.lang === "spa" || $appSettings.lang === "por"
+        ? "/logo_2_spa_por.png"
+        : "/logo_2.png";
 </script>
 
 <div
@@ -23,11 +24,11 @@
     >
   </div>
   <nav class="flex gap-[2em] mr-[2em] items-center m-0">
+    <a href="/" use:link>{$t("home", "Home")}</a>
     <a href="/info" use:link>{$t("info", "How to make labels")}</a>
     <a href="https://nscf.org.za/learn-more-about-us" target="_blank"
       >{$t("aboutNSCF", "About the NSCF")}</a
     >
-    <a href="/" use:link>{$t("home", "Home")}</a>
     <select
       class="mt-2 bg-white border border-[#ccc] rounded-[4px] py-[0.25rem] px-[0.5rem] text-[0.9rem] text-[#333] cursor-pointer outline-none transition-[border-color,box-shadow] duration-200 hover:border-[#888] focus:border-[#555] focus:shadow-[0_0_0_2px_rgba(0,0,0,0.05)]"
       bind:value={$appSettings.lang}

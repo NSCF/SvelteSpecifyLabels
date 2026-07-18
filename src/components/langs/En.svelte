@@ -11,7 +11,7 @@
   types and adhere to best practices.
 </p>
 
-<h3>Loading your data</h3>
+<h3 id="loading-data">Loading your data</h3>
 <p>
   Start by loading in a CSV file with your data from the home page. <a
     href="https://en.wikipedia.org/wiki/Comma-separated_values"
@@ -174,5 +174,9 @@
   design, layout and functionality of this tool.
 </p>
 <p>
-  Translations were done with AI and assistance to improve would be greatly appreciated (with guidance provided on <a href="https://github.com/NSCF/SvelteSpecifyLabels" target="_blank">GitHub</a>).
+  Translations were done with AI and assistance to improve would be greatly
+  appreciated (with guidance provided on <a
+    href="https://github.com/NSCF/SvelteSpecifyLabels"
+    target="_blank">GitHub</a
+  >).
 </p>

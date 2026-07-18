@@ -1,11 +1,13 @@
 <script>
   import chardet from "chardet";
   import { createEventDispatcher } from "svelte";
+  import { link } from "svelte-spa-router";
   import CloseIcon from "./misc/CloseIcon.svelte";
   import { t } from "../i18n/lang";
   import readCSV from "../lib/readCSVInput";
   import readJSON from "../lib/readJSONInput";
   import readFileAsUint8Array from "../lib/readFileAsUint8Array";
+  import HelpIcon from "./misc/HelpIcon.svelte";
 
   const dispatch = createEventDispatcher();
 
@@ -116,12 +118,20 @@
     class="mx-auto w-[20em] text-center text-[gray] bg-[var(--color-bg)] rounded-[7px] cursor-pointer {hovering
       ? 'border-[10px] border-dashed border-[grey]'
       : 'border-[10px] border-dashed border-[lightgray]'}"
+    role="button"
+    tabindex="0"
     on:mouseenter={isHovering}
     on:mouseleave={isNotHovering}
     on:dragenter={isHovering}
     on:dragleave={isNotHovering}
     on:drop={handleDragDrop}
     on:click={(_) => hiddenInput.click()}
+    on:keydown={(e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        hiddenInput.click();
+      }
+    }}
     ondragover="return false"
   >
     <h3 class="underline mt-[2em]">{$t("load", "Load some data")}</h3>
@@ -139,6 +149,11 @@
   class="hidden"
   on:change={handleFileSelected}
 />
+<div class="w-[20em] flex justify-end m-auto">
+  <a href="/info" use:link class="text-gray-400 hover:text-gray-600">
+    <HelpIcon />
+  </a>
+</div>
 <dialog class="bg-[#FFCC66]" bind:this={dialog}>
   <div class="flex w-full justify-end">
     <button
