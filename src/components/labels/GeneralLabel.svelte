@@ -1,82 +1,109 @@
 <script>
   import CutMarks from "../misc/CutMarks.svelte";
   import { getContext, createEventDispatcher } from "svelte";
-  import firstLetterLowerCase from '../../lib/firstLetterLowerCase'
-  import getLabelDet from '../../lib/getLabelDet'
-  import QRCode from 'qrcode'
+  import firstLetterLowerCase from "../../lib/firstLetterLowerCase";
+  import getLabelDet from "../../lib/getLabelDet";
+  import QRCode from "qrcode";
 
-  export let labelRecord
+  export let labelRecord;
 
-  const dispatch = createEventDispatcher()
-  const labelSettings = getContext('generalLabelSettings')
+  const dispatch = createEventDispatcher();
+  const labelSettings = getContext("generalLabelSettings");
 
-  let labelDet = null
-  let img
+  let labelDet = null;
+  let img;
 
-  $: if (labelRecord || $labelSettings.includeTaxonAuthorities || $labelSettings.italics) labelDet =  getLabelDet(labelRecord, $labelSettings.includeTaxonAuthorities, false, $labelSettings.italics)
+  $: if (
+    labelRecord ||
+    $labelSettings.includeTaxonAuthorities ||
+    $labelSettings.italics
+  )
+    labelDet = getLabelDet(
+      labelRecord,
+      $labelSettings.includeTaxonAuthorities,
+      false,
+      $labelSettings.italics,
+    );
 
-  $: if($labelSettings.includeQRCode && $labelSettings.qrCodeErrorLevel && img && labelRecord && labelRecord.catalogNumber) {
-    QRCode.toDataURL(labelRecord.catalogNumber, { margin: 0, errorCorrectionLevel: $labelSettings.qrCodeErrorLevel }, function (error, url) {
-      if (error) console.error(error)
-      if (url) img.src = url
-    })
+  $: if (
+    $labelSettings.includeQRCode &&
+    $labelSettings.qrCodeErrorLevel &&
+    img &&
+    labelRecord &&
+    labelRecord.catalogNumber
+  ) {
+    QRCode.toDataURL(
+      labelRecord.catalogNumber,
+      { margin: 0, errorCorrectionLevel: $labelSettings.qrCodeErrorLevel },
+      function (error, url) {
+        if (error) console.error(error);
+        if (url) img.src = url;
+      },
+    );
   }
 
-  const getPrintDateString = _ => {
-    const now = new Date()
-    const month = now.toLocaleString('default', { month: 'short' });
-    const year = now.getFullYear()
-    return `${month}, ${year}`
-  }
+  const getPrintDateString = (_) => {
+    const now = new Date();
+    const month = now.toLocaleString("default", { month: "short" });
+    const year = now.getFullYear();
+    return `${month}, ${year}`;
+  };
 
-  const collectorNumberString = _ => {
-    let collectorNumberString = ''
+  const collectorNumberString = (_) => {
+    let collectorNumberString = "";
     if (labelRecord && labelRecord.recordNumber) {
-      if (typeof labelRecord.recordNumber == 'number') {
+      if (typeof labelRecord.recordNumber == "number") {
         if (labelRecord.primaryCollectorLastName) {
-          collectorNumberString += labelRecord.primaryCollectorLastName + ' ' + labelRecord.recordNumber
+          collectorNumberString +=
+            labelRecord.primaryCollectorLastName +
+            " " +
+            labelRecord.recordNumber;
+        } else {
+          collectorNumberString += " coll. no. " + labelRecord.recordNumber;
         }
-        else {
-          collectorNumberString += ' coll. no. ' + labelRecord.recordNumber
-        }
-      }
-      else {
-        collectorNumberString = labelRecord.recordNumber
+      } else {
+        collectorNumberString = labelRecord.recordNumber;
       }
     }
 
-    return collectorNumberString
+    return collectorNumberString;
+  };
 
-  }
-
-  const labelRendered = _ => {
-    dispatch('label-rendered')
-  }
-
+  const labelRendered = (_) => {
+    dispatch("label-rendered");
+  };
 </script>
 
-<div class="label" 
-  style="--font: {$labelSettings.font}; 
+<div
+  class="label"
+  style="--font: {$labelSettings.font};
   --font-weight: {$labelSettings.fontWeight};
-  --font-size: { $labelSettings.fontSize + 'pt'}; 
+  --font-size: {$labelSettings.fontSize + 'pt'};
   --line-height: {$labelSettings.lineHeight + '%'};
-  --label-width: { $labelSettings.labelWidth + 'cm' };
-  " 
-  use:labelRendered>
+  --label-width: {$labelSettings.labelWidth + 'cm'};
+  "
+  use:labelRendered
+>
   <!-- storage location indicator at the top -->
   {#if $labelSettings.showStorage}
     {#if labelRecord.storageBox}
-      <div style="padding:4px;">Box: {labelRecord.storageBox} -- cut this off label</div>
+      <div style="padding:4px;">
+        Box: {labelRecord.storageBox} -- cut this off label
+      </div>
     {:else}
       <div style="padding:4px;">No storage recorded -- cut this off label</div>
     {/if}
-  <CutMarks char={'—'}/>
+    <CutMarks char={"—"} />
   {/if}
-  <!-- main label -->
+  <!-- MAIN LABEL -->
   {#if !$labelSettings.detLabelOnly}
-    {#if $labelSettings.showInstitution}
-      <div style="width:100%; text-align:center;margin-bottom:.5em;" class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>
-        {$labelSettings.collectionName || ''}
+    {#if $labelSettings.showCollectionName}
+      <div
+        style="width:100%; text-align:center;margin-bottom:.5em;"
+        class:bolder={!$labelSettings.underline}
+        class:underline={$labelSettings.underline}
+      >
+        {$labelSettings.collectionName || ""}
       </div>
     {/if}
     <div class="label-part">
@@ -84,23 +111,39 @@
         <div class="labelpunch">
           <svg height="10" width="10">
             <circle cx="5" cy="5" r="2" fill="black" />
-          </svg> 
+          </svg>
         </div>
       {/if}
       <div class="labeltext">
         {#if labelRecord.catalogNumber || labelRecord.recordNumber || labelRecord.fieldNumber}
-          <div style="display:flex; flex-direction:row-reverse; justify-content:space-between;margin-right:1em">
+          <div
+            style="display:flex; flex-direction:row-reverse; justify-content:space-between;margin-right:1em"
+          >
             {#if labelRecord.recordNumber || labelRecord.fieldNumber}
-              <div class:bolder={!labelRecord.catalogNumber && !$labelSettings.underline} class:underline={!labelRecord.catalogNumber && $labelSettings.underline}>
+              <div
+                class:bolder={!labelRecord.catalogNumber &&
+                  !$labelSettings.underline}
+                class:underline={!labelRecord.catalogNumber &&
+                  $labelSettings.underline}
+              >
                 {#if $labelSettings.includeFieldNumber && labelRecord.fieldNumber}
-                <span>{labelRecord.fieldNumber}{labelRecord.recordNumber? ' / ' +  labelRecord.recordNumber: ''}</span>
+                  <span
+                    >{labelRecord.fieldNumber}{labelRecord.recordNumber
+                      ? " / " + labelRecord.recordNumber
+                      : ""}</span
+                  >
                 {:else}
-                <span>{collectorNumberString()}</span>
+                  <span>{collectorNumberString()}</span>
                 {/if}
               </div>
             {/if}
             {#if labelRecord.catalogNumber}
-              <div class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>{labelRecord.catalogNumber}</div>
+              <div
+                class:bolder={!$labelSettings.underline}
+                class:underline={$labelSettings.underline}
+              >
+                {labelRecord.catalogNumber}
+              </div>
             {/if}
           </div>
         {/if}
@@ -114,9 +157,9 @@
         </div>
         {#if labelRecord.fullCoordsString}
           <div class="inlineblock">{labelRecord.fullCoordsString}</div>
-        {/if}    
+        {/if}
         <div class="labelrow">
-          {labelRecord.habitat || ''}
+          {labelRecord.habitat || ""}
         </div>
         <div class="labelrow">
           {#if labelRecord.collectionDate}
@@ -128,32 +171,41 @@
             {/each}
           {/if}
           {#if labelRecord.permitNumber}
-            <span class="inlineblock padright-sm">Permit:&nbsp;{labelRecord.permitNumber}</span>
-          {/if}  
+            <span class="inlineblock padright-sm"
+              >Permit:&nbsp;{labelRecord.permitNumber}</span
+            >
+          {/if}
           {#if labelRecord.samplingProtocol && !labelRecord.eventRemarks}
             <span class="inlineblock">{labelRecord.samplingProtocol}</span>
           {/if}
         </div>
         <div class="labelrow">
           {#if labelRecord.samplingProtocol && labelRecord.eventRemarks}
-            <span class="inlineblock">{labelRecord.samplingProtocol} ({firstLetterLowerCase(labelRecord.eventRemarks)})</span>
+            <span class="inlineblock"
+              >{labelRecord.samplingProtocol} ({firstLetterLowerCase(
+                labelRecord.eventRemarks,
+              )})</span
+            >
           {:else}
-            {labelRecord.eventRemarks || ''}
+            {labelRecord.eventRemarks || ""}
           {/if}
         </div>
         {#if labelRecord.specimenCount && $labelSettings.includeStageSexOnMainLabel}
-          {#if labelRecord.specimenStageSex && labelRecord.specimenStageSex.match(/(\d+)/g).reduce((x, y) => x + Number(y), 0) == Number(labelRecord.specimenCount)}
+          {#if labelRecord.specimenStageSex && labelRecord.specimenStageSex
+              .match(/(\d+)/g)
+              .reduce((x, y) => x + Number(y), 0) == Number(labelRecord.specimenCount)}
             <span class="inlineblock">{labelRecord.specimenStageSex}</span>
           {:else}
             <div>
               {#if labelRecord.specimenStageSex}
-                <span class="inlineblock">({labelRecord.specimenStageSex})</span>
+                <span class="inlineblock">({labelRecord.specimenStageSex})</span
+                >
               {/if}
             </div>
           {/if}
         {/if}
         <div>
-          {labelRecord.occurrenceRemarks || ''}
+          {labelRecord.occurrenceRemarks || ""}
         </div>
         {#if labelRecord.typeStatus}
           <div class="clearfix">
@@ -164,46 +216,85 @@
           </div>
         {/if}
         {#if $labelSettings.addPrintedDate}
-          <div class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline} >Printed on {$labelSettings.printerModel ? $labelSettings.printerModel : ''} {getPrintDateString()}</div>
+          <div
+            class:bolder={!$labelSettings.underline}
+            class:underline={$labelSettings.underline}
+          >
+            Printed on {$labelSettings.printerModel
+              ? $labelSettings.printerModel
+              : ""}
+            {getPrintDateString()}
+          </div>
         {/if}
         {#if labelRecord.project && $labelSettings.includeProject}
-          <div class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline} >{labelRecord.project}</div>
+          <div
+            class:bolder={!$labelSettings.underline}
+            class:underline={$labelSettings.underline}
+          >
+            {labelRecord.project}
+          </div>
         {/if}
       </div>
       {#if labelRecord.catalogNumber && $labelSettings.includeQRCode && !($labelSettings.detLabelOnly || $labelSettings.qrCodeOnDetLabels)}
         <div style="margin:.25em;">
-          <img width={$labelSettings.qrCodeDims} height={$labelSettings.qrCodeDims} bind:this={img} alt="QR code"/>
+          <img
+            width={$labelSettings.qrCodeDims}
+            height={$labelSettings.qrCodeDims}
+            bind:this={img}
+            alt="QR code"
+          />
         </div>
       {/if}
     </div>
   {/if}
   <!-- series / sample counts -->
-  {#if labelRecord.seriesSampleCounts && Array.isArray(labelRecord.seriesSampleCounts) && labelRecord.seriesSampleCounts.length > 1} <!--this is customized for label data from Arthrobase-->
-    <CutMarks char={'—'} />
+  {#if labelRecord.seriesSampleCounts && Array.isArray(labelRecord.seriesSampleCounts) && labelRecord.seriesSampleCounts.length > 1}
+    <!--this is customized for label data from Arthrobase-->
+    <CutMarks char={"—"} />
     <div class="label-part">
       <div class="labeltext">
-        <div class="inlineblock" class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>
+        <div
+          class="inlineblock"
+          class:bolder={!$labelSettings.underline}
+          class:underline={$labelSettings.underline}
+        >
           Collecting events:
         </div>
         {#if labelRecord.catalogNumber || labelRecord.recordNumber || labelRecord.fieldNumber}
-          <div style="display:flex; flex-direction:row-reverse; justify-content:space-between;margin-right:1em">
+          <div
+            style="display:flex; flex-direction:row-reverse; justify-content:space-between;margin-right:1em"
+          >
             {#if labelRecord.recordNumber}
-              <div class:bolder={!labelRecord.catalogNumber && !$labelSettings.underline} class:underline={!labelRecord.catalogNumber && $labelSettings.underline}>
+              <div
+                class:bolder={!labelRecord.catalogNumber &&
+                  !$labelSettings.underline}
+                class:underline={!labelRecord.catalogNumber &&
+                  $labelSettings.underline}
+              >
                 {#if $labelSettings.includeFieldNumber && labelRecord.fieldNumber}
-                  <span>{labelRecord.fieldNumber}{labelRecord.recordNumber? ' / ' + labelRecord.recordNumber : ''}</span>
+                  <span
+                    >{labelRecord.fieldNumber}{labelRecord.recordNumber
+                      ? " / " + labelRecord.recordNumber
+                      : ""}</span
+                  >
                 {:else}
                   <span>{collectorNumberString()}</span>
                 {/if}
               </div>
             {/if}
             {#if labelRecord.catalogNumber}
-              <div class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>{labelRecord.catalogNumber}</div>
+              <div
+                class:bolder={!$labelSettings.underline}
+                class:underline={$labelSettings.underline}
+              >
+                {labelRecord.catalogNumber}
+              </div>
             {/if}
           </div>
         {/if}
         {#each labelRecord.seriesSampleCounts as ssc}
           {#if ssc.collectingDate}
-            <br/>
+            <br />
             <div>{ssc.collectingDate}</div>
             {#if ssc.collectors}
               <div>{ssc.collectors}</div>
@@ -217,20 +308,25 @@
             {#if ssc.lifeStageSexCounts}
               <div>{ssc.lifeStageSexCounts}</div>
             {/if}
-            <br/>
+            <br />
           {/if}
         {/each}
       </div>
     </div>
   {/if}
   <!-- determination label -->
-  {#if ($labelSettings.detLabel || $labelSettings.detLabelOnly) && labelDet} <!-- Apologies to readers for these, detLabel flags whether to add the label, labelDet is what goes on the label -->
+  {#if ($labelSettings.detLabel || $labelSettings.detLabelOnly) && labelDet}
+    <!-- Apologies to readers for these, detLabel flags whether to add the label, labelDet is what goes on the label -->
     {#if !$labelSettings.detLabelOnly}
-      <CutMarks char={'—'}/>
+      <CutMarks char={"—"} />
     {/if}
     {#if $labelSettings.detLabelOnly && $labelSettings.showCollectionName}
-      <div style="width:100%; text-align:center;margin-bottom:.5em;" class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>
-        {$labelSettings.collectionName || ''}
+      <div
+        style="width:100%; text-align:center;margin-bottom:.5em;"
+        class:bolder={!$labelSettings.underline}
+        class:underline={$labelSettings.underline}
+      >
+        {$labelSettings.collectionName || ""}
       </div>
     {/if}
     <div class="label-part det-label">
@@ -238,54 +334,73 @@
         <div class="labelpunch">
           <svg height="10" width="10">
             <circle cx="5" cy="5" r="2" fill="black" />
-          </svg> 
+          </svg>
         </div>
       {/if}
       <div class="labeltext">
-        <div style="display:flex; justify-content:space-between;margin-right:1em">
+        <div
+          style="display:flex; justify-content:space-between;margin-right:1em"
+        >
           <!-- type status -->
           {#if labelRecord.typeStatus}
             <div class="uppercase">{labelRecord.typeStatus}</div>
           {:else if labelRecord.catalogNumber || labelRecord.recordNumber}
-            <div /> <!-- a placeholder -->
+            <div />
+            <!-- a placeholder -->
           {/if}
           <!-- catalog and/or collector number -->
           {#if labelRecord.catalogNumber}
-            <div class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>{labelRecord.catalogNumber}</div>
+            <div
+              class:bolder={!$labelSettings.underline}
+              class:underline={$labelSettings.underline}
+            >
+              {labelRecord.catalogNumber}
+            </div>
           {:else if labelRecord.recordNumber || labelRecord.fieldNumber}
-            <div class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>
+            <div
+              class:bolder={!$labelSettings.underline}
+              class:underline={$labelSettings.underline}
+            >
               {#if $labelSettings.includeFieldNumber && labelRecord.fieldNumber}
-              <span>{labelRecord.fieldNumber}{labelRecord.recordNumber ? ' / ' + labelRecord.recordNumber : ''}</span>
+                <span
+                  >{labelRecord.fieldNumber}{labelRecord.recordNumber
+                    ? " / " + labelRecord.recordNumber
+                    : ""}</span
+                >
               {:else}
-              <span>{collectorNumberString()}</span>
+                <span>{collectorNumberString()}</span>
               {/if}
-            </div>            
+            </div>
           {/if}
         </div>
         <!-- family if provided and different to the actual det -->
         {#if labelRecord.family && labelRecord.family != labelDet}
           <div class="clearfloat">
-            <span class="inlineblock" >{labelRecord.family.toUpperCase()}</span>
+            <span class="inlineblock">{labelRecord.family.toUpperCase()}</span>
           </div>
         {/if}
         <!-- taxon name with all the bells and whistles... -->
         <div class="clearfloat">
-          <span class="inlineblock" class:bolder={!$labelSettings.underline} class:underline={$labelSettings.underline}>{@html labelDet}</span>
+          <span
+            class="inlineblock"
+            class:bolder={!$labelSettings.underline}
+            class:underline={$labelSettings.underline}>{@html labelDet}</span
+          >
         </div>
         <!-- det by and date -->
         <div>
           {#if labelRecord.identifiedBy || labelRecord.dateIdentified}
             <span>det: </span>
-            <span >{labelRecord.identifiedBy || ''}</span>
-            <span class="inlineblock">{labelRecord.dateIdentified || ''}</span>
+            <span>{labelRecord.identifiedBy || ""}</span>
+            <span class="inlineblock">{labelRecord.dateIdentified || ""}</span>
           {/if}
         </div>
         <!-- specimen stage and sex -->
         <div>
-          {labelRecord.specimenStageSex || ''}
+          {labelRecord.specimenStageSex || ""}
         </div>
         <div>
-          {labelRecord.identificationRemarks || ''}
+          {labelRecord.identificationRemarks || ""}
         </div>
         {#if labelRecord.typeStatus && labelRecord.typeNumber}
           <div class="clearfix">
@@ -293,33 +408,37 @@
           </div>
         {/if}
       </div>
-      {#if labelRecord.catalogNumber && $labelSettings.includeQRCode && ($labelSettings.detLabelOnly || $labelSettings.qrCodeOnDetLabels) }
+      {#if labelRecord.catalogNumber && $labelSettings.includeQRCode && ($labelSettings.detLabelOnly || $labelSettings.qrCodeOnDetLabels)}
         <div style="margin:.25em;">
-          <img width={$labelSettings.qrCodeDims} height={$labelSettings.qrCodeDims} bind:this={img} alt="QR code"/>
+          <img
+            width={$labelSettings.qrCodeDims}
+            height={$labelSettings.qrCodeDims}
+            bind:this={img}
+            alt="QR code"
+          />
         </div>
       {/if}
     </div>
   {/if}
-  <CutMarks char={'-'}/>
+  <CutMarks char={"-"} />
 </div>
 
 <style>
-
   .label {
     position: relative;
     font-family: var(--font, sans-serif);
     font-size: calc(var(--font-size, 10pt));
     font-weight: var(--font-weight, 400);
     line-height: var(--line-height, 105%);
-    break-inside:avoid;
+    break-inside: avoid;
   }
 
   .label-part {
-    display:flex;
+    display: flex;
     flex-direction: row;
     align-items: center;
-    padding-top:3px;
-    padding-bottom:3px;
+    padding-top: 3px;
+    padding-bottom: 3px;
     min-height: 0cm;
   }
 
@@ -355,20 +474,20 @@
   }
 
   .labelrow {
-    margin:0;
+    margin: 0;
   }
 
   .inlineblock {
     display: inline-block;
-    margin:0;
+    margin: 0;
   }
 
   span.padright {
-    margin-right:1em;
+    margin-right: 1em;
   }
 
   span.padright-sm {
-    margin-right:0.1em;
+    margin-right: 0.1em;
   }
 
   .floatright {
@@ -380,7 +499,6 @@
   }
 
   .clearfloat {
-    clear:both
+    clear: both;
   }
-
 </style>

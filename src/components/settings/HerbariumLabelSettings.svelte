@@ -1,6 +1,6 @@
 <script>
   import {getContext, createEventDispatcher} from 'svelte'
-  import langs from "../../i18n/lang";
+  import { t } from "../../i18n/lang";
   import numberInputSettings from '../../settings/numberInputSettings';
 
   const dispatch = createEventDispatcher()
@@ -16,60 +16,60 @@
     <div style="break-inside: avoid;">
       <label style="display:inline;">
         <input type=checkbox bind:checked={$labelSettings.showCollectionName}>
-        {langs['addCollName'][$appSettings.lang]}
+        {$t('addCollName', 'Add my collection name')}
       </label>
       <br/>
       {#if $labelSettings.showCollectionName}
-        <input type="text" bind:value={$labelSettings.collectionName} style="display:inline;padding:10px;height:10px;" placeholder={langs['collName'][$appSettings.lang]}><br>
-        <input type="text" bind:value={$labelSettings.institutionName} style="display:inline;padding:10px;height:10px;" placeholder={langs['inst'][$appSettings.lang]}><br>
+        <input type="text" bind:value={$labelSettings.collectionName} style="display:inline;padding:10px;height:10px;" placeholder={$t('collName', 'Collection name')}><br>
+        <input type="text" bind:value={$labelSettings.institutionName} style="display:inline;padding:10px;height:10px;" placeholder={$t('inst', 'Institution')}><br>
       {/if}
     </div>
     <label style="display:inline">
       <input type=checkbox bind:checked={$labelSettings.detLabel}>
-      {langs['detsOnly'][$appSettings.lang]}
+      {$t('detsOnly', 'Make det labels only')}
     </label>
     <br/>
     <label style="display:inline">
       <input type=checkbox bind:checked={$labelSettings.includeBarcode}>
-      {langs['barcode'][$appSettings.lang]}
+      {$t('barcode', 'Include barcode')}
     </label>
     <br/>
     <label style="display:inline;break-after:never;">
       <input type=checkbox bind:checked={$labelSettings.includeQRCode}> 
-      {langs['qrCode'][$appSettings.lang]}
+      {$t('qrCode', 'Include QR code')}
     </label>
     <br/>
     <label style="display:inline">
       <input type=checkbox bind:checked={$labelSettings.useRomanNumeralMonths} on:change={_ => dispatch('calc_labels')}>
-      {langs['romanNums'][$appSettings.lang]}
+      {$t('romanNums', 'Use Roman numerals for months')}
     </label>
     <br/>
     <label style="display:inline">
       <input type=checkbox bind:checked={$labelSettings.includeTaxonAuthorities}>
-      {langs['authors'][$appSettings.lang]}
+      {$t('authors', 'Include taxon authorities')}
     </label>
     <br/>
     <label style="display:inline">
       <input type=checkbox bind:checked={$labelSettings.underline}> <!-- TODO we need this for herbarium label separately -->
-      {langs['underline'][$appSettings.lang]}
+      {$t('underline', 'Underline, not bold')}
     </label>
     <br/>
     <label style="display:inline">
       <input type=checkbox bind:checked={$labelSettings.italics}> <!-- TODO we need this for herbarium label separately -->
-      {langs['italics'][$appSettings.lang]}
+      {$t('italics', 'Italics for scientific names')}
     </label>
     <br/>
   </div>
   <div style="display:flex; gap:5px">
     <div>
-      <label for="label-size">{langs['labelSize'][$appSettings.lang]}</label>
+      <label for="label-size">{$t('labelSize', 'Label size')}</label>
       <select id="label-size" bind:value={$labelSettings.labelSize} disabled={$labelSettings.detLabel}>
         <option value="standard">Standard</option>
         <option value="large">Extra height</option>
       </select>
     </div>
     <div>
-      <label for="fonts">{langs['font'][$appSettings.lang]}</label>
+      <label for="fonts">{$t('font', 'Font')}</label>
       <select id="fonts" bind:value={$labelSettings.font}>
         {#each fonts as font}
         <option value={font}>{font}</option>
@@ -77,14 +77,14 @@
       </select>
     </div>
     <div>
-      <label for="font-size">{langs['fontSize'][$appSettings.lang]}</label>
+      <label for="font-size">{$t('fontSize', 'Font size')}</label>
       <select id="font-size" bind:value={$labelSettings.fontSize}>
         <option value="8">8</option>
         <option value="10">10</option>
       </select>
     </div>
   </div>
-  <p style="position:relative; margin:0; top:-1em; font-size:0.7em">{langs['saveSettings'][$appSettings.lang]}</p>
+  <p style="position:relative; margin:0; top:-1em; font-size:0.7em">{$t('saveSettings', 'Settings are saved when you print')}</p>
   <br/>
 </div>
 

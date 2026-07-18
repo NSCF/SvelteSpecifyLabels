@@ -3,13 +3,12 @@
   import darwinCoreFields from "../../lib/dwcFields";
   import LinkIcon from "../misc/LinkIcon.svelte";
   import CloseIcon from "../misc/CloseIcon.svelte";
-  import langs from "../../i18n/lang";
+  import { t } from "../../i18n/lang";
 
   const dispatch = createEventDispatcher()
 
   export let record
   export let labelField
-  export let lang
 
   const fieldMappings = getContext('mappings')
   const appSettings = getContext('appSettings')
@@ -27,7 +26,7 @@
   <a style="position: relative; top: 4px;" href={"https://dwc.tdwg.org/terms/#dwc:" + labelField} target=”_blank”><LinkIcon /></a>
   {/if}
   <select style="display: inline; color: black; margin:0; margin-left:1em;" bind:value={$fieldMappings[$appSettings.labelType][labelField]} on:change={_ => dispatch('mapping-change')}>
-    <option value="">{langs['remove'][lang]}</option>
+    <option value="">{$t('remove', 'remove')}</option>
     {#each Object.keys(record) as datasetField}
     <option value={datasetField}>{datasetField}</option>
     {/each}

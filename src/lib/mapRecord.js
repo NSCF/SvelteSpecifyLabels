@@ -3,7 +3,7 @@ import addRomanNumeralDates from './addRomanNumeralDates.js'
 
 
 //takes a record from the input dataset and returns the object needed by the label
-export default function mapRecord(record, fieldMappings, abbreviateCountries, useRomanNumeralMonths, appendGridRefToCoordsString) {
+export default function mapRecord(record, fieldMappings, abbreviateCountries, useRomanNumeralMonths, appendGridRefToCoordsString, labelType) {
 
   let mappedRecord = {}
   for (const [labelfield, recordField] of Object.entries(fieldMappings)) {
@@ -165,12 +165,17 @@ export default function mapRecord(record, fieldMappings, abbreviateCountries, us
       mappedRecord.locality = mappedRecord.verbatimLocality
     }
 
-    if (mappedRecord.locality) {
-      if (mappedRecord.locality.toLowerCase().includes(mappedRecord.geography.toLowerCase())) {
-        mappedRecord.fullLocality = mappedRecord.locality
+    let localityToUse = mappedRecord.locality;
+    if (labelType === 'insect' && mappedRecord.labelLocality) {
+      localityToUse = mappedRecord.labelLocality;
+    }
+
+    if (localityToUse) {
+      if (localityToUse.toLowerCase().includes(mappedRecord.geography.toLowerCase())) {
+        mappedRecord.fullLocality = localityToUse
       }
       else {
-        mappedRecord.fullLocality = [mappedRecord.geography, mappedRecord.locality].join('; ')
+        mappedRecord.fullLocality = [mappedRecord.geography, localityToUse].join('; ')
       }
     }
     else {
@@ -335,6 +340,12 @@ export default function mapRecord(record, fieldMappings, abbreviateCountries, us
     }
     else if (typeof mappedRecord.dups == 'string') {
       mappedRecord.specimenCount = mappedRecord.dups.split(/[,|;\s]/).filter(x => x).length
+    }
+  }
+
+  if (labelType === 'insect') {
+    if (!mappedRecord.specimenCount || isNaN(mappedRecord.specimenCount) || Number(mappedRecord.specimenCount) < 1) {
+      mappedRecord.specimenCount = 1;
     }
   }
 

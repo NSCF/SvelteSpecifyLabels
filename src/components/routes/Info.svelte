@@ -7,12 +7,17 @@
   const langComponents = {
     en: async _ => await import('../langs/En.svelte'),
     afr: async _ => await import('../langs/Afr.svelte'),
+    zul: async _ => await import('../langs/Zul.svelte'),
+    spa: async _ => await import('../langs/Spa.svelte'),
+    fra: async _ => await import('../langs/Fra.svelte'),
+    por: async _ => await import('../langs/Por.svelte'),
   }
 
   let Lang 
 
   const getLang = async _ => {
-    const result = await langComponents[$appSettings.lang]()
+    const loader = langComponents[$appSettings.lang] || langComponents['en']
+    const result = await loader()
     Lang = result.default
   }
 

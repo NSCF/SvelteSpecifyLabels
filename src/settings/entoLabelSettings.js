@@ -1,14 +1,8 @@
 import numberInputSettings from './numberInputSettings.js'
 
 export default {
-  showCollectionName: false,
-  collectionName: null,
-  labelPerSpecimen: false,
-  useRomanNumeralMonths: false,
   detLabel: true,
   detLabelOnly: false,
-  showStorage: false,
-  includePunch: false,
   includeQRCode: false,
   qrCodeErrorLevel: 'Q',
   qrCodeOnDetLabels: false,
@@ -18,14 +12,17 @@ export default {
   includeCollectorInSort: false,
   underline: false,
   italics: false,
-  addPrintedDate: false,
-  includeProject: false,
+  includeProjectLabel: false,
   includeStageSexOnMainLabel: false,
   font: 'Roboto Condensed',
-  fontSize: numberInputSettings.fontSize.default,
+  fontSize: 4,
   fontWeight: 400,
   lineHeight: numberInputSettings.lineHeight.default,
-  labelWidth: numberInputSettings.labelWidth.default,
+  labelSize: '15x7',
+  labelWidth: 1.5,
+  labelHeight: 0.7,
   qrCodeDims: numberInputSettings.qrCodeDims.default,
-  zoom: 1
+  zoom: 1,
+  labelPerSpecimen: true,
+  useRomanNumeralMonths: true
 }

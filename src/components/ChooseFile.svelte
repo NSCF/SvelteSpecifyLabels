@@ -1,14 +1,13 @@
 <script>
   import chardet from 'chardet';
-  import {getContext, createEventDispatcher } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
   import CloseIcon from './misc/CloseIcon.svelte';
-  import langs from '../i18n/lang';
+  import { t } from '../i18n/lang';
 	import readCSV from '../lib/readCSVInput'
 	import readJSON from '../lib/readJSONInput'
   import readFileAsUint8Array from '../lib/readFileAsUint8Array'
 
   const dispatch = createEventDispatcher();
-  const appSettings = getContext('appSettings')
 
   const fileMIMETypes = ['text/csv', 'application/vnd.ms-excel', 'text/json', 'application/json']
 
@@ -131,8 +130,8 @@
     on:click={_ => hiddenInput.click()}
     ondragover="return false"
   >
-    <h2 class="import-cta">{langs['load'][$appSettings.lang]}</h2>
-    <p class="import-detail">{langs['box'][$appSettings.lang]}</p>
+    <h2 class="import-cta">{$t('load', 'Load some data')}</h2>
+    <p class="import-detail">{$t('box', 'Drag and drop a CSV file with your label data here or click to select from your hard drive')}</p>
   </div>
 </div>
 <input type="file" bind:this={hiddenInput} style="display:none" on:change={handleFileSelected}>

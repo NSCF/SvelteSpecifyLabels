@@ -12,7 +12,7 @@ export const fieldsMappings = {
   admin2Type: ['districttype', 'countytype', 'municipalitytype', 'admin2type'], //specific for Arthrobase extracts
   verbatimLocality: [],
   locality: ['localityname', 'localitystring', 'locnotes', 'localitynotes'],
-  labelLocality: ['short locality'], // for insect labels
+  labelLocality: ['shortLocality', 'abbrevLocality'], // for insect labels
   fullLocality: [],
   fullCoordsString: [],
   verbatimCoordinates: ['Orig Coords', 'verbatimCoords', 'original coords', 'verbatimcoordinates'], //odd mapping here due to field usage in Specify
@@ -59,7 +59,7 @@ export const fieldsMappings = {
   specimenStageSex: ['Stage Sex Count', 'lifeStageSexCounts'],
   sex: ['Sex'],
   lifeStage: ['stage'],
-  specimenCount: ['count', 'counts', 'countamt', 'countamount', 'labelcount', 'labeltotal', 'sheets'],
+  specimenCount: ['count', 'counts', 'countamt', 'countamount', 'labelcount', 'labeltotal', 'sheets', 'individualCount', 'individualcount'],
   seriesSampleCounts: [], //just for Arthrobase
   occurrenceRemarks: ['Remarks', 'Collection Object Remarks', 'Collection Object/Remarks', 'seriesNote', 'notes', 'note', 'specimenNotes', 'specimenNote'],
 

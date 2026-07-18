@@ -6,7 +6,7 @@
   import FieldMappingSelect from "../fieldMappings/FieldMappingSelect.svelte";
   import BackToDesignButton from "../misc/BackToDesignButton.svelte";
   import getFieldMappings from "../../lib/getFieldMappings";
-  import langs from "../../i18n/lang";
+  import { t } from "../../i18n/lang";
   import makeLabelData from '../../lib/makeLabelData'
 
   const rawData = getContext('data')
@@ -88,23 +88,23 @@
 <svelte:document on:scroll={_ => dontShowAgain = true} />
 <div style="max-width:1280px; margin:auto;" bind:this={mainDiv}>
   {#if show}
-    <h2>{langs['mappings'][$appSettings.lang]}</h2>
-    <p style="max-width:1000px;">{langs['mappingHelp'][$appSettings.lang]}</p>
+    <h2>{$t('mappings', 'Field mappings')}</h2>
+    <p style="max-width:1000px;">{$t('mappingHelp', 'Each mapping on this page shows a label field and the mapped field from your dataset. Not all fields are required; simply map your dataset fields to the label fields that make sense and see how they appear')}</p>
     <div style="display: flex; justify-content:space-between">
       <BackToDesignButton />
-      <button on:click={_ => push('/preview')}>{langs['preview'][$appSettings.lang]}</button>
+      <button on:click={_ => push('/preview')}>{$t('preview', 'Preview and print')}</button>
     </div>
     <div style="width:{$labelSettings.labelWidth}cm; margin:auto; height: {labelPreviewHeight}">
       <LabelPreview on:label-rendered={getHideBottomDiv} />
     </div>
     <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:2em;" bind:this={bottomDiv}>
       <FieldMappingSelect record={$rawData[0]} {excludeFromMappings} on:mapping-change={handleMappingChange} />
-      <button class="secondary-button" on:click={resetMappings}>{langs['resetAll'][$appSettings.lang]}</button>
+      <button class="secondary-button" on:click={resetMappings}>{$t('resetAll', 'Reset all')}</button>
     </div>
     <div style="display: flex; width: 100%; flex-wrap: wrap;">
       {#each Object.keys($fieldMappings[$appSettings.labelType]) as labelField}
         {#if $fieldMappings[$appSettings.labelType][labelField] && !excludeFromMappings.includes(labelField)}
-          <FieldMappingIndividual record={$rawData[0]} {labelField} lang={$appSettings.lang} on:mapping-change={handleMappingChange} />
+          <FieldMappingIndividual record={$rawData[0]} {labelField} on:mapping-change={handleMappingChange} />
         {/if}
       {/each}
     </div>

@@ -4,7 +4,7 @@ A web app for generating specimen labels with a range of options, and intended t
 
 This tool is running live at at [labels.nscf.org.za](labels.nscf.org.za), the easiest is to use it there. If you want to run it locally, follow the installation steps below.
 
-This is not a label designing tool like we have in most collection management databases, it is for generating labels using generic (opinionated) templates. 
+This is not a label designing tool like we have in most collection management databases, it is for generating labels using generic (opinionated) templates.
 
 (Note to maintainer/s: this tool is published on the NSCF web hosting platform as a set of static files directly via FTP).
 
@@ -19,28 +19,25 @@ Create a folder on your hard drive (name it whatever you like), then open that f
 
 When it's done, type `cd sveltespecifylabels` in the command window and enter, then `npm install` and enter, then `npm run dev` and enter. The command window will show you a URL that you need to copy and paste into your web browser, and press enter.
 
-You only need to do the clone and install once. Then each time you want to make labels, just open the command window in the SvelteSpecifyLabels folder, and run `npm run dev`. Make sure to check the GitHub repo from time to time for updates. If there are updates since you last used the tool, run `git pull` before running `npm run dev`. If it breaks after a pull, try `npm install` before `npm run dev` as there may be new dependencies included. 
+You only need to do the clone and install once. Then each time you want to make labels, just open the command window in the SvelteSpecifyLabels folder, and run `npm run dev`. Make sure to check the GitHub repo from time to time for updates. If there are updates since you last used the tool, run `git pull` before running `npm run dev`. If it breaks after a pull, try `npm install` before `npm run dev` as there may be new dependencies included.
 
 ## Usage
 When the app is running in your browser go to Info (menu bar at the top) for usage instructions.
 
-***Rest assured that none of your data is saved anywhere or sent over the internet. You (or someone who knows Javascript) are welcome to check the code in this repo to confirm this.***
+***Rest assured that none of your data is saved anywhere or sent over the internet. You (or someone who knows Javascript) are welcome to check the code in this repo to confirm this, or ask your favourite LLM to review the repo.***
 
 ### Field headings/mappings
-The input CSV file must have reasonable field headings in order for the fields to be added to the label. The headings in the file are mapped to Darwin Core fields and some additional specimen/accession specific fields. 
+The input CSV file must have reasonable field headings in order for the fields to be added to the label. The headings in the file are mapped to Darwin Core fields and some additional specimen/accession specific fields.
 
-There is a link on the home page to an example CSV file, which includes comments in the field headings with more information. 
+There is a link on the home page to an example CSV file, which includes comments in the field headings with more information.
 
 Your field headings don't have to match these headings perfectly. You can use the field mappings section to map your dataset fields to the label fields. These mappings will also be saved.
 
-To see all the fields that are used you can go to the src/lib/ folder and fieldMappings.js in a text editor. This shows you the fields that are included on the labels and their alternative names (aliases) that they can have in the input file. 
+To see all the fields that are used you can go to the src/lib/ folder and fieldMappings.js in a text editor. This shows you the fields that are included on the labels and their alternative names (aliases) that they can have in the input file.
 
 ## Languages
-We hope to make this tool available in several different languages to make it more user friendly to a broader audience. If you would like to contribute a translation (the various labels, links and buttons, as well the more lengthy help/info page), please follow the standard process for [forking and cloning a Github repo](https://www.jcchouinard.com/github-forks-and-pull-requests/), and create a pull request with your translation. Short phrases are in src/i18n/lang.js, and the help/info pages are in src/components/langs (copy paste an existing file, rename it, and then translate). Please use the relevant ISO 639-3 language code. You can add the translations using a simple text editor like Notepad (not MS Word), or alternatively [download and install VS Code](https://code.visualstudio.com/download) for a richer, more colourful text editing experience. 
+We hope to make this tool available in several different languages to make it more accessible to a broader audience. AI was used extensively to provide translations other than English, and these might not be perfect. If you would like to improve or contribute a translation (the various labels, links and buttons, as well the more lengthy help/info page), please follow the standard process for [forking and cloning a Github repo](https://www.jcchouinard.com/github-forks-and-pull-requests/), and create a pull request with your translation. Short phrases are in src/i18n/lang.js, and the help/info pages are in src/components/langs (copy paste an existing file, rename it, and then translate). Please use the relevant ISO 639-3 language code. You can add the translations using a simple text editor like Notepad (not MS Word), or alternatively [download and install VS Code](https://code.visualstudio.com/download) for a richer, more engaging text editing experience.
 
 ## Feedback
 
 If you encounter errors or have suggestions, please make use of the Issues feature in Github: [https://github.com/NSCF/SvelteSpecifyLabels/issues](https://github.com/NSCF/SvelteSpecifyLabels/issues)
-
-
-

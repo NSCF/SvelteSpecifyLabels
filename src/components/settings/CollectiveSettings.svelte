@@ -1,7 +1,7 @@
 <script>
 
 import { getContext, createEventDispatcher } from 'svelte'
-import langs from "../../i18n/lang";
+import { t } from "../../i18n/lang";
 
 const dispatch = createEventDispatcher()
 
@@ -22,16 +22,16 @@ if ($appSettings.labelType == 'herbarium') {
 <div style="display:flex; gap:3em;">
   <label style="display:inline">
     <input type=checkbox bind:checked={$labelSettings.labelPerSpecimen}>
-    {langs['count'][$appSettings.lang]}
+    {$t('count', 'Duplicate labels using count')}
   </label>
   <label style="display:inline">
     <input type=checkbox bind:checked={$labelSettings.excludeNoCatnums} on:change={_ => dispatch('calc_labels')}>
-    {langs['excludeCatNums'][$appSettings.lang]}
+    {$t('excludeCatNums', 'Exclude records with no catalog or collector numbers')}
   </label>
   <br/>
   <label style="display:inline">
     <input type=checkbox bind:checked={$labelSettings.includeCollectorInSort} on:change={_ => dispatch('calc_labels')}>
-    {langs['sortOnCollectors'][$appSettings.lang]}
+    {$t('sortOnCollectors', 'Include collector names in sort')}
   </label>
   <br/>
 </div>

@@ -1,38 +1,31 @@
 <script>
   import { getContext } from "svelte";
   import { link } from "svelte-spa-router";
-  import langs from "../../i18n/lang";
-
-  let langOptions = ["en", "afr"];
+  import { t } from "../../i18n/lang";
 
   const appSettings = getContext("appSettings");
-
-  const handLangButtonClick = (_) => {
-    const langIndex = langOptions.indexOf($appSettings.lang);
-    const nextIndex = langIndex + 1;
-    if (langOptions.length > nextIndex) {
-      $appSettings.lang = langOptions[nextIndex];
-    } else {
-      $appSettings.lang = langOptions[0];
-    }
-  };
 </script>
 
 <div
-  style="positin:relative;display:flex; width: 100%; justify-content:space-between; border-bottom: 1px solid rgb(168, 168, 168);"
+  style="position:relative;display:flex; width: 100%; justify-content:space-between; border-bottom: 1px solid rgb(168, 168, 168);"
 >
   <div>
     <a class="logo" style="display: flex;align-items:center" href="/" use:link
       ><img src="/logo_2.png" width="200px" alt="" /></a
     >
   </div>
-  <nav style="display: flex; gap:2em;margin-right:2em;">
-    <a href="/info" use:link>{langs["info"][$appSettings.lang]}</a>
+  <nav style="display: flex; gap:2em;margin-right:2em;align-items:center;">
+    <a href="/info" use:link>{$t("info", "How to make labels")}</a>
     <a href="https://nscf.org.za/learn-more-about-us" target="_blank"
-      >{langs["aboutNSCF"][$appSettings.lang]}</a
+      >{$t("aboutNSCF", "About the NSCF")}</a
     >
-    <a href="/" use:link>{langs["home"][$appSettings.lang]}</a>
-    <!-- <button class="secondary-button" on:click={handLangButtonClick}>{$settings.app.lang}</button> -->
+    <a href="/" use:link>{$t("home", "Home")}</a>
+    <select class="lang-select" bind:value={$appSettings.lang}>
+      <option value="en">English</option>
+      <option value="spa">Español</option>
+      <option value="fra">Français</option>
+      <option value="por">Português</option>
+    </select>
   </nav>
   <img
     style="position:absolute;right:-.5em;top:-.5em;height:1.5em;border:10px solid white;border-radius:50%;transform:rotate(45deg);"
@@ -59,20 +52,31 @@
     text-decoration: none;
   }
 
-  /* DONT DELETE THESE
-
-   .secondary-button {
-    background-color: transparent;
-    border: 1px solid transparent;
-    color:grey;
-  }
-
-  .secondary-button:hover {
-    border: 1px solid gray
-  } */
-
   nav {
     margin: 0;
+  }
+
+  .lang-select {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.9rem;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .lang-select:hover {
+    border-color: #888;
+  }
+
+  .lang-select:focus {
+    border-color: #555;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
   }
 
   .gradient {

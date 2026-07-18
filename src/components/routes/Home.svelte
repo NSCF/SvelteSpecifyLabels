@@ -6,7 +6,7 @@
   import "../../tippy-themes.css";
   import Header from "../misc/Header.svelte";
   import ChooseFile from "../ChooseFile.svelte";
-  import langs from "../../i18n/lang";
+  import { t } from "../../i18n/lang";
 
   let title = "NSCF Labels";
 
@@ -28,7 +28,7 @@
     herbarium:
       "Standard herbarium specimen labels, portrait format, with fixed dimensions. Options available to add herbarium / institution name.",
     insect:
-      "Tiny labels for pinned insects, with fixed dimensions and small font, and the data separated onto individual parts. Include a 'labelLocality' field for abbreviated locality information while maintaining a full locality description in your primary dataset.",
+      "Tiny labels for pinned insects, with fixed dimensions and small font, and the data separated onto individual parts. Include a 'shortLocality' field for abbreviated locality information while maintaining a full locality description in your primary dataset.",
   };
 
   // lets add those descriptions
@@ -58,7 +58,7 @@
           bind:group={$appSettings.labelType}
         />
         <label for="wetlabel" data-tippy-content={labelExplanations.general}
-          >{langs["wet"][$appSettings.lang]}</label
+          >{$t("wet", "General/wet labels")}</label
         ><br />
       </div>
       <div>
@@ -72,7 +72,7 @@
         <label
           for="herbariumlabel"
           data-tippy-content={labelExplanations.herbarium}
-          >{langs["herbarium"][$appSettings.lang]}</label
+          >{$t("herbarium", "Herbarium labels")}</label
         ><br />
       </div>
       <div>
@@ -82,12 +82,9 @@
           name="label-type"
           value="insect"
           bind:group={$appSettings.labelType}
-          disabled
         />
         <label for="insectlabel" data-tippy-content={labelExplanations.insect}
-          >{langs["insect"][$appSettings.lang]} ({langs["coming"][
-            $appSettings.lang
-          ]})</label
+          >{$t("insect", "Ento labels")}</label
         >
       </div>
     </div>
@@ -97,7 +94,7 @@
         href="/design"
         use:link
         on:click|preventDefault={(_) => push("/design")}
-        >{langs["exampleLabels"][$appSettings.lang]}</a
+        >{$t("exampleLabels", "Example labels")}</a
       >
     </div>
   </div>

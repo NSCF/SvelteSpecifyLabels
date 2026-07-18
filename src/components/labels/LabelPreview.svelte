@@ -5,6 +5,7 @@
   const appSettings = getContext('appSettings')
   const generalLabelSettings = getContext('generalLabelSettings')
   const herbariumLabelSettings = getContext('herbariumLabelSettings')
+  const entoLabelSettings = getContext('entoLabelSettings')
   const labelData = getContext('labelData')
 
   let recordIndex = 0
@@ -15,6 +16,9 @@
   }
   else if ($appSettings.labelType == 'herbarium') {
     labelSettings = herbariumLabelSettings
+  }
+  else if ($appSettings.labelType == 'insect') {
+    labelSettings = entoLabelSettings
   }
 
   const nextRecord = _ => {
@@ -31,7 +35,7 @@
 
 </script>
 
-<div style="display:flex; flex-direction:column; height:100%; width:100%; color:black;--zoom:{$appSettings.labelType == 'general' ? $generalLabelSettings.zoom : 1 }">
+<div style="display:flex; flex-direction:column; height:100%; width:100%; color:black;--zoom:{$appSettings.labelType != 'herbarium' ? $labelSettings.zoom : 1}">
   <div style="flex: 1 1 0; min-height: 0; display:flex; flex-direction:column; justify-content:center;">
     <div class="zoom" class:border={$appSettings.labelType != 'herbarium'} style="width:{Number($labelSettings.labelWidth) + 0.1}cm; padding:.1cm;margin:auto;">
       <Label labelRecord={$labelData[recordIndex]} on:label-rendered />

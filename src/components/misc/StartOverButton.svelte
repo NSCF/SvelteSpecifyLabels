@@ -1,13 +1,9 @@
 <script>
-  import { getContext } from 'svelte'
   import { push } from 'svelte-spa-router'
-  import langs from "../../i18n/lang";
-
-  const appSettings = getContext('appSettings')
-
+  import { t } from "../../i18n/lang";
 </script>
 
-<button id="back-button" on:click={_ => push('/')}>{langs['startOver'][$appSettings.lang]}</button>
+<button id="back-button" on:click={_ => push('/')}>{$t('startOver', 'Start over')}</button>
 
 <style>
 

@@ -6,6 +6,7 @@
   const appSettings = getContext('appSettings')
   const generalLabelSettings = getContext('generalLabelSettings')
   const herbariumLabelSettings = getContext('herbariumLabelSettings')
+  const entoLabelSettings = getContext('entoLabelSettings')
   
   let labelSettings
   if ($appSettings.labelType == 'general') {
@@ -13,6 +14,9 @@
   }
   if ($appSettings.labelType == 'herbarium') {
     labelSettings = herbariumLabelSettings
+  }
+  if ($appSettings.labelType == 'insect') {
+    labelSettings = entoLabelSettings
   }
 
 </script>

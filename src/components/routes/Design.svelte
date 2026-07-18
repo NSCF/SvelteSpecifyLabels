@@ -5,12 +5,13 @@
   import LabelPreview from "../labels/LabelPreview.svelte";
   import GeneralLabelSettings from "../settings/GeneralLabelSettings.svelte";
   import HerbariumLabelSettings from "../settings/HerbariumLabelSettings.svelte";
+  import EntoLabelSettings from "../settings/EntoLabelSettings.svelte";
   import StartOverButton from "../misc/StartOverButton.svelte";
   import getFieldMappings from "../../lib/getFieldMappings";
   import reconcileFieldMappings from "../../lib/reconcileFieldMappings";
   import makeLabel from "../../lib/toMakeOrNotToMakeLabel";
   import makeLabelData from "../../lib/makeLabelData";
-  import langs from "../../i18n/lang";
+  import { t } from "../../i18n/lang";
   import exampleData from "../../exampleData";
   import exampleDataPlants from "../../exampleDataPlants";
 
@@ -18,6 +19,7 @@
   const appSettings = getContext("appSettings");
   const generalLabelSettings = getContext("generalLabelSettings");
   const herbariumLabelSettings = getContext("herbariumLabelSettings");
+  const entoLabelSettings = getContext("entoLabelSettings");
   const fieldMappings = getContext("mappings");
   const labelData = getContext("labelData");
 
@@ -27,6 +29,9 @@
   }
   if ($appSettings.labelType == "herbarium") {
     labelSettings = herbariumLabelSettings;
+  }
+  if ($appSettings.labelType == "insect") {
+    labelSettings = entoLabelSettings;
   }
 
   if ($rawData.length == 0) {
@@ -66,6 +71,7 @@
     $labelSettings.excludeNoCatnums,
     $labelSettings.showStorage,
     $labelSettings.includeCollectorInSort,
+    $appSettings.labelType,
   );
 
   // it might be a completely new dataset and the previous mappings dont work, so we attempt to remap the fields
@@ -79,6 +85,7 @@
       $labelSettings.excludeNoCatnums,
       $labelSettings.showStorage,
       $labelSettings.includeCollectorInSort,
+      $appSettings.labelType,
     );
   }
 
@@ -111,6 +118,7 @@
       $labelSettings.excludeNoCatnums,
       $labelSettings.showStorage,
       $labelSettings.includeCollectorInSort,
+      $appSettings.labelType,
     );
   };
 
@@ -123,6 +131,7 @@
       $labelSettings.excludeNoCatnums,
       $labelSettings.showStorage || null,
       $labelSettings.includeCollectorInSort,
+      $appSettings.labelType,
     );
   };
 
@@ -162,6 +171,8 @@
         <GeneralLabelSettings />
       {:else if $appSettings.labelType == "herbarium"}
         <HerbariumLabelSettings />
+      {:else if $appSettings.labelType == "insect"}
+        <EntoLabelSettings />
       {/if}
     </div>
     <div
@@ -177,11 +188,11 @@
     <div>
       <StartOverButton />
       <button on:click={(_) => push("/mappings")}
-        >{langs["mappings"][$appSettings.lang]}</button
+        >{$t("mappings", "Field mappings")}</button
       >
     </div>
     <button on:click={(_) => push("/preview")}
-      >{langs["preview"][$appSettings.lang]}</button
+      >{$t("preview", "Preview and print")}</button
     >
   </div>
   <hr />
