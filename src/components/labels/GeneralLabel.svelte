@@ -3,7 +3,7 @@
   import { getContext, createEventDispatcher } from "svelte";
   import firstLetterLowerCase from "../../lib/firstLetterLowerCase";
   import getLabelDet from "../../lib/getLabelDet";
-  import QRCode from "qrcode";
+  import { datamatrix } from "@bwip-js/browser";
 
   export let labelRecord;
 
@@ -11,7 +11,6 @@
   const labelSettings = getContext("generalLabelSettings");
 
   let labelDet = null;
-  let img;
 
   $: if (
     labelRecord ||
@@ -25,21 +24,27 @@
       $labelSettings.italics,
     );
 
-  $: if (
-    $labelSettings.includeQRCode &&
-    $labelSettings.qrCodeErrorLevel &&
-    img &&
-    labelRecord &&
-    labelRecord.catalogNumber
-  ) {
-    QRCode.toDataURL(
-      labelRecord.catalogNumber,
-      { margin: 0, errorCorrectionLevel: $labelSettings.qrCodeErrorLevel },
-      function (error, url) {
-        if (error) console.error(error);
-        if (url) img.src = url;
+  function renderDataMatrix(node, catalogNumber) {
+    const draw = () => {
+      if (catalogNumber) {
+        let canvas = document.createElement("canvas");
+        try {
+          datamatrix(canvas, {
+            text: catalogNumber,
+            includetext: false,
+          });
+          node.src = canvas.toDataURL("image/png");
+        } catch (e) {
+          console.error("datamatrix error", e);
+        }
+      }
+    };
+    draw();
+    return {
+      update() {
+        draw();
       },
-    );
+    };
   }
 
   const getPrintDateString = (_) => {
@@ -235,8 +240,8 @@
           <img
             width={$labelSettings.qrCodeDims}
             height={$labelSettings.qrCodeDims}
-            bind:this={img}
-            alt="QR code"
+            use:renderDataMatrix={labelRecord.catalogNumber}
+            alt="Data Matrix"
           />
         </div>
       {/if}
@@ -402,8 +407,8 @@
           <img
             width={$labelSettings.qrCodeDims}
             height={$labelSettings.qrCodeDims}
-            bind:this={img}
-            alt="QR code"
+            use:renderDataMatrix={labelRecord.catalogNumber}
+            alt="Data Matrix"
           />
         </div>
       {/if}

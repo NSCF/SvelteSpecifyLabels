@@ -322,12 +322,12 @@ const langs = {
     por: 'cm',
   },
   qrCodeSize: {
-    en: 'QR Code size',
-    afr: 'QR Coda groote',
+    en: 'Code size',
+    afr: 'Coda groote',
     zul: '',
-    spa: 'Tamaño de código QR',
-    fra: 'Taille du code QR',
-    por: 'Tamanho do código QR',
+    spa: 'Tamaño de código',
+    fra: 'Taille du code',
+    por: 'Tamanho do código',
   },
   robustness: {
     en: 'Robustness',

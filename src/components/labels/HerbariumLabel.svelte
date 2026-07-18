@@ -1,8 +1,7 @@
 <script>
   import { getContext, createEventDispatcher } from "svelte";
   import getLabelDet from "../../lib/getLabelDet";
-  import QRCode from "qrcode";
-  import JsBarcode from "jsbarcode";
+  import { datamatrix, code128 } from "@bwip-js/browser";
 
   const dispatch = createEventDispatcher();
 
@@ -11,8 +10,6 @@
   const labelSettings = getContext("herbariumLabelSettings");
 
   let labelDet = null;
-  let qrImg;
-  let barcodeImg;
 
   $: if (
     labelRecord ||
@@ -26,36 +23,51 @@
       $labelSettings.italics,
     );
 
-  $: if (
-    $labelSettings.includeQRCode &&
-    $labelSettings.qrCodeErrorLevel &&
-    qrImg &&
-    labelRecord &&
-    labelRecord.catalogNumber
-  ) {
-    QRCode.toDataURL(
-      labelRecord.catalogNumber,
-      { margin: 0, errorCorrectionLevel: $labelSettings.qrCodeErrorLevel },
-      function (error, url) {
-        if (error) console.error(error);
-        if (url) qrImg.src = url;
+  function renderQRCode(node, catalogNumber) {
+    const draw = () => {
+      if (catalogNumber) {
+        let canvas = document.createElement("canvas");
+        try {
+          datamatrix(canvas, {
+            text: catalogNumber,
+            includetext: false,
+          });
+          node.src = canvas.toDataURL("image/png");
+        } catch (e) {
+          console.error("datamatrix error", e);
+        }
+      }
+    };
+    draw();
+    return {
+      update() {
+        draw();
       },
-    );
+    };
   }
 
-  $: if (
-    $labelSettings.includeBarcode &&
-    !$labelSettings.includeQRCode &&
-    barcodeImg &&
-    labelRecord &&
-    labelRecord.catalogNumber
-  ) {
-    JsBarcode(barcodeImg, labelRecord.catalogNumber, {
-      width: 1.2,
-      height: 30,
-      margin: 0,
-      displayValue: false,
-    });
+  function renderBarcode(node, catalogNumber) {
+    const draw = () => {
+      if (catalogNumber) {
+        let canvas = document.createElement("canvas");
+        try {
+          code128(canvas, {
+            text: catalogNumber,
+            includetext: false,
+            height: 30,
+          });
+          node.src = canvas.toDataURL("image/png");
+        } catch (e) {
+          console.error("code128 error", e);
+        }
+      }
+    };
+    draw();
+    return {
+      update() {
+        draw();
+      },
+    };
   }
 
   const labelRendered = (_) => {
@@ -191,14 +203,24 @@
               ? 'mt-[5px]'
               : 'mt-0'}"
           >
-            <div>{labelRecord.catalogNumber || ""}</div>
+            <div
+              class="uppercase one-line-condensed {$labelSettings.underline
+                ? 'underline'
+                : 'font-bold'}"
+            >
+              {labelRecord.catalogNumber || ""}
+            </div>
             {#if $labelSettings.includeQRCode}
-              <img class="h-full mr-[20px]" alt="QR code" bind:this={qrImg} />
+              <img
+                class="h-3/4 mr-[20px]"
+                alt="Data Matrix"
+                use:renderQRCode={labelRecord.catalogNumber}
+              />
             {:else if $labelSettings.includeBarcode}
-              <svg
+              <img
                 alt="barcode"
-                class="[image-rendering:crisp-edges]"
-                bind:this={barcodeImg}
+                class="[image-rendering:crisp-edges] w-1/2 h-2/3"
+                use:renderBarcode={labelRecord.catalogNumber}
               />
             {/if}
           </div>

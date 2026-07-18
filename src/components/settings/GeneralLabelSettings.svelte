@@ -31,7 +31,9 @@
 </script>
 
 <div class="w-full flex flex-col">
-  <div class="w-full mt-[2em] [column-count:2] [column-width:50%] gap-[1em] mb-[1em]">
+  <div
+    class="w-full mt-[2em] [column-count:2] [column-width:50%] gap-[1em] mb-[1em]"
+  >
     <CheckboxSetting
       bind:value={$labelSettings.showCollectionName}
       labelText={$t("addCollName", "Add my collection name")}
@@ -115,7 +117,9 @@
   </div>
   <div class="flex gap-[5px]">
     <div>
-      <label for="fonts" class="inline whitespace-nowrap">{$t("font", "Font")}</label>
+      <label for="fonts" class="inline whitespace-nowrap"
+        >{$t("font", "Font")}</label
+      >
       <select id="fonts" bind:value={$labelSettings.font}>
         {#each fonts as font}
           <option value={font}>{font}</option>
@@ -169,21 +173,12 @@
       <div>
         <NumberInput
           id="qrcode-size"
-          labelString={$t("qrCodeSize", "QR Code size")}
+          labelString={$t("CodeSize", "Code size")}
           min={numberInputSettings.qrCodeDims.min}
           max={numberInputSettings.qrCodeDims.max}
           step={numberInputSettings.qrCodeDims.step || 1}
           bind:value={$labelSettings.qrCodeDims}
         />
-      </div>
-      <div>
-        <label for="robustness" class="inline whitespace-nowrap">{$t("robustness", "Robustness")}</label>
-        <select id="robustness" bind:value={$labelSettings.qrCodeErrorLevel}>
-          <option value="L">Low</option>
-          <option value="M">Medium</option>
-          <option value="Q">Quartile</option>
-          <option value="H">High</option>
-        </select>
       </div>
     {/if}
   </div>

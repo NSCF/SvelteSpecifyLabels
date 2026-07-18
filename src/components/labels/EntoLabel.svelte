@@ -3,7 +3,6 @@
   import { getContext, createEventDispatcher } from "svelte";
   import firstLetterLowerCase from "../../lib/firstLetterLowerCase";
   import getLabelDet from "../../lib/getLabelDet";
-  import QRCode from "qrcode";
   import { datamatrix, code128 } from "@bwip-js/browser";
 
   export let labelRecord;
