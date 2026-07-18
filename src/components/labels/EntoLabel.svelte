@@ -140,22 +140,21 @@
     const heightPoints = labelHeight * 28.346;
     const lineSpacing = fontSize * (lineHeight / 100);
 
-    let usableWidthPoints = widthPoints - 3;
-    if (
+    const widthFirst =
       isLocality &&
       $labelSettings.labelSize === "22x15" &&
       $labelSettings.barcodeOnMain
-    ) {
-      usableWidthPoints -= 0.4 * 28.346;
-    }
-    const usableHeightPoints = heightPoints - 2;
+        ? widthPoints - 3 - 0.4 * 28.346
+        : widthPoints - 3;
+    const widthRest = widthPoints - 3;
 
     const charWidthFactor = $labelSettings.font === "Courier" ? 0.6 : 0.4;
     const charWidthPoints = fontSize * charWidthFactor;
-    const charactersPerLine = Math.max(
-      10,
-      Math.floor(usableWidthPoints / charWidthPoints),
-    );
+
+    const charsFirst = Math.max(10, Math.floor(widthFirst / charWidthPoints));
+    const charsRest = Math.max(10, Math.floor(widthRest / charWidthPoints));
+
+    const usableHeightPoints = heightPoints - 2;
 
     // Calculate max lines per label
     const baseMaxLines = Math.max(
@@ -172,13 +171,17 @@
       const partStr = part.toString().trim();
       if (!partStr) continue;
 
-      const partLines = estimateLinesForText(partStr, charactersPerLine);
+      const isFirst = chunks.length === 0;
+      const chars = isFirst ? charsFirst : charsRest;
+
+      const partLines = estimateLinesForText(partStr, chars);
       const limit = baseMaxLines;
 
       if (currentChunk.length > 0 && currentChunkLines + partLines > limit) {
         chunks.push(currentChunk);
         currentChunk = [partStr];
-        currentChunkLines = partLines;
+        const nextChars = charsRest;
+        currentChunkLines = estimateLinesForText(partStr, nextChars);
       } else {
         currentChunk.push(partStr);
         currentChunkLines += partLines;
@@ -297,61 +300,61 @@
 >
   <!-- 1. Locality & Collection Event label -->
   {#if !$labelSettings.detLabelOnly}
-    {#each chunkParts(getLocalityParts(labelRecord), true) as chunk}
+    {#each chunkParts(getLocalityParts(labelRecord), true) as chunk, index}
       {#if $labelSettings.labelSize === "22x15" && $labelSettings.barcodeOnMain && labelRecord.catalogNumber}
         <div
           class="box-border p-[1px_2px] overflow-hidden flex flex-row items-stretch text-left bg-white break-inside-avoid mb-[2px] print:!border-[#aaa]"
           style="width: var(--label-width, 2.2cm); height: var(--label-height, 1.5cm); border: 0.1mm dashed #bbb;"
         >
           <!-- Left Column: Barcode/QR block -->
-          <div
-            class="flex flex-col justify-center items-center select-none"
-            style="width: 0.4cm; flex-shrink: 0;"
-          >
-            {#if $labelSettings.includeQRCode}
-              <div
-                class="flex flex-row-reverse items-center justify-center gap-[4px] rotate-[-90deg]"
-              >
-                <img
-                  alt="QR code"
-                  class="object-contain"
-                  style="width: 0.32cm; height: 0.32cm; min-width: 0.32cm;"
-                  use:renderQRCode={labelRecord.catalogNumber}
-                />
+          {#if index === 0}
+            <div
+              class="flex flex-col justify-center items-center select-none"
+              style="width: 0.4cm; flex-shrink: 0;"
+            >
+              {#if $labelSettings.includeQRCode}
                 <div
-                  class="font-mono leading-none text-center whitespace-nowrap mt-[1px]"
-                >
-                  {labelRecord.catalogNumber}
-                </div>
-              </div>
-            {:else if $labelSettings.includeBarcode}
-              <div
-                class="flex items-center justify-center w-full h-full border"
-              >
-                <div
-                  class="flex flex-col gap-[1px] items-center justify-center select-none border"
-                  style="transform: rotate(-90deg); transform-origin: center; width: 1.3cm; height: 0.35cm; flex-shrink: 0;"
+                  class="flex flex-row-reverse items-center justify-center gap-[4px] rotate-[-90deg]"
                 >
                   <img
-                    alt="barcode"
-                    style="width: 1.3cm; height: 0.18cm;"
-                    use:renderBarcodeMain={labelRecord.catalogNumber}
+                    alt="QR code"
+                    class="object-contain"
+                    style="width: 0.32cm; height: 0.32cm; min-width: 0.32cm;"
+                    use:renderQRCode={labelRecord.catalogNumber}
                   />
                   <div
-                    class="font-mono text-[3.2pt] leading-none text-center mt-0"
+                    class="font-mono leading-none text-center whitespace-nowrap mt-[1px]"
                   >
                     {labelRecord.catalogNumber}
                   </div>
                 </div>
-              </div>
-            {:else}
-              <div
-                class="font-mono text-[4pt] leading-none text-center rotate-[-90deg] whitespace-nowrap"
-              >
-                {labelRecord.catalogNumber}
-              </div>
-            {/if}
-          </div>
+              {:else if $labelSettings.includeBarcode}
+                <div
+                  class="flex items-center justify-center w-full h-full border"
+                >
+                  <div
+                    class="flex flex-col items-center justify-center select-none border"
+                    style="transform: rotate(-90deg); transform-origin: center; width: 1.3cm; height: 0.35cm; flex-shrink: 0;"
+                  >
+                    <img
+                      alt="barcode"
+                      style="width: 1.3cm; height: 0.18cm;"
+                      use:renderBarcodeMain={labelRecord.catalogNumber}
+                    />
+                    <div class="font-mono leading-none text-center mt-0">
+                      {labelRecord.catalogNumber}
+                    </div>
+                  </div>
+                </div>
+              {:else}
+                <div
+                  class="font-mono text-[4pt] leading-none text-center rotate-[-90deg] whitespace-nowrap"
+                >
+                  {labelRecord.catalogNumber}
+                </div>
+              {/if}
+            </div>
+          {/if}
           <!-- Right Column: Locality text -->
           <div
             class="flex-1 flex flex-col justify-center items-start overflow-hidden"
