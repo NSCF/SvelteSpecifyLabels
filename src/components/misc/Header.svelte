@@ -4,23 +4,34 @@
   import { t } from "../../i18n/lang";
 
   const appSettings = getContext("appSettings");
+
+  $: logoSrc = $appSettings.lang === 'fra'
+    ? '/logo_2_fr.png'
+    : ($appSettings.lang === 'spa' || $appSettings.lang === 'por')
+      ? '/logo_2_spa_por.png'
+      : '/logo_2.png';
 </script>
 
 <div
-  style="position:relative;display:flex; width: 100%; justify-content:space-between; border-bottom: 1px solid rgb(168, 168, 168);"
+  class="relative flex w-full justify-between border-b border-b-[rgb(168,168,168)]"
 >
   <div>
-    <a class="logo" style="display: flex;align-items:center" href="/" use:link
-      ><img src="/logo_2.png" width="200px" alt="" /></a
+    <a
+      class="logo font-normal hover:filter-none hover:no-underline flex items-center"
+      href="/"
+      use:link><img src={logoSrc} class="w-[200px]" alt="" /></a
     >
   </div>
-  <nav style="display: flex; gap:2em;margin-right:2em;align-items:center;">
+  <nav class="flex gap-[2em] mr-[2em] items-center m-0">
     <a href="/info" use:link>{$t("info", "How to make labels")}</a>
     <a href="https://nscf.org.za/learn-more-about-us" target="_blank"
       >{$t("aboutNSCF", "About the NSCF")}</a
     >
     <a href="/" use:link>{$t("home", "Home")}</a>
-    <select class="lang-select" bind:value={$appSettings.lang}>
+    <select
+      class="mt-2 bg-white border border-[#ccc] rounded-[4px] py-[0.25rem] px-[0.5rem] text-[0.9rem] text-[#333] cursor-pointer outline-none transition-[border-color,box-shadow] duration-200 hover:border-[#888] focus:border-[#555] focus:shadow-[0_0_0_2px_rgba(0,0,0,0.05)]"
+      bind:value={$appSettings.lang}
+    >
       <option value="en">English</option>
       <option value="spa">Español</option>
       <option value="fra">Français</option>
@@ -28,66 +39,15 @@
     </select>
   </nav>
   <img
-    style="position:absolute;right:-.5em;top:-.5em;height:1.5em;border:10px solid white;border-radius:50%;transform:rotate(45deg);"
+    class="absolute right-[-1.5em] top-[.5em] h-[1.5em] border-solid border-white rounded-[50%] rotate-[45deg]"
     src="github-cat.svg"
     alt="github"
   />
   <a
     title="view on github"
-    class="gradient"
-    style="position:absolute;right:-7em;width:250px;height:2em;transform:rotate(45deg);"
+    class="absolute right-[-9em] w-[250px] h-[2em] rotate-[45deg] bg-[linear-gradient(transparent,transparent,transparent,transparent,transparent,lightgray,dimgray,gray)] text-[0.8rem]"
     href="https://github.com/NSCF/SvelteSpecifyLabels"
     target="_blank"
   >
   </a>
 </div>
-
-<style>
-  .logo {
-    font-weight: normal;
-  }
-
-  .logo:hover {
-    filter: none;
-    text-decoration: none;
-  }
-
-  nav {
-    margin: 0;
-  }
-
-  .lang-select {
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.9rem;
-    color: #333;
-    cursor: pointer;
-    outline: none;
-    transition:
-      border-color 0.2s,
-      box-shadow 0.2s;
-  }
-
-  .lang-select:hover {
-    border-color: #888;
-  }
-
-  .lang-select:focus {
-    border-color: #555;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
-  }
-
-  .gradient {
-    background-image: linear-gradient(
-      transparent,
-      transparent,
-      transparent,
-      transparent,
-      transparent,
-      lightgray,
-      black
-    );
-  }
-</style>

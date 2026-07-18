@@ -44,10 +44,10 @@
   <title>{title}</title>
 </svelte:head>
 <Header />
-<div style="max-width:1200px; margin:auto">
-  <div style="margin:auto;margin-top:50px;">
+<div class="max-w-[1200px] mx-auto">
+  <div class="mx-auto mt-[50px]">
     <div
-      style="display:flex;width:700px;justify-content:space-around;margin:auto;margin-top:20px; "
+      class="flex w-[700px] justify-around mx-auto mt-[20px]"
     >
       <div>
         <input
@@ -89,7 +89,7 @@
       </div>
     </div>
     <ChooseFile on:data={handleFileDataAndTitle} />
-    <div style="width:100%; display: flex; justify-content:flex-end; gap:2em;">
+    <div class="w-full flex justify-end gap-[2em]">
       <a
         href="/design"
         use:link

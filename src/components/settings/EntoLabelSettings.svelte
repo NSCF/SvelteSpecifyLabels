@@ -40,8 +40,8 @@
   };
 </script>
 
-<div style="width: 100%;display:flex; flex-direction:column;">
-  <div class="cols">
+<div class="w-full flex flex-col">
+  <div class="w-full mt-[2em] [column-count:2] [column-width:50%] gap-[1em] mb-[1em]">
     <CheckboxSetting
       bind:value={$labelSettings.showCollectionName}
       labelText={$t("addCollName", "Add my collection name")}
@@ -50,7 +50,7 @@
       <input
         type="text"
         bind:value={$labelSettings.collectionName}
-        style="display:inline;padding:10px;height:10px"
+        class="inline p-[10px] h-[10px]"
         placeholder={$t("collName", "Collection name")}
       /><br />
       <br />
@@ -92,9 +92,9 @@
       labelText={$t("italics", "Italics for scientific names")}
     />
   </div>
-  <div style="display:flex; gap:5px; flex-wrap: wrap; align-items: flex-end;">
+  <div class="flex gap-[5px] flex-wrap items-end">
     <div>
-      <label for="ento-label-size">Label Size</label>
+      <label for="ento-label-size" class="inline whitespace-nowrap">Label Size</label>
       <select id="ento-label-size" bind:value={$labelSettings.labelSize} on:change={handleSizeChange}>
         {#each sizeOptions as opt}
           <option value={opt.value}>{opt.label}</option>
@@ -102,7 +102,7 @@
       </select>
     </div>
     <div>
-      <label for="fonts">{$t("font", "Font")}</label>
+      <label for="fonts" class="inline whitespace-nowrap">{$t("font", "Font")}</label>
       <select id="fonts" bind:value={$labelSettings.font}>
         {#each fonts as font}
           <option value={font}>{font}</option>
@@ -111,7 +111,7 @@
     </div>
     {#if $labelSettings.font in fontWeights}
       <div>
-        <label for="font-weight" style="text-wrap:nowrap"
+        <label for="font-weight" class="inline whitespace-nowrap"
           >{$t("fontWeight", "Font weight")}</label
         >
         <select id="font-weight" bind:value={$labelSettings.fontWeight}>
@@ -142,24 +142,8 @@
       />
     </div>
   </div>
-  <p style="position:relative; margin:0; margin-top:10px; font-size:0.7em">
+  <p class="relative m-0 mt-[10px] text-[0.7em]">
     {$t("saveSettings", "Settings are saved when you print")}
   </p>
   <br />
 </div>
-
-<style>
-  label {
-    display: inline;
-    text-wrap: nowrap;
-  }
-
-  .cols {
-    width: 100%;
-    margin-top: 2em;
-    column-count: 2;
-    column-width: 50%;
-    column-gap: 1em;
-    margin-bottom: 1em;
-  }
-</style>

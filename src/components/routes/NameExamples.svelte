@@ -1,4 +1,5 @@
 <script>
+  import { t } from "../../i18n/lang";
   import getLabelDet from "../../lib/getLabelDet.js";
 
   let withItalics = false;
@@ -7,7 +8,8 @@
   const tests = [
     //scientificName
     {
-      rule: "scientificName takes precedence over rank fields",
+      ruleKey: "rule1",
+      defaultRule: "scientificName takes precedence over rank fields",
       infras: true,
       data: {
         scientificName: "Quercus robur L.",
@@ -17,7 +19,8 @@
       },
     },
     {
-      rule: "dwc:scientificName should not have qualifiers, but we can italicize around it anyway...",
+      ruleKey: "rule2",
+      defaultRule: "dwc:scientificName should not have qualifiers, but we can italicize around it anyway...",
       infras: true,
       data: {
         scientificName: "Quercus aff. robur L.",
@@ -26,7 +29,8 @@
       },
     },
     {
-      rule: "Authorship will be added to scientificName, even though it should be there already...",
+      ruleKey: "rule3",
+      defaultRule: "Authorship will be added to scientificName, even though it should be there already...",
       infras: true,
       data: {
         scientificName: "Quercus robur",
@@ -35,7 +39,8 @@
       },
     },
     {
-      rule: "But it's not added to verbatimIdentification, because we give you full control over what is printed there",
+      ruleKey: "rule4",
+      defaultRule: "But it's not added to verbatimIdentification, because we give you full control over what is printed there",
       infras: true,
       data: {
         verbatimIdentification: "Quercus robur",
@@ -43,7 +48,8 @@
       },
     },
     {
-      rule: "Verbatim identification will be italicized though",
+      ruleKey: "rule5",
+      defaultRule: "Verbatim identification will be italicized though",
       infras: true,
       data: {
         verbatimIdentification: "Quercus aff. robur",
@@ -51,17 +57,20 @@
       },
     },
     {
-      rule: "We can't italicize genera in scientificName because there's no way of knowing it's a genus and not a higher rank",
+      ruleKey: "rule6",
+      defaultRule: "We can't italicize genera in scientificName because there's no way of knowing it's a genus and not a higher rank",
       infras: true,
       data: { scientificName: "Quercus sp." },
     },
     {
-      rule: "...unless you provide a taxonRank",
+      ruleKey: "rule7",
+      defaultRule: "...unless you provide a taxonRank",
       infras: true,
       data: { scientificName: "Quercus sp.", taxonRank: "genus" },
     },
     {
-      rule: "You don't have to identify to species or genus level, any rank will do",
+      ruleKey: "rule8",
+      defaultRule: "You don't have to identify to species or genus level, any rank will do",
       infras: true,
       data: {
         scientificName: "Fagaceae",
@@ -69,7 +78,8 @@
       },
     },
     {
-      rule: "The simplest is to use 'atomic' fields",
+      ruleKey: "rule9",
+      defaultRule: "The simplest is to use 'atomic' fields",
       infras: true,
       data: {
         family: "Fagaceae",
@@ -79,7 +89,8 @@
       },
     },
     {
-      rule: "...with a qualifier field if you have qualifiers",
+      ruleKey: "rule10",
+      defaultRule: "...with a qualifier field if you have qualifiers",
       infras: true,
       data: {
         family: "Fagaceae",
@@ -90,12 +101,14 @@
       },
     },
     {
-      rule: "...and then we can add the 'sp.' for genera automatically",
+      ruleKey: "rule11",
+      defaultRule: "...and then we can add the 'sp.' for genera automatically",
       infras: true,
       data: { family: "Fagaceae", genus: "Quercus" },
     },
     {
-      rule: "Remember that qualifiers and question marks are different things, but you can have both",
+      ruleKey: "rule12",
+      defaultRule: "Remember that qualifiers and question marks are different things, but you can have both",
       infras: true,
       data: {
         family: "Fagaceae",
@@ -107,7 +120,8 @@
       },
     },
     {
-      rule: "For animals we don't include infraspecific ranks",
+      ruleKey: "rule13",
+      defaultRule: "For animals we don't include infraspecific ranks",
       infras: false,
       data: {
         family: "Canidae",
@@ -118,7 +132,8 @@
       },
     },
     {
-      rule: "But for plants we do, with authorship inserted in the correct place...",
+      ruleKey: "rule14",
+      defaultRule: "But for plants we do, with authorship inserted in the correct place...",
       infras: true,
       data: {
         family: "Fagaceae",
@@ -130,7 +145,8 @@
       },
     },
     {
-      rule: "or...",
+      ruleKey: "rule15",
+      defaultRule: "or...",
       infras: true,
       data: {
         family: "Fagaceae",
@@ -142,7 +158,8 @@
       },
     },
     {
-      rule: "And the qualifier is in front so it's not lost amongst the infraspecific ranks and epithets...",
+      ruleKey: "rule16",
+      defaultRule: "And the qualifier is in front so it's not lost amongst the infraspecific ranks and epithets...",
       infras: true,
       data: {
         family: "Fagaceae",
@@ -160,32 +177,25 @@
 
   $: withItalics,
     (labelDets = tests.map((x) =>
-      getLabelDet(x.data, withAuthorship, x.infras, withItalics)
+      getLabelDet(x.data, withAuthorship, x.infras, withItalics),
     ));
 
   $: withAuthorship,
     (labelDets = tests.map((x) =>
-      getLabelDet(x.data, withAuthorship, x.infras, withItalics)
+      getLabelDet(x.data, withAuthorship, x.infras, withItalics),
     ));
 </script>
 
-<div
-  style="height: 100vh; overflow:hidden; min-height:0; display:flex; flex-direction: column;"
->
+<div class="h-screen overflow-hidden min-h-0 flex flex-col">
   <div>
-    <div
-      style="display:flex; align-items: center; justify-content: space-between;"
-    >
-      <h3 class="">Name Rules</h3>
-      <button class="btn" onclick="history.back()">Back</button>
+    <div class="flex items-center justify-between">
+      <h3 class="">{$t("nameRules", "Name Rules")}</h3>
+      <button class="btn-secondary" onclick="history.back()"
+        >{$t("back", "Back")}</button
+      >
     </div>
-    <p style="font-size:0.8em">
-      The rules that the label tool uses for forming and italicizing names are
-      quite complex. Here are some examples to try and highlight how they work.
-      The simplest is to either have 'atomic' fields in your dataset (family,
-      genus, specificEpithet, qualifier, author, etc) or a full scientificName,
-      taxonRank (if you have anything identified to the genus or subgenus level
-      and want those italicized), qualifer, and author fields.
+    <p class="text-[0.8em]">
+      {$t("nameRulesHelp", "The rules that the label tool uses for forming and italicizing names are quite complex. Here are some examples to try and highlight how they work. The simplest is to either have 'atomic' fields in your dataset (family, genus, specificEpithet, qualifier, author, etc) or a full scientificName, taxonRank (if you have anything identified to the genus or subgenus level and want those italicized), qualifer, and author fields.")}
     </p>
     <input
       type="checkbox"
@@ -193,7 +203,7 @@
       id="withItalics"
       bind:checked={withItalics}
     />
-    <label for="withItalics">With Italics</label>
+    <label for="withItalics">{$t("withItalics", "With Italics")}</label>
 
     <input
       type="checkbox"
@@ -201,22 +211,19 @@
       id="withAuthorship"
       bind:checked={withAuthorship}
     />
-    <label for="withAuthorship">With Authorship</label>
+    <label for="withAuthorship">{$t("withAuthorship", "With Authorship")}</label>
   </div>
-  <div
-    style="overflow: auto; flex-grow: 1; padding-right: 16px; display: flex; flex-direction: column; gap: 16px;"
-  >
+  <div class="overflow-auto flex-grow pr-[16px] flex flex-col gap-[16px]">
     {#each labelDets as labelDet, index}
-      <div>
-        <p style="margin:0;font-size:0.8em;font-weight:bold">
-          {tests[index].rule}
+      <div class="text-gray-500">
+        <p class="m-0 text-[0.8em] font-bold">
+          {$t(tests[index].ruleKey, tests[index].defaultRule)}
         </p>
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <pre
-            style="margin:0;padding:0;width: 50%;display: inline-block;">{JSON.stringify(
+        <div class="flex items-center gap-[8px]">
+          <pre class="m-0 p-0 w-[50%] inline-block">{JSON.stringify(
               tests[index].data,
               null,
-              2
+              2,
             )}</pre>
           <span class="font-bold">{@html labelDet}</span>
         </div>

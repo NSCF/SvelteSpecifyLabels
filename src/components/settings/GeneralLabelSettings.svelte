@@ -30,8 +30,8 @@
   $: if (!($labelSettings.font in fontWeights)) $labelSettings.fontWeight = 400;
 </script>
 
-<div style="width: 100%;display:flex; flex-direction:column;">
-  <div class="cols">
+<div class="w-full flex flex-col">
+  <div class="w-full mt-[2em] [column-count:2] [column-width:50%] gap-[1em] mb-[1em]">
     <CheckboxSetting
       bind:value={$labelSettings.showCollectionName}
       labelText={$t("addCollName", "Add my collection name")}
@@ -40,7 +40,7 @@
       <input
         type="text"
         bind:value={$labelSettings.collectionName}
-        style="display:inline;padding:10px;height:10px"
+        class="inline p-[10px] h-[10px]"
         placeholder={$t("collName", "Collection name")}
       /><br />
       <br />
@@ -107,15 +107,15 @@
       <input
         type="text"
         bind:value={$labelSettings.printerModel}
-        style="display:inline; margin:0;height:10px"
+        class="inline m-0 h-[10px]"
         placeholder={$t("printer", "Printer make and model")}
       /><br />
       <br />
     {/if}
   </div>
-  <div style="display:flex; gap:5px">
+  <div class="flex gap-[5px]">
     <div>
-      <label for="fonts">{$t("font", "Font")}</label>
+      <label for="fonts" class="inline whitespace-nowrap">{$t("font", "Font")}</label>
       <select id="fonts" bind:value={$labelSettings.font}>
         {#each fonts as font}
           <option value={font}>{font}</option>
@@ -124,7 +124,7 @@
     </div>
     {#if $labelSettings.font in fontWeights}
       <div>
-        <label for="font-weight" style="text-wrap:nowrap"
+        <label for="font-weight" class="inline whitespace-nowrap"
           >{$t("fontWeight", "Font weight")}</label
         >
         <select id="font-weight" bind:value={$labelSettings.fontWeight}>
@@ -177,7 +177,7 @@
         />
       </div>
       <div>
-        <label for="robustness">{$t("robustness", "Robustness")}</label>
+        <label for="robustness" class="inline whitespace-nowrap">{$t("robustness", "Robustness")}</label>
         <select id="robustness" bind:value={$labelSettings.qrCodeErrorLevel}>
           <option value="L">Low</option>
           <option value="M">Medium</option>
@@ -187,24 +187,8 @@
       </div>
     {/if}
   </div>
-  <p style="position:relative; margin:0; top:-1em; font-size:0.7em">
+  <p class="relative m-0 top-[-1em] text-[0.7em]">
     {$t("saveSettings", "Settings are saved when you print")}
   </p>
   <br />
 </div>
-
-<style>
-  label {
-    display: inline;
-    text-wrap: nowrap;
-  }
-
-  .cols {
-    width: 100%;
-    margin-top: 2em;
-    column-count: 2;
-    column-width: 50%;
-    column-gap: 1em;
-    margin-bottom: 1em;
-  }
-</style>

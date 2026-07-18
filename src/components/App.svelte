@@ -34,6 +34,22 @@
 
   //now we do the same for the new settings
   reconcileStoredSettings("appSettings", defaultAppSettings);
+
+  // Detect and set browser language on first visit
+  if (localStorage.getItem("appSettings") === null) {
+    const browserLang = (navigator.language || "").toLowerCase();
+    let detectedLang = "en";
+    if (browserLang.startsWith("es")) {
+      detectedLang = "spa";
+    } else if (browserLang.startsWith("fr")) {
+      detectedLang = "fra";
+    } else if (browserLang.startsWith("pt")) {
+      detectedLang = "por";
+    }
+    defaultAppSettings.lang = detectedLang;
+    localStorage.setItem("appSettings", JSON.stringify(defaultAppSettings));
+  }
+
   reconcileStoredSettings("generalLabelSettings", defaultGeneralLabelSettings);
   reconcileStoredSettings(
     "herbariumLabelSettings",
@@ -42,11 +58,23 @@
   reconcileStoredSettings("entoLabelSettings", defaultEntoLabelSettings);
 
   const appSettings = writable(defaultAppSettings);
+
+  // Persist app settings reactively to localStorage
+  $: {
+    localStorage.setItem("appSettings", JSON.stringify($appSettings));
+  }
   const generalLabelSettings = writable(defaultGeneralLabelSettings);
   const herbariumLabelSettings = writable(defaultHerbariumLabelSettings);
   const entoLabelSettings = writable(defaultEntoLabelSettings);
 
   $: locale.set($appSettings.lang);
+
+  $: logoSrc =
+    $appSettings.lang === "fra"
+      ? "/logo_2_fr.png"
+      : $appSettings.lang === "spa" || $appSettings.lang === "por"
+        ? "/logo_2_spa_por.png"
+        : "/logo_2.png";
 
   let rawData = writable([]);
   let fieldMappings = writable({});
@@ -61,58 +89,24 @@
   setContext("labelData", labelData);
 </script>
 
-<div class="container">
+<div
+  class="hidden lg:block lg:mt-0 lg:mx-[2em] lg:mb-[2em] lg:p-0 print:block print:mt-0"
+>
   <Router {routes} />
 </div>
 
-<div class="mobile-message">
+<div
+  class="flex w-screen flex-col p-[2rem] text-[1.2rem] lg:hidden print:hidden"
+>
   <div>
-    <a class="logo" style="display: flex;align-items:center" href="/" use:link
-      ><img src="/logo_2.png" width="200px" alt="" /></a
+    <a class="logo flex items-center" href="/" use:link
+      ><img src={logoSrc} class="w-[200px]" alt="" /></a
     >
   </div>
-  <div style="width:80%;margin-top:50px;">
+  <div class="w-[80%] mt-[50px]">
     {$t(
       "mobileMessage",
       "Designing specimen labels is definitely a job for a large screen! Send the site link to your desktop or laptop computer and let's get going there...",
     )}
   </div>
 </div>
-
-<style>
-  .container {
-    display: none;
-  }
-
-  .mobile-message {
-    display: flex;
-    width: 100vw;
-    flex-direction: column;
-    padding: 2rem;
-    font-size: 1.2rem;
-  }
-
-  /* Large screens (e.g. >= 1024px) */
-  @media (min-width: 1024px) {
-    .container {
-      display: block;
-      margin: 0 2em 2em;
-      padding: 0px;
-    }
-
-    .mobile-message {
-      display: none;
-    }
-  }
-
-  @media print {
-    .container {
-      display: block;
-      margin-top: 0;
-    }
-
-    .mobile-message {
-      display: none;
-    }
-  }
-</style>

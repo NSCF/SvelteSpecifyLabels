@@ -166,25 +166,29 @@
 </script>
 
 <div
-  class="ento-label-container"
+  class="inline-block break-inside-avoid text-black"
   style="--font: {$labelSettings.font};
   --font-weight: {$labelSettings.fontWeight};
   --font-size: {$labelSettings.fontSize + 'pt'};
   --line-height: {$labelSettings.lineHeight + '%'};
   --label-width: {$labelSettings.labelWidth + 'cm'};
   --label-height: {$labelSettings.labelHeight + 'cm'};
+  font-family: var(--font, sans-serif);
+  font-size: var(--font-size, 4pt);
+  font-weight: var(--font-weight, 400);
+  line-height: var(--line-height, 100%);
   "
   use:labelRendered
 >
   <!-- 1. Locality & Collection Event labels -->
   {#if !$labelSettings.detLabelOnly}
     {#each splitLabelContent(getLocalityParts(labelRecord)) as chunk}
-      <div class="ento-sub-label">
+      <div class="box-border p-[1px_2px] overflow-hidden flex flex-col justify-start items-start text-left bg-white break-inside-avoid mb-[2px] print:!border-[#aaa]" style="width: var(--label-width, 1.5cm); height: var(--label-height, 0.7cm); border: 0.1mm dashed #bbb;">
         {#if $labelSettings.showCollectionName && $labelSettings.collectionName}
-          <div class="label-header">{$labelSettings.collectionName}</div>
+          <div class="w-full font-bold text-center mb-[1px] whitespace-nowrap overflow-hidden text-ellipsis" style="border-bottom: 0.05mm solid #ccc;">{$labelSettings.collectionName}</div>
         {/if}
         {#each chunk as line}
-          <div class="label-line">{@html line}</div>
+          <div class="w-full break-words break-all block">{@html line}</div>
         {/each}
       </div>
       <CutMarks char={"-"} />
@@ -192,9 +196,9 @@
 
     <!-- 2. Habitat & Notes labels -->
     {#each splitLabelContent(getHabitatParts(labelRecord)) as chunk}
-      <div class="ento-sub-label">
+      <div class="box-border p-[1px_2px] overflow-hidden flex flex-col justify-start items-start text-left bg-white break-inside-avoid mb-[2px] print:!border-[#aaa]" style="width: var(--label-width, 1.5cm); height: var(--label-height, 0.7cm); border: 0.1mm dashed #bbb;">
         {#each chunk as line}
-          <div class="label-line">{@html line}</div>
+          <div class="w-full break-words break-all block">{@html line}</div>
         {/each}
       </div>
       <CutMarks char={"-"} />
@@ -204,68 +208,15 @@
   <!-- 3. Determination labels -->
   {#if ($labelSettings.detLabel || $labelSettings.detLabelOnly) && labelDet}
     {#each splitLabelContent(getDetParts(labelRecord)) as chunk}
-      <div class="ento-sub-label">
+      <div class="box-border p-[1px_2px] overflow-hidden flex flex-col justify-start items-start text-left bg-white break-inside-avoid mb-[2px] print:!border-[#aaa]" style="width: var(--label-width, 1.5cm); height: var(--label-height, 0.7cm); border: 0.1mm dashed #bbb;">
         {#if $labelSettings.showCollectionName && $labelSettings.collectionName && $labelSettings.detLabelOnly}
-          <div class="label-header">{$labelSettings.collectionName}</div>
+          <div class="w-full font-bold text-center mb-[1px] whitespace-nowrap overflow-hidden text-ellipsis" style="border-bottom: 0.05mm solid #ccc;">{$labelSettings.collectionName}</div>
         {/if}
         {#each chunk as line}
-          <div class="label-line">{@html line}</div>
+          <div class="w-full break-words break-all block">{@html line}</div>
         {/each}
       </div>
       <CutMarks char={"-"} />
     {/each}
   {/if}
 </div>
-
-<style>
-  .ento-label-container {
-    display: inline-block;
-    break-inside: avoid;
-    font-family: var(--font, sans-serif);
-    font-size: var(--font-size, 4pt);
-    font-weight: var(--font-weight, 400);
-    line-height: var(--line-height, 100%);
-    color: black;
-  }
-
-  .ento-sub-label {
-    width: var(--label-width, 1.5cm);
-    height: var(--label-height, 0.7cm);
-    box-sizing: border-box;
-    border: 0.1mm dashed #bbb;
-    padding: 1px 2px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    text-align: left;
-    background-color: white;
-    break-inside: avoid;
-    margin-bottom: 2px;
-  }
-
-  .label-header {
-    width: 100%;
-    font-weight: bold;
-    text-align: center;
-    border-bottom: 0.05mm solid #ccc;
-    margin-bottom: 1px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .label-line {
-    width: 100%;
-    word-wrap: break-word;
-    word-break: break-all;
-    display: block;
-  }
-
-  @media print {
-    .ento-sub-label {
-      border: 0.1mm dashed #aaa;
-    }
-  }
-</style>

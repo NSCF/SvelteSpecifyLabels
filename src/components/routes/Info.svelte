@@ -28,7 +28,7 @@
 </script>
 
 <Header />
-<div style="max-width:1200px; margin:auto;">
+<div class="max-w-[1200px] mx-auto">
 
   {#if Lang}
   <svelte:component this={Lang} />

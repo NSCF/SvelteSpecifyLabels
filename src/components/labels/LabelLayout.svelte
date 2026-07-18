@@ -21,7 +21,7 @@
 
 </script>
 
-<div class="label-cols" style="color:black; --label-width: { $labelSettings.labelWidth}cm"> 
+<div class="w-full gap-[1em] [break-before:column]" style="color:black; --label-width: { $labelSettings.labelWidth}cm; column-width: var(--label-width);"> 
   {#if $labelData.length}
     {#each $labelData as labelRecord}
       {#if $labelSettings.labelPerSpecimen && labelRecord.specimenCount }
@@ -36,14 +36,3 @@
   No data to show, refresh to start over and choose a different file
   {/if}
 </div>
-
-<style>
-
-  .label-cols {
-    width: 100%;
-    column-width: var(--label-width);
-    column-gap: 1em;
-    break-before: column;
-  }
-
-</style>

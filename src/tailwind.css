@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@page {
+  margin: 1cm;
+}
+
+@keyframes jumpInfinite {
+  0% {
+    top: 0;
+  }
+  50% {
+    top: -20px;
+  }
+  100% {
+    top: 0;
+  }
+}
+
+.down-arrow {
+  position: relative;
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  transform: rotate(90deg) scale(2);
+  animation: jumpInfinite 2s infinite;
+}
+
+@layer base {
+
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.25;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: #645b5b;
+  }
+  h1 { font-size: 2.25rem; }
+  h2 { font-size: 1.875rem; }
+  h3 { font-size: 1.5rem; }
+  h4 { font-size: 1.25rem; }
+  h5 { font-size: 1.125rem; }
+  h6 { font-size: 1rem; }
+
+  p {
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+  }
+
+  ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  ol {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  li {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  a {
+    color: #7c53ac;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* Form Elements & Inputs */
+  input[type="text"],
+  input[type="number"],
+  select,
+  textarea {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.95rem;
+    color: #333;
+    outline: none;
+    margin-bottom: 0.5rem;
+  }
+  input[type="text"]:focus,
+  input[type="number"]:focus,
+  select:focus,
+  textarea:focus {
+    border-color: #888;
+  }
+
+  /* Buttons */
+  button {
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  button:disabled {
+    color: #999;
+    cursor: not-allowed;
+  }
+
+  pre {
+    color: #af2b2b;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-[#4ab056] hover:bg-[#3aa146] text-white;
+  }
+  .btn-secondary {
+    @apply bg-[LightGray] text-[dimgray] hover:bg-[silver];
+  }
+}

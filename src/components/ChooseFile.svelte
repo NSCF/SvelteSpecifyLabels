@@ -116,12 +116,10 @@
 </script>
 
 <!-- based on https://codepen.io/MSEdgeDev/pen/KzzNaZ -->
-<div id="wrapper" class="wrapper">
+<div id="wrapper" class="w-full mx-auto mt-[5px] font-['segoe',sans-serif]">
   <div 
     id="fileDropBox"
-    class="fileDropBox"
-    class:active={hovering}
-    class:inactive={!hovering}
+    class="mx-auto w-[20em] text-center text-[gray] bg-[var(--color-bg)] rounded-[7px] cursor-pointer {hovering ? 'border-[10px] border-dashed border-[grey]' : 'border-[10px] border-dashed border-[lightgray]'}"
     on:mouseenter={isHovering}
     on:mouseleave={isNotHovering}
     on:dragenter={isHovering} 
@@ -130,59 +128,16 @@
     on:click={_ => hiddenInput.click()}
     ondragover="return false"
   >
-    <h2 class="import-cta">{$t('load', 'Load some data')}</h2>
-    <p class="import-detail">{$t('box', 'Drag and drop a CSV file with your label data here or click to select from your hard drive')}</p>
+    <h2 class="underline mt-[2em]">{$t('load', 'Load some data')}</h2>
+    <p class="mb-[2em] mx-[2em] pointer-events-none">{$t('box', 'Drag and drop a CSV file with your label data here or click to select from your hard drive')}</p>
   </div>
 </div>
-<input type="file" bind:this={hiddenInput} style="display:none" on:change={handleFileSelected}>
-<dialog style="background-color: #FFCC66;" bind:this={dialog}>
-  <div style="display:flex; width:100%; justify-content:flex-end;">
-    <button style="background-color: transparent; border:none; padding:0; margin:0" on:click={_ => dialog.close()}><CloseIcon /></button>
+<input type="file" bind:this={hiddenInput} class="hidden" on:change={handleFileSelected}>
+<dialog class="bg-[#FFCC66]" bind:this={dialog}>
+  <div class="flex w-full justify-end">
+    <button class="bg-transparent border-none p-0 m-0" on:click={_ => dialog.close()}><CloseIcon /></button>
   </div>
   <div>
     {dialogMessage}
   </div>
 </dialog>
-
-<style>
-* {
-    font-family: segoe, sans-serif;
-  }
-
- .wrapper {
-    width:100%;
-    margin: auto;
-    margin-top:5px;
-  }
-
-  .fileDropBox {
-    margin: auto;
-    width: 20em;
-    text-align: center;
-    color: gray;
-    background-color: var(--color-bg);
-    border-radius: 7px;
-    cursor: pointer;
-  }
-
-  .import-cta {
-    /* color: var(--color); */
-    text-decoration: underline;
-    margin-top: 2em;
-  }
-
-  .import-detail {
-    margin-bottom: 2em;
-    margin-left: 2em;
-    margin-right: 2em;
-    pointer-events: none;
-  }
-
-  .inactive {
-    border: 10px dashed lightgray;
-  }
-
-  .active {
-    border: 10px dashed grey;
-  }
-</style>

@@ -6,7 +6,6 @@
   import GeneralLabelSettings from "../settings/GeneralLabelSettings.svelte";
   import HerbariumLabelSettings from "../settings/HerbariumLabelSettings.svelte";
   import EntoLabelSettings from "../settings/EntoLabelSettings.svelte";
-  import StartOverButton from "../misc/StartOverButton.svelte";
   import getFieldMappings from "../../lib/getFieldMappings";
   import reconcileFieldMappings from "../../lib/reconcileFieldMappings";
   import makeLabel from "../../lib/toMakeOrNotToMakeLabel";
@@ -155,18 +154,10 @@
   // }
 </script>
 
-<div
-  style="height:95vh; display:flex; flex-direction:column; align-items:center;"
->
+<div class="h-[95vh] flex flex-col items-center">
   <Header />
-  <div
-    id="main"
-    style="width:100%; max-width:1280px; flex:1 1 0; min-height:0; display:flex;"
-  >
-    <div
-      id="settings"
-      style="display: flex; align-items:center; margin-right:5px;"
-    >
+  <div id="main" class="w-full max-w-[1280px] flex-auto min-h-0 flex">
+    <div id="settings" class="flex items-center mr-[5px]">
       {#if $appSettings.labelType == "general"}
         <GeneralLabelSettings />
       {:else if $appSettings.labelType == "herbarium"}
@@ -175,31 +166,22 @@
         <EntoLabelSettings />
       {/if}
     </div>
-    <div
-      id="preview-section"
-      style="position:relative; width:100%; display:flex"
-    >
+    <div id="preview-section" class="relative w-full flex">
       <LabelPreview />
     </div>
   </div>
-  <div
-    style="width:100%; max-width:1280px; display:flex; justify-content:space-between"
-  >
+  <div class="w-full max-w-[1280px] flex justify-between">
     <div>
-      <StartOverButton />
-      <button on:click={(_) => push("/mappings")}
+      <button id="back-button" class="btn-secondary" on:click={(_) => push("/")}
+        >{$t("startOver", "Start over")}</button
+      >
+      <button class="btn-secondary" on:click={(_) => push("/mappings")}
         >{$t("mappings", "Field mappings")}</button
       >
     </div>
-    <button on:click={(_) => push("/preview")}
+    <button class="btn-primary" on:click={(_) => push("/preview")}
       >{$t("preview", "Preview and print")}</button
     >
   </div>
-  <hr />
+  <hr class="m-0" />
 </div>
-
-<style>
-  hr {
-    margin: 0;
-  }
-</style>
