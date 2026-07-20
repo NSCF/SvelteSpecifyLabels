@@ -113,7 +113,7 @@
       on:scroll={handleScroll}
     >
       {#if Lang}
-        <div bind:this={contentContainer} class="info-content max-w-[850px]">
+        <div bind:this={contentContainer} class="max-w-[850px] pb-12">
           <svelte:component this={Lang} />
         </div>
       {/if}
@@ -133,7 +133,7 @@
           {#each headings as heading}
             <a
               href={`#${heading.id}`}
-              class="block py-1 px-2 leading-snug transition-colors duration-150 rounded {heading.level === 5 ? 'ml-3 text-xs' : 'font-medium'} {activeId === heading.id ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'}"
+              class="block py-1 px-2 leading-snug transition-colors duration-150 rounded {heading.level === 5 ? 'ml-3 text-xs' : 'font-medium'} {activeId === heading.id ? 'bg-[#7c53ac]/10 !text-[#7c53ac] font-bold' : '!text-slate-600 hover:!text-[#7c53ac] hover:bg-slate-50'}"
               on:click|preventDefault={() => scrollToHeading(heading.id)}
             >
               {heading.text}
@@ -144,37 +144,3 @@
     {/if}
   </div>
 </div>
-
-<style>
-  :global(.info-content h3) {
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: #1e293b;
-    margin-top: 1.75rem;
-    margin-bottom: 0.75rem;
-    scroll-margin-top: 1.5rem;
-  }
-  :global(.info-content h3:first-child) {
-    margin-top: 0.25rem;
-  }
-  :global(.info-content h5) {
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: #334155;
-    margin-top: 1.25rem;
-    margin-bottom: 0.5rem;
-  }
-  :global(.info-content p) {
-    font-size: 1rem;
-    line-height: 1.65;
-    color: #475569;
-    margin-bottom: 1rem;
-  }
-  :global(.info-content a) {
-    color: #2563eb;
-    text-decoration: underline;
-  }
-  :global(.info-content a:hover) {
-    color: #1d4ed8;
-  }
-</style>

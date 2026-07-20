@@ -140,10 +140,12 @@
 <h3>Opciones de etiqueta</h3>
 <p>
   Una vez que haya agregado sus datos, verá una lista de opciones para
-  personalizar el diseño de sus etiquetas. Al hacer clic en el botón de
-  imprimir, sus elecciones (y mapeos de campos) se guardarán para la próxima vez
-  que desee imprimir etiquetas. Utilice un conjunto de datos pequeño para lograr
-  el diseño de etiqueta adecuado antes de generar lotes grandes de etiquetas.
+  personalizar el diseño de sus etiquetas. Sienta la libertad de experimentar
+  con los ajustes y los tamaños de etiqueta disponibles para ver qué funciona
+  mejor para su situación. Al hacer clic en el botón de imprimir, sus elecciones
+  (y mapeos de campos) se guardarán para la próxima vez que desee imprimir
+  etiquetas. Utilice un conjunto de datos pequeño para lograr el diseño de
+  etiqueta adecuado antes de generar lotes grandes de etiquetas.
 </p>
 <p>
   <em>

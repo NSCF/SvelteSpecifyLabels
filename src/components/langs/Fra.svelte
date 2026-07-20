@@ -145,10 +145,12 @@
 <h3>Options d'étiquette</h3>
 <p>
   Une fois vos données ajoutées, vous verrez une liste d'options pour
-  personnaliser la conception de vos étiquettes. Lorsque vous cliquez sur le
-  bouton d'impression, vos choix (et correspondances de champs) seront
-  enregistrés pour la prochaine fois. Utilisez un petit jeu de données pour
-  finaliser la conception de l'étiquette avant de générer de grands lots.
+  personnaliser la conception de vos étiquettes. N'hésitez pas à essayer les
+  différents paramètres et tailles d'étiquettes disponibles pour voir ce qui
+  convient le mieux à votre situation. Lorsque vous cliquez sur le bouton
+  d'impression, vos choix (et correspondances de champs) seront enregistrés pour
+  la prochaine fois. Utilisez un petit jeu de données pour finaliser la
+  conception de l'étiquette avant de générer de grands lots.
 </p>
 <p>
   <em>

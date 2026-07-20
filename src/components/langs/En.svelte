@@ -129,10 +129,11 @@
 <h3>Label options</h3>
 <p>
   Once you've added your data you will see a list of options for customizing
-  your label design. When you click the print button your choices (and field
-  mappings) will be saved for the next time you want to print labels. Use a
-  small dataset to get the label design right before generating large batches of
-  labels.
+  your label design. Feel free to experiment with the settings and available
+  label sizes to see what works best for your situation. When you click the
+  print button your choices (and field mappings) will be saved for the next
+  time you want to print labels. Use a small dataset to get the label design
+  right before generating large batches of labels.
 </p>
 <p>
   <em>

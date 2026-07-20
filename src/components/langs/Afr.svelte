@@ -127,10 +127,11 @@
 <h3>Etiket opsies</h3>
 <p>
   Sodra jy jou datastel ingetrek het, sal jy 'n lys opsies sien om jou
-  etiketontwerp aan te pas. Wanneer jy op drukknoppie kliek, sal jou keuses (en
-  veldskakels) gestoor word vir die volgende keer wanneer jy etikette wil druk.
-  Gebruik 'n klein datastel om die etiketontwerp baas te raak, voordat jy groot
-  groepe etikette maak.
+  etiketontwerp aan te pas. Voel vry om met die stellings en beskikbare
+  etiketgrootte te eksperimenteer om te sien wat die beste vir jou situasie werk.
+  Wanneer jy op drukknoppie kliek, sal jou keuses (en veldskakels) gestoor word
+  vir die volgende keer wanneer jy etikette wil druk. Gebruik 'n klein datastel
+  om die etiketontwerp baas te raak, voordat jy groot groepe etikette maak.
 </p>
 <p>
   <em>
