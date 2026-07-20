@@ -182,7 +182,7 @@
       </div>
     {/if}
   </div>
-  <p class="relative m-0 top-[-1em] text-[0.7em]">
+  <p class="relative m-0 top-[-1em] text-[0.7em] text-gray-400">
     {$t("saveSettings", "Settings are saved when you preview/print")}
   </p>
   <br />

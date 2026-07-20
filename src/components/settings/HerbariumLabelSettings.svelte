@@ -1,7 +1,6 @@
 <script>
   import { getContext } from "svelte";
   import { t } from "../../i18n/lang";
-  import numberInputSettings from "../../settings/numberInputSettings";
 
   const appSettings = getContext("appSettings");
   const labelSettings = getContext("herbariumLabelSettings");
@@ -21,7 +20,10 @@
   >
     <div class="[break-inside:avoid]">
       <label class="inline whitespace-nowrap">
-        <input type="checkbox" bind:checked={$labelSettings.showCollectionName} />
+        <input
+          type="checkbox"
+          bind:checked={$labelSettings.showCollectionName}
+        />
         {$t("addCollName", "Add my collection name")}
       </label>
       <br />
@@ -62,47 +64,64 @@
       />
       {$t("romanNums", "Use Roman numerals for months")}
     </label>
-    <br/>
+    <br />
     <label class="inline whitespace-nowrap">
-      <input type=checkbox bind:checked={$labelSettings.includeTaxonAuthorities}>
-      {$t('authors', 'Include taxon authorities')}
+      <input
+        type="checkbox"
+        bind:checked={$labelSettings.includeTaxonAuthorities}
+      />
+      {$t("authors", "Include taxon authorities")}
     </label>
-    <br/>
+    <br />
     <label class="inline whitespace-nowrap">
-      <input type=checkbox bind:checked={$labelSettings.underline}> <!-- TODO we need this for herbarium label separately -->
-      {$t('underline', 'Underline, not bold')}
+      <input type="checkbox" bind:checked={$labelSettings.underline} />
+      <!-- TODO we need this for herbarium label separately -->
+      {$t("underline", "Underline, not bold")}
     </label>
-    <br/>
+    <br />
     <label class="inline whitespace-nowrap">
-      <input type=checkbox bind:checked={$labelSettings.italics}> <!-- TODO we need this for herbarium label separately -->
-      {$t('italics', 'Italics for scientific names')}
+      <input type="checkbox" bind:checked={$labelSettings.italics} />
+      <!-- TODO we need this for herbarium label separately -->
+      {$t("italics", "Italics for scientific names")}
     </label>
-    <br/>
+    <br />
   </div>
   <div class="flex gap-[5px]">
     <div>
-      <label for="label-size" class="inline whitespace-nowrap">{$t('labelSize', 'Label size')}</label>
-      <select id="label-size" bind:value={$labelSettings.labelSize} disabled={$labelSettings.detLabel}>
+      <label for="label-size" class="inline whitespace-nowrap"
+        >{$t("labelSize", "Label size")}</label
+      >
+      <select
+        id="label-size"
+        bind:value={$labelSettings.labelSize}
+        disabled={$labelSettings.detLabel}
+      >
         <option value="standard">Standard</option>
         <option value="large">Extra height</option>
       </select>
     </div>
     <div>
-      <label for="fonts" class="inline whitespace-nowrap">{$t('font', 'Font')}</label>
+      <label for="fonts" class="inline whitespace-nowrap"
+        >{$t("font", "Font")}</label
+      >
       <select id="fonts" bind:value={$labelSettings.font}>
         {#each fonts as font}
-        <option value={font}>{font}</option>
+          <option value={font}>{font}</option>
         {/each}
       </select>
     </div>
     <div>
-      <label for="font-size" class="inline whitespace-nowrap">{$t('font-size', 'Font size')}</label>
+      <label for="font-size" class="inline whitespace-nowrap"
+        >{$t("font-size", "Font size")}</label
+      >
       <select id="font-size" bind:value={$labelSettings.fontSize}>
         <option value="8">8</option>
         <option value="10">10</option>
       </select>
     </div>
   </div>
-  <p class="relative m-0 top-[-1em] text-[0.7em]">{$t('saveSettings', 'Settings are saved when you preview/print')}</p>
-  <br/>
+  <p class="relative m-0 top-[-1em] text-[0.7em] text-gray-400">
+    {$t("saveSettings", "Settings are saved when you preview/print")}
+  </p>
+  <br />
 </div>

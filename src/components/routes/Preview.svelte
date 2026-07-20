@@ -5,6 +5,7 @@
   import CollectiveSettings from "../settings/CollectiveSettings.svelte";
   import LabelLayout from "../labels/LabelLayout.svelte";
   import { t } from "../../i18n/lang";
+  import { saveSettings } from "../../lib/settingsManager";
 
   const rawData = getContext("data");
   const labelData = getContext("labelData");
@@ -30,34 +31,27 @@
   }
 
   const showPrint = (_) => {
-    localStorage.setItem("appSettings", JSON.stringify($appSettings));
-    localStorage.setItem(
-      "generalLabelSettings",
-      JSON.stringify($generalLabelSettings),
+    saveSettings(
+      $appSettings,
+      $generalLabelSettings,
+      $herbariumLabelSettings,
+      $entoLabelSettings,
+      $fieldMappings,
     );
-    localStorage.setItem(
-      "herbariumLabelSettings",
-      JSON.stringify($herbariumLabelSettings),
-    );
-    localStorage.setItem(
-      "entoLabelSettings",
-      JSON.stringify($entoLabelSettings),
-    );
-    localStorage.setItem("fieldMappings", JSON.stringify($fieldMappings));
     window.print();
   };
 </script>
 
-<div class="print:hidden">
+<div class="print:hidden px-4">
   <Header />
   <div class="flex justify-between mt-2">
-    <button id="back-button" class="btn-secondary" on:click={(_) => pop()}
+    <button id="back-button" class="btn btn-secondary" on:click={(_) => pop()}
       >{$t("back", "Back")}</button
     >
     <button
       on:click={showPrint}
       disabled={!$labelData.length}
-      class="btn-primary"
+      class="btn btn-primary"
       >{$t("printButton", "Let's print these labels...")}</button
     >
   </div>
@@ -65,6 +59,6 @@
     <CollectiveSettings />
   </div>
 </div>
-<div class="print:mt-[1em]">
+<div class="px-4 print:px-0 print:mt-[1em]">
   <LabelLayout />
 </div>

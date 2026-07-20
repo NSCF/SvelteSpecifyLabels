@@ -142,6 +142,14 @@
   </em>
 </p>
 
+<h3>Saving, exporting, and importing settings</h3>
+<p>
+  All your label settings and field mappings are stored locally in your browser so that your preferences are remembered the next time you visit. No settings or data are sent to a server.
+</p>
+<p>
+  If you work across multiple computers or want to share your label configuration with colleagues, you can use the export and import buttons at the top of the settings panel to save your settings as a JSON file and transfer them.
+</p>
+
 <h3>Printing labels</h3>
 <p>
   When you click the print button from the preview screen the browser will open

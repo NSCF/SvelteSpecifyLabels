@@ -201,6 +201,14 @@ const langs = {
     fra: 'Inclure les autorités de taxon',
     por: 'Incluir autoridades de táxon',
   },
+  borderForTypes: {
+    en: "Red border on det label for types",
+    afr: "Rooi rand op determinase etiket vir tipe eksemplare",
+    zul: '',
+    spa: 'Borde rojo en la etiqueta de det para tipos',
+    fra: 'Bordure rouge sur l\'étiquette de dét pour les types',
+    por: 'Borda vermelha na etiqueta de det para tipos',
+  },
   excludeCatNums: {
     en: "Exclude records with no catalog or collector numbers",
     afr: "Sluit etikette sonder rekordnommers uit",

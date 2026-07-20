@@ -89,11 +89,15 @@
       bind:value={$labelSettings.italics}
       labelText={$t("italics", "Italics for scientific names")}
     />
+    <CheckboxSetting
+      bind:value={$labelSettings.borderForTypes}
+      labelText={$t("borderForTypes", "Red border on det label for types")}
+    />
   </div>
-  <div class="flex gap-[5px] flex-wrap items-end">
-    <div>
-      <label for="ento-label-size" class="inline whitespace-nowrap"
-        >Label Size</label
+  <div class="flex gap-[5px] flex-wrap items-end mb-[5px]">
+    <div class="flex flex-col">
+      <label for="ento-label-size" class="block whitespace-nowrap"
+        >{$t("labelSize", "Label size")}</label
       >
       <select
         id="ento-label-size"
@@ -105,8 +109,10 @@
         {/each}
       </select>
     </div>
-    <div>
-      <label for="fonts" class="inline whitespace-nowrap"
+  </div>
+  <div class="flex gap-[5px] items-end mb-[5px]">
+    <div class="flex flex-col">
+      <label for="fonts" class="block whitespace-nowrap"
         >{$t("font", "Font")}</label
       >
       <select id="fonts" bind:value={$labelSettings.font}>
@@ -116,8 +122,8 @@
       </select>
     </div>
     {#if $labelSettings.font in fontWeights}
-      <div>
-        <label for="font-weight" class="inline whitespace-nowrap"
+      <div class="flex flex-col">
+        <label for="font-weight" class="block whitespace-nowrap"
           >{$t("fontWeight", "Font weight")}</label
         >
         <select id="font-weight" bind:value={$labelSettings.fontWeight}>
@@ -148,7 +154,8 @@
       />
     </div>
   </div>
-  <p class="relative m-0 mt-[10px] text-[0.7em]">
+  <div class="flex gap-[5px] flex-wrap items-end"></div>
+  <p class="relative m-0 mt-[10px] text-[0.7em] text-gray-400">
     {$t("saveSettings", "Settings are saved when you preview/print")}
   </p>
   <br />

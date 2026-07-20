@@ -141,6 +141,14 @@
   </em>
 </p>
 
+<h3>Stoor, uitvoer en invoer van stellings</h3>
+<p>
+  Al jou etiketstellings en veldpassings word plaaslik in jou blaaier gestoor sodat jou voorkeure onthou word wanneer jy weer die webwerf besoek. Geen stellings of data word na 'n bediener gestuur nie.
+</p>
+<p>
+  As jy op verskillende rekenaars werk of jou etiketinstellings met kollegas wil deel, kan jy die uitvoer- en invoerknoppies bo-aan die stellingspaneel gebruik om jou stellings as 'n JSON-lêer te stoor en oor te dra.
+</p>
+
 <h3>Druk van etikette</h3>
 <p>
   Wanneer jy op die drukknoppie kliek, sal die blaaier die standaard drukdialoog

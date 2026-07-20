@@ -3,6 +3,7 @@ import numberInputSettings from './numberInputSettings.js'
 export default {
   detLabel: true,
   detLabelOnly: false,
+  borderForTypes: false,
   includeBarcode: true,
   includeQRCode: false,
   barcodeOnMain: false,

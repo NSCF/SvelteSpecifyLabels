@@ -154,6 +154,14 @@
   </em>
 </p>
 
+<h3>Guardar, exportar e importar configuraciones</h3>
+<p>
+  Todas tus configuraciones de etiqueta y mapeos de campos se guardan localmente en tu navegador para que se recuerden tus preferencias en tu próxima visita. No se envía ninguna configuración ni dato a un servidor.
+</p>
+<p>
+  Si trabajas en varias computadoras o deseas compartir tu configuración de etiquetas con colegas, puedes usar los botones de exportación e importación en la parte superior del panel de configuración para guardar y transferir tus configuraciones como un archivo JSON.
+</p>
+
 <h3>Impresión de etiquetas</h3>
 <p>
   Al hacer clic en el botón de imprimir desde la pantalla de vista previa, el

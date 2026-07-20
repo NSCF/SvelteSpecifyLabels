@@ -113,9 +113,7 @@
   setContext("labelData", labelData);
 </script>
 
-<div
-  class="hidden lg:block lg:mt-0 lg:mx-[2em] lg:mb-[2em] lg:p-0 print:block print:mt-0"
->
+<div class="hidden lg:block p-1 print:block print:mt-0">
   <Router {routes} />
 </div>
 

@@ -23,7 +23,7 @@
       use:link><img src={logoSrc} class="w-[200px]" alt="" /></a
     >
   </div>
-  <nav class="flex gap-[2em] mr-[2em] items-center m-0">
+  <nav class="flex gap-[2em] mr-[3em] items-center m-0">
     <a href="/" use:link>{$t("home", "Home")}</a>
     <a href="/info" use:link>{$t("info", "How to make labels")}</a>
     <a href="https://nscf.org.za/learn-more-about-us" target="_blank"
@@ -40,13 +40,13 @@
     </select>
   </nav>
   <img
-    class="absolute right-[-1.5em] top-[.5em] h-[1.5em] border-solid border-white rounded-[50%] rotate-[45deg]"
+    class="absolute right-0 top-[.5em] h-[1.5em] border-solid border-white rounded-[50%] rotate-[45deg]"
     src="github-cat.svg"
     alt="github"
   />
   <a
     title="view on github"
-    class="absolute right-[-9em] w-[250px] h-[2em] rotate-[45deg] bg-[linear-gradient(transparent,transparent,transparent,transparent,transparent,lightgray,dimgray,gray)] text-[0.8rem]"
+    class="absolute right-[-9em] w-[300px] h-[2em] rotate-[45deg] bg-[linear-gradient(transparent,transparent,transparent,transparent,transparent,lightgray,dimgray,gray)] text-[0.8rem]"
     href="https://github.com/NSCF/SvelteSpecifyLabels"
     target="_blank"
   >

@@ -73,6 +73,10 @@
   const labelRendered = (_) => {
     dispatch("label-rendered");
   };
+
+  $: boldWeight = Math.min(900, Number($labelSettings.fontWeight || 400) + 300);
+  $: boldClass = $labelSettings.underline ? "underline" : "";
+  $: boldStyle = $labelSettings.underline ? "" : `font-weight: ${boldWeight};`;
 </script>
 
 <div
@@ -97,14 +101,13 @@
       {#if $labelSettings.showCollectionName}
         <div class="w-full flex flex-col items-center">
           <div
-            class="{$labelSettings.underline
-              ? 'underline'
-              : 'font-bold'} text-[1.2em]"
+            class="{boldClass} text-[1.2em]"
+            style={boldStyle}
           >
             {$labelSettings.collectionName || ""}
           </div>
           {#if $labelSettings.institutionName}
-            <div class={$labelSettings.underline ? "underline" : "font-bold"}>
+            <div class={boldClass} style={boldStyle}>
               {$labelSettings.institutionName}
             </div>
           {/if}
@@ -119,9 +122,8 @@
           <div class="w-full">
             <div class="flex justify-between">
               <div
-                class="uppercase one-line-condensed {$labelSettings.underline
-                  ? 'underline'
-                  : 'font-bold'}"
+                class="uppercase one-line-condensed {boldClass}"
+                style={boldStyle}
               >
                 {labelRecord.family || "No family"}
               </div>
@@ -204,9 +206,8 @@
               : 'mt-0'}"
           >
             <div
-              class="uppercase one-line-condensed {$labelSettings.underline
-                ? 'underline'
-                : 'font-bold'}"
+              class="uppercase one-line-condensed {boldClass}"
+              style={boldStyle}
             >
               {labelRecord.catalogNumber || ""}
             </div>
@@ -263,7 +264,7 @@
           {/if}
         {/if}
       </div>
-      <div class={$labelSettings.underline ? "underline" : "font-bold"}>
+      <div class={boldClass} style={boldStyle}>
         {@html labelDet || ""}
       </div>
       <div class="flex justify-between">

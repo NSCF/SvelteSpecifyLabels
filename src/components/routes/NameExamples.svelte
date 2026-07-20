@@ -20,7 +20,8 @@
     },
     {
       ruleKey: "rule2",
-      defaultRule: "dwc:scientificName should not have qualifiers, but we can italicize around it anyway...",
+      defaultRule:
+        "dwc:scientificName should not have qualifiers, but we can italicize around it anyway...",
       infras: true,
       data: {
         scientificName: "Quercus aff. robur L.",
@@ -30,7 +31,8 @@
     },
     {
       ruleKey: "rule3",
-      defaultRule: "Authorship will be added to scientificName, even though it should be there already...",
+      defaultRule:
+        "Authorship will be added to scientificName, even though it should be there already...",
       infras: true,
       data: {
         scientificName: "Quercus robur",
@@ -40,7 +42,8 @@
     },
     {
       ruleKey: "rule4",
-      defaultRule: "But it's not added to verbatimIdentification, because we give you full control over what is printed there",
+      defaultRule:
+        "But it's not added to verbatimIdentification, because we give you full control over what is printed there",
       infras: true,
       data: {
         verbatimIdentification: "Quercus robur",
@@ -58,7 +61,8 @@
     },
     {
       ruleKey: "rule6",
-      defaultRule: "We can't italicize genera in scientificName because there's no way of knowing it's a genus and not a higher rank",
+      defaultRule:
+        "We can't italicize genera in scientificName because there's no way of knowing it's a genus and not a higher rank",
       infras: true,
       data: { scientificName: "Quercus sp." },
     },
@@ -70,7 +74,8 @@
     },
     {
       ruleKey: "rule8",
-      defaultRule: "You don't have to identify to species or genus level, any rank will do",
+      defaultRule:
+        "You don't have to identify to species or genus level, any rank will do",
       infras: true,
       data: {
         scientificName: "Fagaceae",
@@ -108,7 +113,8 @@
     },
     {
       ruleKey: "rule12",
-      defaultRule: "Remember that qualifiers and question marks are different things, but you can have both",
+      defaultRule:
+        "Remember that qualifiers and question marks are different things, but you can have both",
       infras: true,
       data: {
         family: "Fagaceae",
@@ -133,7 +139,8 @@
     },
     {
       ruleKey: "rule14",
-      defaultRule: "But for plants we do, with authorship inserted in the correct place...",
+      defaultRule:
+        "But for plants we do, with authorship inserted in the correct place...",
       infras: true,
       data: {
         family: "Fagaceae",
@@ -159,7 +166,8 @@
     },
     {
       ruleKey: "rule16",
-      defaultRule: "And the qualifier is in front so it's not lost amongst the infraspecific ranks and epithets...",
+      defaultRule:
+        "And the qualifier is in front so it's not lost amongst the infraspecific ranks and epithets...",
       infras: true,
       data: {
         family: "Fagaceae",
@@ -190,12 +198,15 @@
   <div>
     <div class="flex items-center justify-between">
       <h3 class="">{$t("nameRules", "Name Rules")}</h3>
-      <button class="btn-secondary" onclick="history.back()"
+      <button class="btn btn-secondary" onclick="history.back()"
         >{$t("back", "Back")}</button
       >
     </div>
     <p class="text-[0.8em]">
-      {$t("nameRulesHelp", "The rules that the label tool uses for forming and italicizing names are quite complex. Here are some examples to try and highlight how they work. The simplest is to either have 'atomic' fields in your dataset (family, genus, specificEpithet, qualifier, author, etc) or a full scientificName, taxonRank (if you have anything identified to the genus or subgenus level and want those italicized), qualifer, and author fields.")}
+      {$t(
+        "nameRulesHelp",
+        "The rules that the label tool uses for forming and italicizing names are quite complex. Here are some examples to try and highlight how they work. The simplest is to either have 'atomic' fields in your dataset (family, genus, specificEpithet, qualifier, author, etc) or a full scientificName, taxonRank (if you have anything identified to the genus or subgenus level and want those italicized), qualifer, and author fields.",
+      )}
     </p>
     <input
       type="checkbox"
@@ -211,7 +222,8 @@
       id="withAuthorship"
       bind:checked={withAuthorship}
     />
-    <label for="withAuthorship">{$t("withAuthorship", "With Authorship")}</label>
+    <label for="withAuthorship">{$t("withAuthorship", "With Authorship")}</label
+    >
   </div>
   <div class="overflow-auto flex-grow pr-[16px] flex flex-col gap-[16px]">
     {#each labelDets as labelDet, index}

@@ -159,6 +159,14 @@
   </em>
 </p>
 
+<h3>Enregistrement, exportation et importation des paramètres</h3>
+<p>
+  Tous vos paramètres d'étiquette et vos correspondances de champs sont stockés localement dans votre navigateur afin que vos préférences soient conservées lors de vos prochaines visites. Aucun paramètre ni donnée n'est envoyé à un serveur.
+</p>
+<p>
+  Si vous travaillez sur plusieurs ordinateurs ou souhaitez partager votre configuration d'étiquettes avec des collègues, vous pouvez utiliser les boutons d'exportation et d'importation en haut du panneau de configuration pour enregistrer et transférer vos paramètres sous forme de fichier JSON.
+</p>
+
 <h3>Impression des étiquettes</h3>
 <p>
   Lorsque vous cliquez sur le bouton d'impression depuis l'écran d'aperçu, le

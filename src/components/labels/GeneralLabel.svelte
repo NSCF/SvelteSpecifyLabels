@@ -77,6 +77,10 @@
   const labelRendered = (_) => {
     dispatch("label-rendered");
   };
+
+  $: boldWeight = Math.min(900, Number($labelSettings.fontWeight || 400) + 300);
+  $: boldClass = $labelSettings.underline ? "underline" : "";
+  $: boldStyle = $labelSettings.underline ? "" : `font-weight: ${boldWeight};`;
 </script>
 
 <div
@@ -108,9 +112,8 @@
   {#if !$labelSettings.detLabelOnly}
     {#if $labelSettings.showCollectionName}
       <div
-        class="w-full text-center mb-[.5em] {$labelSettings.underline
-          ? 'underline'
-          : 'font-bold'}"
+        class="w-full text-center mb-[.5em] {boldClass}"
+        style={boldStyle}
       >
         {$labelSettings.collectionName || ""}
       </div>
@@ -128,11 +131,8 @@
           <div class="flex flex-row-reverse justify-between mr-[1em]">
             {#if labelRecord.recordNumber || labelRecord.fieldNumber}
               <div
-                class={!labelRecord.catalogNumber && $labelSettings.underline
-                  ? "underline"
-                  : !labelRecord.catalogNumber && !$labelSettings.underline
-                    ? "font-bold"
-                    : ""}
+                class={!labelRecord.catalogNumber ? boldClass : ""}
+                style={!labelRecord.catalogNumber ? boldStyle : ""}
               >
                 {#if $labelSettings.includeFieldNumber && labelRecord.fieldNumber}
                   <span
@@ -146,7 +146,7 @@
               </div>
             {/if}
             {#if labelRecord.catalogNumber}
-              <div class={$labelSettings.underline ? "underline" : "font-bold"}>
+              <div class={boldClass} style={boldStyle}>
                 {labelRecord.catalogNumber}
               </div>
             {/if}
@@ -222,7 +222,7 @@
           </div>
         {/if}
         {#if $labelSettings.addPrintedDate}
-          <div class={$labelSettings.underline ? "underline" : "font-bold"}>
+          <div class={boldClass} style={boldStyle}>
             Printed on {$labelSettings.printerModel
               ? $labelSettings.printerModel
               : ""}
@@ -230,7 +230,7 @@
           </div>
         {/if}
         {#if labelRecord.project && $labelSettings.includeProject}
-          <div class={$labelSettings.underline ? "underline" : "font-bold"}>
+          <div class={boldClass} style={boldStyle}>
             {labelRecord.project}
           </div>
         {/if}
@@ -254,9 +254,8 @@
     <div class="flex flex-row items-center pt-[3px] pb-[3px] min-h-0">
       <div class="w-full">
         <div
-          class="inline-block m-0 {$labelSettings.underline
-            ? 'underline'
-            : 'font-bold'}"
+          class="inline-block m-0 {boldClass}"
+          style={boldStyle}
         >
           Collecting events:
         </div>
@@ -264,11 +263,8 @@
           <div class="flex flex-row-reverse justify-between mr-[1em]">
             {#if labelRecord.recordNumber}
               <div
-                class={!labelRecord.catalogNumber && $labelSettings.underline
-                  ? "underline"
-                  : !labelRecord.catalogNumber && !$labelSettings.underline
-                    ? "font-bold"
-                    : ""}
+                class={!labelRecord.catalogNumber ? boldClass : ""}
+                style={!labelRecord.catalogNumber ? boldStyle : ""}
               >
                 {#if $labelSettings.includeFieldNumber && labelRecord.fieldNumber}
                   <span
@@ -282,7 +278,7 @@
               </div>
             {/if}
             {#if labelRecord.catalogNumber}
-              <div class={$labelSettings.underline ? "underline" : "font-bold"}>
+              <div class={boldClass} style={boldStyle}>
                 {labelRecord.catalogNumber}
               </div>
             {/if}
@@ -318,9 +314,8 @@
     {/if}
     {#if $labelSettings.detLabelOnly && $labelSettings.showCollectionName}
       <div
-        class="w-full text-center mb-[.5em] {$labelSettings.underline
-          ? 'underline'
-          : 'font-bold'}"
+        class="w-full text-center mb-[.5em] {boldClass}"
+        style={boldStyle}
       >
         {$labelSettings.collectionName || ""}
       </div>
@@ -344,11 +339,11 @@
           {/if}
           <!-- catalog and/or collector number -->
           {#if labelRecord.catalogNumber}
-            <div class={$labelSettings.underline ? "underline" : "font-bold"}>
+            <div class={boldClass} style={boldStyle}>
               {labelRecord.catalogNumber}
             </div>
           {:else if labelRecord.recordNumber || labelRecord.fieldNumber}
-            <div class={$labelSettings.underline ? "underline" : "font-bold"}>
+            <div class={boldClass} style={boldStyle}>
               {#if $labelSettings.includeFieldNumber && labelRecord.fieldNumber}
                 <span
                   >{labelRecord.fieldNumber}{labelRecord.recordNumber
@@ -372,9 +367,8 @@
         <!-- taxon name with all the bells and whistles... -->
         <div class="clear-both">
           <span
-            class="inline-block m-0 {$labelSettings.underline
-              ? 'underline'
-              : 'font-bold'}"
+            class="inline-block m-0 {boldClass}"
+            style={boldStyle}
           >
             {@html labelDet}
           </span>

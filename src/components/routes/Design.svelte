@@ -13,6 +13,15 @@
   import exampleData from "../../exampleData";
   import exampleDataPlants from "../../exampleDataPlants";
 
+  import ExportIcon from "../misc/ExportIcon.svelte";
+  import ImportIcon from "../misc/ImportIcon.svelte";
+  import SaveIcon from "../misc/SaveIcon.svelte";
+  import {
+    saveSettings,
+    exportSettings,
+    importSettings,
+  } from "../../lib/settingsManager";
+
   const rawData = getContext("data");
   const appSettings = getContext("appSettings");
   const generalLabelSettings = getContext("generalLabelSettings");
@@ -20,6 +29,65 @@
   const entoLabelSettings = getContext("entoLabelSettings");
   const fieldMappings = getContext("mappings");
   const labelData = getContext("labelData");
+
+  let fileInput;
+
+  const handleSaveSettings = () => {
+    saveSettings(
+      $appSettings,
+      $generalLabelSettings,
+      $herbariumLabelSettings,
+      $entoLabelSettings,
+      $fieldMappings
+    );
+    alert($t("settingsSaved", "Settings saved successfully!"));
+  };
+
+  const handleExportSettings = () => {
+    exportSettings(
+      $appSettings,
+      $generalLabelSettings,
+      $herbariumLabelSettings,
+      $entoLabelSettings,
+      $fieldMappings
+    );
+  };
+
+  const triggerImportFileInput = () => {
+    if (fileInput) {
+      fileInput.click();
+    }
+  };
+
+  const handleImportFile = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const importedData = JSON.parse(text);
+
+      const result = importSettings(
+        importedData,
+        appSettings,
+        generalLabelSettings,
+        herbariumLabelSettings,
+        entoLabelSettings,
+        fieldMappings,
+        $appSettings.labelType
+      );
+
+      if (!result.success) {
+        alert(result.error);
+      } else {
+        alert($t("settingsImported", "Settings imported successfully!"));
+      }
+    } catch (err) {
+      alert($t("importError", "Error parsing JSON file: ") + err.message);
+    } finally {
+      fileInput.value = "";
+    }
+  };
 
   let labelSettings;
   if ($appSettings.labelType == "general") {
@@ -114,13 +182,50 @@
   <Header />
   <div id="main" class="w-full max-w-[1280px] flex-auto min-h-0 flex">
     <div id="settings" class="flex items-center mr-[5px]">
-      {#if $appSettings.labelType == "general"}
-        <GeneralLabelSettings />
-      {:else if $appSettings.labelType == "herbarium"}
-        <HerbariumLabelSettings />
-      {:else if $appSettings.labelType == "insect"}
-        <EntoLabelSettings />
-      {/if}
+      <div>
+        <div
+          class="relative w-full flex justify-end gap-2 text-slate-300 top-8"
+        >
+          <button
+            type="button"
+            title="Export settings"
+            class="text-inherit hover:text-slate-400"
+            on:click={handleExportSettings}
+          >
+            <ExportIcon />
+          </button>
+          <button
+            type="button"
+            title="Import settings"
+            class="text-inherit hover:text-slate-400"
+            on:click={triggerImportFileInput}
+          >
+            <ImportIcon />
+          </button>
+          <button
+            type="button"
+            title="Save settings"
+            class="text-inherit hover:text-slate-400"
+            on:click={handleSaveSettings}
+          >
+            <SaveIcon />
+          </button>
+        </div>
+        <input
+          type="file"
+          accept=".json,application/json"
+          bind:this={fileInput}
+          class="hidden"
+          on:change={handleImportFile}
+        />
+        {#if $appSettings.labelType == "general"}
+          <GeneralLabelSettings />
+        {:else if $appSettings.labelType == "herbarium"}
+          <HerbariumLabelSettings />
+        {:else if $appSettings.labelType == "insect"}
+          <EntoLabelSettings />
+        {/if}
+      </div>
     </div>
     <div id="preview-section" class="relative w-full flex">
       <LabelPreview />
@@ -128,14 +233,16 @@
   </div>
   <div class="w-full max-w-[1280px] flex justify-between border-t pt-2">
     <div>
-      <button id="back-button" class="btn-secondary" on:click={(_) => push("/")}
-        >{$t("startOver", "Start over")}</button
+      <button
+        id="back-button"
+        class="btn btn-secondary"
+        on:click={(_) => push("/")}>{$t("startOver", "Start over")}</button
       >
-      <button class="btn-secondary" on:click={(_) => push("/mappings")}
+      <button class="btn btn-secondary" on:click={(_) => push("/mappings")}
         >{$t("mappings", "Field mappings")}</button
       >
     </div>
-    <button class="btn-primary" on:click={(_) => push("/preview")}
+    <button class="btn btn-primary" on:click={(_) => push("/preview")}
       >{$t("preview", "Preview and print")}</button
     >
   </div>

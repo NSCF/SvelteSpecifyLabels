@@ -26,6 +26,15 @@
       true,
     );
 
+  $: isTypeSpecimen =
+    $labelSettings.borderForTypes &&
+    labelRecord?.typeStatus &&
+    labelRecord.typeStatus.toLowerCase().includes("type");
+
+  $: boldWeight = Math.min(900, Number($labelSettings.fontWeight || 400) + 300);
+  $: boldClass = $labelSettings.underline ? "underline" : "";
+  $: boldStyle = $labelSettings.underline ? "" : `font-weight: ${boldWeight};`;
+
   // Svelte actions for barcode and QR code rendering
   function renderBarcodeMain(node, catalogNumber) {
     if (catalogNumber) {
@@ -283,8 +292,12 @@
     let parts = [];
     if (rec.family) parts.push(rec.family.toUpperCase());
     if (labelDet) {
-      const cls = $labelSettings.underline ? "underline" : "font-bold";
-      parts.push(`<span class="${cls}">${labelDet}</span>`);
+      if ($labelSettings.underline) {
+        parts.push(`<span class="underline">${labelDet}</span>`);
+      } else {
+        const w = Math.min(900, Number($labelSettings.fontWeight || 400) + 300);
+        parts.push(`<span style="font-weight: ${w}">${labelDet}</span>`);
+      }
     }
 
     let detBy = "";
@@ -333,10 +346,10 @@
     {#each chunkParts(getLocalityParts(labelRecord), true) as chunk, index}
       {#if $labelSettings.labelSize === "22x15" && $labelSettings.barcodeOnMain && labelRecord.catalogNumber}
         <div
-          class="box-border p-[1px_2px] overflow-hidden flex flex-row items-stretch text-left bg-white break-inside-avoid mb-[2px] print:!border-[#aaa]"
+          class="ento-box-border box-border p-[1px_2px] overflow-hidden flex flex-row items-stretch text-left bg-white break-inside-avoid mb-[2px] print:!border-transparent"
           style="width: var(--label-width, 2.2cm); {index === 0
             ? 'height: var(--label-height, 1.5cm);'
-            : 'max-height: var(--label-height, 1.5cm); height: auto;'} border: 0.1mm dashed #bbb;"
+            : 'max-height: var(--label-height, 1.5cm); height: auto;'} border: 0.1mm dashed transparent;"
         >
           <!-- Left Column: Barcode/QR block -->
           {#if index === 0}
@@ -355,9 +368,8 @@
                     use:renderQRCode={labelRecord.catalogNumber}
                   />
                   <div
-                    class="font-mono leading-none text-center whitespace-nowrap mt-[1px] {$labelSettings.underline
-                      ? 'underline'
-                      : 'font-bold'}"
+                    class="font-mono leading-none text-center whitespace-nowrap mt-[1px] {boldClass}"
+                    style={boldStyle}
                   >
                     {labelRecord.catalogNumber}
                   </div>
@@ -374,9 +386,8 @@
                       use:renderBarcodeMain={labelRecord.catalogNumber}
                     />
                     <div
-                      class="font-mono leading-none text-center mt-0 {$labelSettings.underline
-                        ? 'underline'
-                        : 'font-bold'}"
+                      class="font-mono leading-none text-center mt-0 {boldClass}"
+                      style={boldStyle}
                     >
                       {labelRecord.catalogNumber}
                     </div>
@@ -384,9 +395,8 @@
                 </div>
               {:else}
                 <div
-                  class="font-mono text-[4pt] leading-none text-center rotate-[-90deg] whitespace-nowrap {$labelSettings.underline
-                    ? 'underline'
-                    : 'font-bold'}"
+                  class="font-mono text-[4pt] leading-none text-center rotate-[-90deg] whitespace-nowrap {boldClass}"
+                  style={boldStyle}
                 >
                   {labelRecord.catalogNumber}
                 </div>
@@ -405,8 +415,8 @@
         <CutMarks char={"-"} />
       {:else}
         <div
-          class="box-border p-[1px_2px] overflow-hidden flex flex-col justify-center items-start text-left bg-white break-inside-avoid mb-[2px] print:!border-[#aaa]"
-          style="width: var(--label-width, 1.5cm); max-height: var(--label-height, 0.7cm); height: auto; border: 0.1mm dashed #bbb;"
+          class="ento-box-border box-border p-[1px_2px] overflow-hidden flex flex-col justify-center items-start text-left bg-white break-inside-avoid mb-[2px] print:!border-transparent"
+          style="width: var(--label-width, 1.5cm); max-height: var(--label-height, 0.7cm); height: auto; border: 0.1mm dashed transparent;"
         >
           {#each chunk as line}
             <div class="w-full break-words block">{@html line}</div>
@@ -419,8 +429,8 @@
     <!-- 2. Notes label -->
     {#each chunkParts(getNotesParts(labelRecord), false) as chunk}
       <div
-        class="box-border p-[1px_2px] overflow-hidden flex flex-col justify-center items-start text-left bg-white break-inside-avoid mb-[2px] print:!border-[#aaa]"
-        style="width: var(--label-width, 1.5cm); max-height: var(--label-height, 0.7cm); height: auto; border: 0.1mm dashed #bbb;"
+        class="ento-box-border box-border p-[1px_2px] overflow-hidden flex flex-col justify-center items-start text-left bg-white break-inside-avoid mb-[2px] print:!border-transparent"
+        style="width: var(--label-width, 1.5cm); max-height: var(--label-height, 0.7cm); height: auto; border: 0.1mm dashed transparent;"
       >
         {#each chunk as line}
           <div class="w-full break-words block">{@html line}</div>
@@ -434,8 +444,12 @@
   {#if ($labelSettings.detLabel || $labelSettings.detLabelOnly) && labelDet}
     {#each chunkParts(getDetParts(labelRecord), false) as chunk}
       <div
-        class="box-border p-[1px_2px] overflow-hidden flex flex-col justify-center items-start text-left bg-white break-inside-avoid mb-[2px] print:!border-[#aaa]"
-        style="width: var(--label-width, 1.5cm); max-height: var(--label-height, 0.7cm); height: auto; border: 0.1mm dashed #bbb;"
+        class="box-border p-[1px_2px] overflow-hidden flex flex-col justify-center items-start text-left bg-white break-inside-avoid mb-[2px] {isTypeSpecimen
+          ? 'print:!border-[red]'
+          : 'ento-box-border print:!border-transparent'}"
+        style="width: var(--label-width, 1.5cm); max-height: var(--label-height, 0.7cm); height: auto; border: {isTypeSpecimen
+          ? '0.8mm solid red'
+          : '0.1mm dashed transparent'};"
       >
         {#each chunk as line}
           <div class="w-full break-words block">{@html line}</div>
@@ -448,8 +462,8 @@
   <!-- 4. Catalog number label -->
   {#if !$labelSettings.detLabelOnly && labelRecord.catalogNumber && !($labelSettings.labelSize === "22x15" && $labelSettings.barcodeOnMain)}
     <div
-      class="box-border p-[1px_2px] overflow-hidden flex flex-col justify-center items-center text-center bg-white break-inside-avoid mb-[2px] print:!border-[#aaa]"
-      style="width: var(--label-width, 1.5cm); height: var(--label-height, 0.7cm); border: 0.1mm dashed #bbb;"
+      class="ento-box-border box-border p-[1px_2px] overflow-hidden flex flex-col justify-center items-center text-center bg-white break-inside-avoid mb-[2px] print:!border-transparent"
+      style="width: var(--label-width, 1.5cm); height: var(--label-height, 0.7cm); border: 0.1mm dashed transparent;"
     >
       {#if $labelSettings.includeQRCode}
         <img
@@ -458,9 +472,8 @@
           use:renderQRCode={labelRecord.catalogNumber}
         />
         <div
-          class="w-full text-center font-mono leading-none mt-[1px] text-[120%] {$labelSettings.underline
-            ? 'underline'
-            : 'font-bold'}"
+          class="w-full text-center font-mono leading-none mt-[1px] text-[120%] {boldClass}"
+          style={boldStyle}
         >
           {labelRecord.catalogNumber}
         </div>
@@ -471,17 +484,15 @@
           use:renderBarcodeCatalog={labelRecord.catalogNumber}
         />
         <div
-          class="w-full text-center font-mono leading-none mt-[1px] text-[120%] {$labelSettings.underline
-            ? 'underline'
-            : 'font-bold'}"
+          class="w-full text-center font-mono leading-none mt-[1px] text-[120%] {boldClass}"
+          style={boldStyle}
         >
           {labelRecord.catalogNumber}
         </div>
       {:else}
         <div
-          class="w-full text-center font-mono text-[120%] leading-none {$labelSettings.underline
-            ? 'underline'
-            : 'font-bold'}"
+          class="w-full text-center font-mono text-[120%] leading-none {boldClass}"
+          style={boldStyle}
         >
           {labelRecord.catalogNumber}
         </div>
@@ -490,3 +501,9 @@
     <CutMarks char={"-"} />
   {/if}
 </div>
+
+<style>
+  :global(.design-mode) .ento-box-border {
+    border-color: #bbb !important;
+  }
+</style>
