@@ -15,7 +15,8 @@
   $: if (
     labelRecord ||
     $labelSettings.includeTaxonAuthorities ||
-    $labelSettings.italics
+    $labelSettings.italics ||
+    $labelSettings.underline
   )
     labelDet = getLabelDet(
       labelRecord,
@@ -114,6 +115,12 @@
     let currentLineLength = 0;
 
     for (let word of words) {
+      if (word.length > charactersPerLine) {
+        const wordLines = Math.ceil(word.length / charactersPerLine);
+        lines += wordLines - 1;
+        currentLineLength = word.length % charactersPerLine;
+        continue;
+      }
       if (
         currentLineLength + word.length + (currentLineLength > 0 ? 1 : 0) <=
         charactersPerLine
@@ -138,29 +145,41 @@
 
     const widthPoints = labelWidth * 28.346;
     const heightPoints = labelHeight * 28.346;
-    const lineSpacing = fontSize * (lineHeight / 100);
 
-    const widthFirst =
-      isLocality &&
-      $labelSettings.labelSize === "22x15" &&
-      $labelSettings.barcodeOnMain
-        ? widthPoints - 3 - 0.4 * 28.346
-        : widthPoints - 3;
-    const widthRest = widthPoints - 3;
+    // Account for line-height and font vertical metrics box
+    const effectiveLineHeight = fontSize * (lineHeight / 100) * 1.18;
 
-    const charWidthFactor = $labelSettings.font === "Courier" ? 0.6 : 0.4;
-    const charWidthPoints = fontSize * charWidthFactor;
-
-    const charsFirst = Math.max(10, Math.floor(widthFirst / charWidthPoints));
-    const charsRest = Math.max(10, Math.floor(widthRest / charWidthPoints));
-
-    const usableHeightPoints = heightPoints - 2;
+    // Deduct padding (top/bottom: 1px = ~1.5pt each) + margin for vertical alignment
+    const usableHeightPoints = Math.max(1, heightPoints - 4);
 
     // Calculate max lines per label
     const baseMaxLines = Math.max(
       2,
-      Math.floor(usableHeightPoints / lineSpacing),
+      Math.floor(usableHeightPoints / effectiveLineHeight),
     );
+
+    // Calculate usable width in points
+    // Padding: 2px left + 2px right = ~4pt
+    const paddingPoints = 4;
+
+    // For 22x15 with barcode on main label, left barcode column takes 0.4cm (~11.34pt) plus spacing (~3.5pt) = ~14.8pt
+    const barcodeColPoints =
+      isLocality &&
+      $labelSettings.labelSize === "22x15" &&
+      $labelSettings.barcodeOnMain &&
+      labelRecord?.catalogNumber
+        ? 0.4 * 28.346 + 3.5
+        : 0;
+
+    const widthFirst = widthPoints - paddingPoints - barcodeColPoints;
+    const widthRest = widthPoints - paddingPoints;
+
+    // Character width factor (0.5 for proportional fonts, 0.6 for Courier)
+    const charWidthFactor = $labelSettings.font === "Courier" ? 0.6 : 0.5;
+    const charWidthPoints = fontSize * charWidthFactor;
+
+    const charsFirst = Math.max(10, Math.floor(widthFirst / charWidthPoints));
+    const charsRest = Math.max(10, Math.floor(widthRest / charWidthPoints));
 
     let chunks = [];
     let currentChunk = [];
@@ -175,9 +194,11 @@
       const chars = isFirst ? charsFirst : charsRest;
 
       const partLines = estimateLinesForText(partStr, chars);
-      const limit = baseMaxLines;
 
-      if (currentChunk.length > 0 && currentChunkLines + partLines > limit) {
+      if (
+        currentChunk.length > 0 &&
+        currentChunkLines + partLines > baseMaxLines
+      ) {
         chunks.push(currentChunk);
         currentChunk = [partStr];
         const nextChars = charsRest;
@@ -233,6 +254,11 @@
       parts.push(collectorNumberString());
     }
 
+    // Stage and sex
+    if ($labelSettings.includeStageSexOnMainLabel && rec.specimenStageSex) {
+      parts.push(rec.specimenStageSex);
+    }
+
     return parts;
   };
 
@@ -256,7 +282,10 @@
   const getDetParts = (rec) => {
     let parts = [];
     if (rec.family) parts.push(rec.family.toUpperCase());
-    if (labelDet) parts.push(labelDet);
+    if (labelDet) {
+      const cls = $labelSettings.underline ? "underline" : "font-bold";
+      parts.push(`<span class="${cls}">${labelDet}</span>`);
+    }
 
     let detBy = "";
     if (rec.identifiedBy) {
@@ -284,13 +313,14 @@
 </script>
 
 <div
-  class="inline-block break-inside-avoid text-black"
+  class="inline-block break-inside-avoid text-black overflow-hidden"
   style="--font: {$labelSettings.font};
   --font-weight: {$labelSettings.fontWeight};
   --font-size: {$labelSettings.fontSize + 'pt'};
   --line-height: {$labelSettings.lineHeight + '%'};
   --label-width: {$labelSettings.labelWidth + 'cm'};
   --label-height: {$labelSettings.labelHeight + 'cm'};
+  width: var(--label-width, 1.5cm);
   font-family: var(--font, sans-serif);
   font-size: var(--font-size, 4pt);
   font-weight: var(--font-weight, 400);
@@ -304,7 +334,9 @@
       {#if $labelSettings.labelSize === "22x15" && $labelSettings.barcodeOnMain && labelRecord.catalogNumber}
         <div
           class="box-border p-[1px_2px] overflow-hidden flex flex-row items-stretch text-left bg-white break-inside-avoid mb-[2px] print:!border-[#aaa]"
-          style="width: var(--label-width, 2.2cm); height: var(--label-height, 1.5cm); border: 0.1mm dashed #bbb;"
+          style="width: var(--label-width, 2.2cm); {index === 0
+            ? 'height: var(--label-height, 1.5cm);'
+            : 'max-height: var(--label-height, 1.5cm); height: auto;'} border: 0.1mm dashed #bbb;"
         >
           <!-- Left Column: Barcode/QR block -->
           {#if index === 0}
@@ -323,17 +355,17 @@
                     use:renderQRCode={labelRecord.catalogNumber}
                   />
                   <div
-                    class="font-mono leading-none text-center whitespace-nowrap mt-[1px]"
+                    class="font-mono leading-none text-center whitespace-nowrap mt-[1px] {$labelSettings.underline
+                      ? 'underline'
+                      : 'font-bold'}"
                   >
                     {labelRecord.catalogNumber}
                   </div>
                 </div>
               {:else if $labelSettings.includeBarcode}
-                <div
-                  class="flex items-center justify-center w-full h-full border"
-                >
+                <div class="flex items-center justify-center w-full h-full">
                   <div
-                    class="flex flex-col items-center justify-center select-none border"
+                    class="flex flex-col items-center justify-center select-none"
                     style="transform: rotate(-90deg); transform-origin: center; width: 1.3cm; height: 0.35cm; flex-shrink: 0;"
                   >
                     <img
@@ -341,14 +373,20 @@
                       style="width: 1.3cm; height: 0.18cm;"
                       use:renderBarcodeMain={labelRecord.catalogNumber}
                     />
-                    <div class="font-mono leading-none text-center mt-0">
+                    <div
+                      class="font-mono leading-none text-center mt-0 {$labelSettings.underline
+                        ? 'underline'
+                        : 'font-bold'}"
+                    >
                       {labelRecord.catalogNumber}
                     </div>
                   </div>
                 </div>
               {:else}
                 <div
-                  class="font-mono text-[4pt] leading-none text-center rotate-[-90deg] whitespace-nowrap"
+                  class="font-mono text-[4pt] leading-none text-center rotate-[-90deg] whitespace-nowrap {$labelSettings.underline
+                    ? 'underline'
+                    : 'font-bold'}"
                 >
                   {labelRecord.catalogNumber}
                 </div>
@@ -368,7 +406,7 @@
       {:else}
         <div
           class="box-border p-[1px_2px] overflow-hidden flex flex-col justify-center items-start text-left bg-white break-inside-avoid mb-[2px] print:!border-[#aaa]"
-          style="width: var(--label-width, 1.5cm); height: var(--label-height, 0.7cm); border: 0.1mm dashed #bbb;"
+          style="width: var(--label-width, 1.5cm); max-height: var(--label-height, 0.7cm); height: auto; border: 0.1mm dashed #bbb;"
         >
           {#each chunk as line}
             <div class="w-full break-words block">{@html line}</div>
@@ -382,7 +420,7 @@
     {#each chunkParts(getNotesParts(labelRecord), false) as chunk}
       <div
         class="box-border p-[1px_2px] overflow-hidden flex flex-col justify-center items-start text-left bg-white break-inside-avoid mb-[2px] print:!border-[#aaa]"
-        style="width: var(--label-width, 1.5cm); height: var(--label-height, 0.7cm); border: 0.1mm dashed #bbb;"
+        style="width: var(--label-width, 1.5cm); max-height: var(--label-height, 0.7cm); height: auto; border: 0.1mm dashed #bbb;"
       >
         {#each chunk as line}
           <div class="w-full break-words block">{@html line}</div>
@@ -394,18 +432,17 @@
 
   <!-- 3. Determination label -->
   {#if ($labelSettings.detLabel || $labelSettings.detLabelOnly) && labelDet}
-    {@const detLines = getDetParts(labelRecord)}
-    {#if detLines.length > 0}
+    {#each chunkParts(getDetParts(labelRecord), false) as chunk}
       <div
         class="box-border p-[1px_2px] overflow-hidden flex flex-col justify-center items-start text-left bg-white break-inside-avoid mb-[2px] print:!border-[#aaa]"
-        style="width: var(--label-width, 1.5cm); height: var(--label-height, 0.7cm); border: 0.1mm dashed #bbb;"
+        style="width: var(--label-width, 1.5cm); max-height: var(--label-height, 0.7cm); height: auto; border: 0.1mm dashed #bbb;"
       >
-        {#each detLines as line}
+        {#each chunk as line}
           <div class="w-full break-words block">{@html line}</div>
         {/each}
       </div>
       <CutMarks char={"-"} />
-    {/if}
+    {/each}
   {/if}
 
   <!-- 4. Catalog number label -->
@@ -421,7 +458,9 @@
           use:renderQRCode={labelRecord.catalogNumber}
         />
         <div
-          class="w-full text-center font-mono leading-none mt-[1px] text-[120%]"
+          class="w-full text-center font-mono leading-none mt-[1px] text-[120%] {$labelSettings.underline
+            ? 'underline'
+            : 'font-bold'}"
         >
           {labelRecord.catalogNumber}
         </div>
@@ -432,13 +471,17 @@
           use:renderBarcodeCatalog={labelRecord.catalogNumber}
         />
         <div
-          class="w-full text-center font-mono leading-none mt-[1px] text-[120%]"
+          class="w-full text-center font-mono leading-none mt-[1px] text-[120%] {$labelSettings.underline
+            ? 'underline'
+            : 'font-bold'}"
         >
           {labelRecord.catalogNumber}
         </div>
       {:else}
         <div
-          class="w-full text-center font-mono font-bold text-[120%] leading-none"
+          class="w-full text-center font-mono text-[120%] leading-none {$labelSettings.underline
+            ? 'underline'
+            : 'font-bold'}"
         >
           {labelRecord.catalogNumber}
         </div>

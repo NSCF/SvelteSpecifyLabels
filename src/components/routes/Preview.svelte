@@ -54,7 +54,10 @@
     <button id="back-button" class="btn-secondary" on:click={(_) => pop()}
       >{$t("back", "Back")}</button
     >
-    <button on:click={showPrint} disabled={!$labelData.length}
+    <button
+      on:click={showPrint}
+      disabled={!$labelData.length}
+      class="btn-primary"
       >{$t("printButton", "Let's print these labels...")}</button
     >
   </div>

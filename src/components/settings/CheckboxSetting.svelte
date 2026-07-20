@@ -6,7 +6,7 @@
   export let settingInfo;
 </script>
 
-<label style="display:inline;">
+<label class="inline-block break-inside-avoid text-wrap">
   <input type="checkbox" bind:checked={value} />
   {labelText}
   {#if settingInfo}

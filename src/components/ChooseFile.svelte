@@ -112,7 +112,7 @@
 </script>
 
 <!-- based on https://codepen.io/MSEdgeDev/pen/KzzNaZ -->
-<div id="wrapper" class="w-full mx-auto mt-[5px] font-['segoe',sans-serif]">
+<div id="wrapper" class="w-full mx-auto mt-8 font-['segoe',sans-serif]">
   <div
     id="fileDropBox"
     class="mx-auto w-[20em] text-center text-[gray] bg-[var(--color-bg)] rounded-[7px] cursor-pointer {hovering

@@ -63,7 +63,7 @@
       bind:value={$labelSettings.includeQRCode}
       labelText={$t("qrCode", "Include QR code")}
     />
-    {#if $labelSettings.labelSize === '22x15'}
+    {#if $labelSettings.labelSize === "22x15"}
       <CheckboxSetting
         bind:value={$labelSettings.barcodeOnMain}
         labelText={$t("barcodeOnMain", "Include barcode on main label")}

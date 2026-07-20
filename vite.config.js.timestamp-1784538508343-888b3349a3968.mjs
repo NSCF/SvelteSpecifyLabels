@@ -1,0 +1,14 @@
+// vite.config.js
+import { defineConfig } from "file:///c:/devprojects/nscf/SvelteSpecifyLabels/node_modules/vite/dist/node/index.js";
+import { svelte } from "file:///c:/devprojects/nscf/SvelteSpecifyLabels/node_modules/@sveltejs/vite-plugin-svelte/src/index.js";
+var vite_config_default = defineConfig({
+  plugins: [
+    svelte({
+      /* plugin options */
+    })
+  ]
+});
+export {
+  vite_config_default as default
+};
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsidml0ZS5jb25maWcuanMiXSwKICAic291cmNlc0NvbnRlbnQiOiBbImNvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9kaXJuYW1lID0gXCJjOlxcXFxkZXZwcm9qZWN0c1xcXFxuc2NmXFxcXFN2ZWx0ZVNwZWNpZnlMYWJlbHNcIjtjb25zdCBfX3ZpdGVfaW5qZWN0ZWRfb3JpZ2luYWxfZmlsZW5hbWUgPSBcImM6XFxcXGRldnByb2plY3RzXFxcXG5zY2ZcXFxcU3ZlbHRlU3BlY2lmeUxhYmVsc1xcXFx2aXRlLmNvbmZpZy5qc1wiO2NvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9pbXBvcnRfbWV0YV91cmwgPSBcImZpbGU6Ly8vYzovZGV2cHJvamVjdHMvbnNjZi9TdmVsdGVTcGVjaWZ5TGFiZWxzL3ZpdGUuY29uZmlnLmpzXCI7aW1wb3J0IHsgZGVmaW5lQ29uZmlnIH0gZnJvbSAndml0ZSc7XHJcbmltcG9ydCB7IHN2ZWx0ZSB9IGZyb20gJ0BzdmVsdGVqcy92aXRlLXBsdWdpbi1zdmVsdGUnO1xyXG5cclxuZXhwb3J0IGRlZmF1bHQgZGVmaW5lQ29uZmlnKHtcclxuICBwbHVnaW5zOiBbXHJcbiAgICBzdmVsdGUoe1xyXG4gICAgICAvKiBwbHVnaW4gb3B0aW9ucyAqL1xyXG4gICAgfSlcclxuICBdXHJcbn0pOyJdLAogICJtYXBwaW5ncyI6ICI7QUFBK1MsU0FBUyxvQkFBb0I7QUFDNVUsU0FBUyxjQUFjO0FBRXZCLElBQU8sc0JBQVEsYUFBYTtBQUFBLEVBQzFCLFNBQVM7QUFBQSxJQUNQLE9BQU87QUFBQTtBQUFBLElBRVAsQ0FBQztBQUFBLEVBQ0g7QUFDRixDQUFDOyIsCiAgIm5hbWVzIjogW10KfQo=
