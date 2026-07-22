@@ -11,6 +11,10 @@
   import defaultEntoLabelSettings from "../settings/entoLabelSettings";
   import { locale, t } from "../i18n/lang";
   import makeLabelData from "../lib/makeLabelData";
+  import { initGA } from "../lib/analytics";
+
+  // Initialize GA
+  initGA(import.meta.env.VITE_GA_MEASUREMENT_ID);
 
   // we need this for legacy purposes, because the structure of settings changed...
   if (localStorage.getItem("labelSettings") != null) {

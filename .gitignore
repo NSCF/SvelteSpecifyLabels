@@ -3,3 +3,6 @@
 /dist/
 
 .DS_Store
+
+# only stores the google analytics measurement id, which is not sensitive information, get it from the analytics dashboard if you need it
+.env

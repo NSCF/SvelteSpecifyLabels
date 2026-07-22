@@ -1,5 +1,5 @@
 <script>
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { push } from "svelte-spa-router";
   import Header from "../misc/Header.svelte";
   import LabelPreview from "../labels/LabelPreview.svelte";
@@ -12,6 +12,7 @@
   import { t } from "../../i18n/lang";
   import exampleData from "../../exampleData";
   import exampleDataPlants from "../../exampleDataPlants";
+  import { trackPageView } from "../../lib/analytics";
 
   import ExportIcon from "../misc/ExportIcon.svelte";
   import ImportIcon from "../misc/ImportIcon.svelte";
@@ -29,6 +30,10 @@
   const entoLabelSettings = getContext("entoLabelSettings");
   const fieldMappings = getContext("mappings");
   const labelData = getContext("labelData");
+
+  onMount(() => {
+    trackPageView("/design", $appSettings.labelType, $appSettings.lang);
+  });
 
   let fileInput;
 

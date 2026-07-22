@@ -1,11 +1,12 @@
 <script>
-  import { getContext } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { pop, replace, push } from "svelte-spa-router";
   import Header from "../misc/Header.svelte";
   import CollectiveSettings from "../settings/CollectiveSettings.svelte";
   import LabelLayout from "../labels/LabelLayout.svelte";
   import { t } from "../../i18n/lang";
   import { saveSettings } from "../../lib/settingsManager";
+  import { trackPageView, trackEvent } from "../../lib/analytics";
 
   const rawData = getContext("data");
   const labelData = getContext("labelData");
@@ -30,6 +31,10 @@
     replace("/");
   }
 
+  onMount(() => {
+    trackPageView("/preview", $appSettings.labelType, $appSettings.lang);
+  });
+
   const showPrint = (_) => {
     saveSettings(
       $appSettings,
@@ -38,6 +43,21 @@
       $entoLabelSettings,
       $fieldMappings,
     );
+
+    let labelCount = $labelData.length;
+    if ($labelSettings && $labelSettings.labelPerSpecimen) {
+      labelCount = $labelData.reduce((sum, record) => {
+        const count = parseInt(record.specimenCount, 10);
+        return sum + (isNaN(count) || count <= 0 ? 1 : count);
+      }, 0);
+    }
+
+    trackEvent("labels_generated", {
+      label_count: labelCount,
+      label_type: $appSettings.labelType,
+      app_language: $appSettings.lang,
+      browser_language: typeof navigator !== 'undefined' ? navigator.language : 'unknown'
+    });
     window.print();
   };
 </script>

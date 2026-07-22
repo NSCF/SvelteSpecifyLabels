@@ -7,6 +7,7 @@
   import Header from "../misc/Header.svelte";
   import ChooseFile from "../ChooseFile.svelte";
   import { t } from "../../i18n/lang";
+  import { trackPageView } from "../../lib/analytics";
 
   let title = "NSCF Labels";
 
@@ -14,6 +15,13 @@
   const appSettings = getContext("appSettings");
 
   $rawData = []; //in case we return to this page and want to add new data
+
+  let initialTracked = false;
+  $: if ($appSettings.labelType) {
+    if (initialTracked) {
+      trackPageView("/", $appSettings.labelType, $appSettings.lang);
+    }
+  }
 
   const handleFileDataAndTitle = async (ev) => {
     let payload = ev.detail;
@@ -33,6 +41,8 @@
 
   // lets add those descriptions
   onMount(() => {
+    trackPageView("/", $appSettings.labelType, $appSettings.lang);
+    initialTracked = true;
     tippy("[data-tippy-content]", {
       delay: [400, 200],
       theme: "light-translucent",
