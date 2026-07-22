@@ -61,8 +61,15 @@
     replace("/");
   }
 
-  const resetMappings = (_) => {
+  const autoMap = (_) => {
     $fieldMappings[$appSettings.labelType] = getFieldMappings($rawData[0]);
+  };
+
+  const clearMappings = (_) => {
+    for (const key of Object.keys($fieldMappings[$appSettings.labelType])) {
+      $fieldMappings[$appSettings.labelType][key] = null;
+    }
+    $fieldMappings = $fieldMappings;
   };
 
   const getHideBottomDiv = (_) => {
@@ -94,12 +101,10 @@
       )}
     </p>
     <div class="flex justify-between">
-      <button
-        id="back-button"
-        class="bg-[LightGray] text-[dimgray] border-none hover:bg-[silver] cursor-pointer"
-        on:click={(_) => pop()}>{$t("back", "Back")}</button
+      <button id="back-button" class="btn btn-secondary" on:click={(_) => pop()}
+        >{$t("back", "Back")}</button
       >
-      <button on:click={(_) => push("/preview")}
+      <button class="btn btn-primary" on:click={(_) => push("/preview")}
         >{$t("preview", "Preview and print")}</button
       >
     </div>
@@ -118,10 +123,14 @@
         {excludeFromMappings}
         on:mapping-change={handleMappingChange}
       />
-      <button
-        class="bg-[LightGray] text-[dimgray] border-none hover:bg-[silver] cursor-pointer"
-        on:click={resetMappings}>{$t("resetAll", "Reset all")}</button
-      >
+      <div>
+        <button class="btn btn-secondary" on:click={clearMappings}
+          >{$t("clear-mappings", "Clear mappings")}</button
+        >
+        <button class="btn btn-secondary" on:click={autoMap}
+          >{$t("autoMap", "Auto map")}</button
+        >
+      </div>
     </div>
     <div class="flex w-full flex-wrap">
       {#each Object.keys($fieldMappings[$appSettings.labelType]) as labelField}

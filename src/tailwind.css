@@ -118,6 +118,6 @@
     @apply bg-[#4ab056] hover:bg-[#3aa146] text-white;
   }
   .btn-secondary {
-    @apply bg-[LightGray] text-[dimgray] hover:bg-[silver];
+    @apply bg-[LightGray] text-[#332b2b] hover:bg-[silver];
   }
 }
