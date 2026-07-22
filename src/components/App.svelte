@@ -1,7 +1,7 @@
 <script>
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
-  import Router, { link } from "svelte-spa-router";
+  import Router, { link, location } from "svelte-spa-router";
   import routes from "../lib/routes";
   import reconcileStoredSettings from "../lib/reconcileStoredSettings";
 
@@ -81,6 +81,21 @@
   let fieldMappings = writable({});
   let labelData = writable([]);
 
+  let designRawData = [];
+  let previousRawData = null;
+
+  $: if ($rawData !== previousRawData) {
+    previousRawData = $rawData;
+    if ($rawData.length > 10) {
+      designRawData = [...$rawData].sort(() => 0.5 - Math.random()).slice(0, 10);
+    } else {
+      designRawData = [...$rawData];
+    }
+  }
+
+  $: isPreview = $location === "/preview";
+  $: activeRawData = isPreview ? $rawData : designRawData;
+
   $: labelSettingsStore =
     $appSettings.labelType == "general"
       ? generalLabelSettings
@@ -91,9 +106,9 @@
   $: abbreviateCountries =
     $appSettings.labelType == "general" || $appSettings.labelType == "insect";
 
-  $: if ($rawData.length > 0 && $fieldMappings[$appSettings.labelType]) {
+  $: if (activeRawData.length > 0 && $fieldMappings[$appSettings.labelType]) {
     $labelData = makeLabelData(
-      $rawData,
+      activeRawData,
       $fieldMappings[$appSettings.labelType],
       abbreviateCountries,
       $labelSettingsStore.useRomanNumeralMonths,
@@ -102,6 +117,8 @@
       $labelSettingsStore.includeCollectorInSort,
       $appSettings.labelType,
     );
+  } else {
+    $labelData = [];
   }
 
   setContext("data", rawData);
