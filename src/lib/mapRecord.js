@@ -1,5 +1,61 @@
 import getDateTimeRange from 'friendly-iso-datetime-intervals'
-import addRomanNumeralDates from './addRomanNumeralDates.js'
+
+function parseAndFormatDate(collectionDate, useRomanNumeralMonths) {
+  if (!collectionDate) return collectionDate;
+
+  let str = collectionDate.trim();
+
+  // 1. Try to split by space + time range
+  // e.g. "2006/11/12 10:00–10:40" or "2007/01/02 08:00–11:30"
+  const spaceSplit = str.split(/\s+/);
+  if (spaceSplit.length === 2 && /^\d{2}:\d{2}/.test(spaceSplit[1])) {
+    const datePart = spaceSplit[0];
+    const timePart = spaceSplit[1];
+    const timeParts = timePart.split(/[-–—]/);
+    const startTime = timeParts[0] ? timeParts[0].trim() : null;
+    const endTime = timeParts[1] ? timeParts[1].trim() : null;
+    try {
+      return getDateTimeRange(datePart, datePart, startTime, endTime, true, useRomanNumeralMonths);
+    } catch (e) {}
+  }
+
+  // 2. Try to split by range separators: " - ", " to ", " and ", "–", "—"
+  let rangeParts = null;
+  const matchRange = str.split(/\s+(?:-|to|and)\s+|\s*[–—]\s*/i);
+  if (matchRange.length === 2) {
+    rangeParts = matchRange;
+  } else {
+    // If not matched, check specifically for "2015/07/17-2015/07/19" (slashes in date, hyphen as range separator)
+    if (str.includes('-')) {
+      const hyphenParts = str.split('-');
+      if (hyphenParts.length === 2 && hyphenParts[0].includes('/') && hyphenParts[1].includes('/')) {
+        rangeParts = hyphenParts;
+      }
+    }
+    // Check for "2015-07-17/2015-07-19" (hyphens/dots in date, slash as range separator)
+    if (!rangeParts && str.includes('/')) {
+      const slashParts = str.split('/');
+      if (slashParts.length === 2 && !slashParts[0].includes('/') && !slashParts[1].includes('/')) {
+        rangeParts = slashParts;
+      }
+    }
+  }
+
+  if (rangeParts) {
+    const start = rangeParts[0].trim();
+    const end = rangeParts[1].trim();
+    try {
+      return getDateTimeRange(start, end, null, null, true, useRomanNumeralMonths);
+    } catch (e) {}
+  }
+
+  // 3. Try to parse directly (single date)
+  try {
+    return getDateTimeRange(str, null, null, null, true, useRomanNumeralMonths);
+  } catch (e) {}
+
+  return collectionDate;
+}
 
 
 //takes a record from the input dataset and returns the object needed by the label
@@ -260,6 +316,10 @@ export default function mapRecord(record, fieldMappings, abbreviateCountries, us
     }
   }
 
+  if (mappedRecord.collectionDate) {
+    mappedRecord.collectionDate = parseAndFormatDate(mappedRecord.collectionDate, useRomanNumeralMonths)
+  }
+
   if (!mappedRecord.specimenStageSex) {
     let sexes, stages
     if (mappedRecord.sex) {
@@ -358,8 +418,15 @@ export default function mapRecord(record, fieldMappings, abbreviateCountries, us
       mappedRecord.dateIdentified = detDateParts.join('/')
     }
   }
-  else {
-    mappedRecord.dateIdentified = getDateTimeRange(mappedRecord.dateIdentified, null, null, null, true, useRomanNumeralMonths)
+
+  if (mappedRecord.dateIdentified) {
+    try {
+      mappedRecord.dateIdentified = getDateTimeRange(mappedRecord.dateIdentified, null, null, null, true, useRomanNumeralMonths)
+    }
+    catch (err) {
+      console.error('error with record identification date', mappedRecord.catalogNumber)
+      console.error(err)
+    }
   }
 
   if (!mappedRecord.identifiedBy) {
