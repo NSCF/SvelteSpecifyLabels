@@ -211,18 +211,20 @@
             >
               {labelRecord.catalogNumber || ""}
             </div>
-            {#if $labelSettings.includeQRCode}
-              <img
-                class="h-3/4 mr-[20px]"
-                alt="Data Matrix"
-                use:renderQRCode={labelRecord.catalogNumber}
-              />
-            {:else if $labelSettings.includeBarcode}
-              <img
-                alt="barcode"
-                class="[image-rendering:crisp-edges] w-1/2 h-2/3"
-                use:renderBarcode={labelRecord.catalogNumber}
-              />
+            {#if labelRecord.catalogNumber}
+              {#if $labelSettings.includeQRCode}
+                <img
+                  class="h-3/4 mr-[20px]"
+                  alt="Data Matrix"
+                  use:renderQRCode={labelRecord.catalogNumber}
+                />
+              {:else if $labelSettings.includeBarcode}
+                <img
+                  alt="barcode"
+                  class="[image-rendering:crisp-edges] w-1/2 h-2/3"
+                  use:renderBarcode={labelRecord.catalogNumber}
+                />
+              {/if}
             {/if}
           </div>
           <div>Project: {labelRecord.project || ""}</div>
@@ -256,8 +258,8 @@
             </div>
           {:else}
             <div>
-              Coll. no. {labelRecord.recordedBy
-                ? labelRecord.recordedBy.split(/[,\s;]/)[0]
+              Coll. no. {labelRecord.recordedBy && labelRecord.recordedBy[0]
+                ? labelRecord.recordedBy[0].split(/[,\s;]/)[0]
                 : ""}
               {labelRecord.recordNumber}
             </div>

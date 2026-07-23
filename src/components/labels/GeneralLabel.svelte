@@ -54,20 +54,20 @@
     return `${month}, ${year}`;
   };
 
-  const collectorNumberString = (_) => {
+  const collectorNumberString = (record) => {
     let collectorNumberString = "";
-    if (labelRecord && labelRecord.recordNumber) {
-      if (typeof labelRecord.recordNumber == "number") {
-        if (labelRecord.primaryCollectorLastName) {
+    if (record && record.recordNumber) {
+      if (typeof record.recordNumber == "number") {
+        if (record.primaryCollectorLastName) {
           collectorNumberString +=
-            labelRecord.primaryCollectorLastName +
+            record.primaryCollectorLastName +
             " " +
-            labelRecord.recordNumber;
+            record.recordNumber;
         } else {
-          collectorNumberString += " coll. no. " + labelRecord.recordNumber;
+          collectorNumberString += " coll. no. " + record.recordNumber;
         }
       } else {
-        collectorNumberString = labelRecord.recordNumber;
+        collectorNumberString = record.recordNumber;
       }
     }
 
@@ -141,7 +141,7 @@
                       : ""}</span
                   >
                 {:else}
-                  <span>{collectorNumberString()}</span>
+                  <span>{collectorNumberString(labelRecord)}</span>
                 {/if}
               </div>
             {/if}
@@ -273,7 +273,7 @@
                       : ""}</span
                   >
                 {:else}
-                  <span>{collectorNumberString()}</span>
+                  <span>{collectorNumberString(labelRecord)}</span>
                 {/if}
               </div>
             {/if}
@@ -351,7 +351,7 @@
                     : ""}</span
                 >
               {:else}
-                <span>{collectorNumberString()}</span>
+                <span>{collectorNumberString(labelRecord)}</span>
               {/if}
             </div>
           {/if}

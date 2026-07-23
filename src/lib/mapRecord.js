@@ -69,8 +69,8 @@ export default function mapRecord(record, fieldMappings, abbreviateCountries, us
         mappedRecord.verbatimLatitude = mappedRecord.verbatimLatitude.slice(0, latInsertionIndex) + insertionSymbol + mappedRecord.verbatimLatitude.slice(latInsertionIndex);
         mappedRecord.verbatimLongitude = mappedRecord.verbatimLongitude.slice(0, longInsertionIndex) + insertionSymbol + mappedRecord.verbatimLongitude.slice(longInsertionIndex);
         const appendSymbol = mappedRecord.llunit == 'DM' ? '\'' : '"'
-        mappedRecord.verbatimLatitude += appendSymbol + mappedRecord.ns ? mappedRecord.ns.toUpperCase() : ''
-        mappedRecord.verbatimLongitude += appendSymbol + mappedRecord.ew ? mappedRecord.ew.toUpperCase() : ''
+        mappedRecord.verbatimLatitude += appendSymbol + (mappedRecord.ns ? mappedRecord.ns.toUpperCase() : '')
+        mappedRecord.verbatimLongitude += appendSymbol + (mappedRecord.ew ? mappedRecord.ew.toUpperCase() : '')
       }
     }
   }
@@ -128,8 +128,8 @@ export default function mapRecord(record, fieldMappings, abbreviateCountries, us
     if (mappedRecord.verbatimElevation) {
       mappedRecord.labelElevation = mappedRecord.verbatimElevation
     }
-    else if (mappedRecord.minElevationMeters || mappedRecord.maxElevationMeters) {
-      let elevVals = [mappedRecord.minElevationMeters, mappedRecord.maxElevationMeters].filter(x => x !== null && x !== undefined)
+    else if (mappedRecord.minElevationMeters != null && mappedRecord.minElevationMeters !== '' || mappedRecord.maxElevationMeters != null && mappedRecord.maxElevationMeters !== '') {
+      let elevVals = [mappedRecord.minElevationMeters, mappedRecord.maxElevationMeters].filter(x => x !== null && x !== undefined && x !== '')
       if (elevVals.length == 1) {
         if (isNaN(elevVals[0])) {
           mappedRecord.labelElevation = elevVals[0]
@@ -140,11 +140,13 @@ export default function mapRecord(record, fieldMappings, abbreviateCountries, us
       }
       else if (mappedRecord.minElevationMeters == mappedRecord.maxElevationMeters) {
         mappedRecord.verbatimElevation = mappedRecord.minElevationMeters + 'm'
+        mappedRecord.labelElevation = mappedRecord.verbatimElevation
       }
       else {
-        let minElev = Math.min(elevVals)
-        let maxElev = Math.max(elevVals)
+        let minElev = Math.min(...elevVals)
+        let maxElev = Math.max(...elevVals)
         mappedRecord.verbatimElevation = [minElev, maxElev].join('-') + 'm'
+        mappedRecord.labelElevation = mappedRecord.verbatimElevation
       }
     }
     else if (mappedRecord.alt) {
@@ -258,16 +260,6 @@ export default function mapRecord(record, fieldMappings, abbreviateCountries, us
     }
   }
 
-  if (mappedRecord.collectionDate && useRomanNumeralMonths) {
-    mappedRecord.collectionDate = addRomanNumeralDates(mappedRecord.collectionDate)
-
-  }
-
-  //we want em dashes instead of en dashes
-  if (mappedRecord.collectionDate && mappedRecord.collectionDate.includes('-')) {
-    mappedRecord.collectionDate = mappedRecord.collectionDate.replace('-', '—')
-  }
-
   if (!mappedRecord.specimenStageSex) {
     let sexes, stages
     if (mappedRecord.sex) {
@@ -350,7 +342,6 @@ export default function mapRecord(record, fieldMappings, abbreviateCountries, us
   }
 
   //det stuff
-
   if (!mappedRecord.dateIdentified) {
     mappedRecord.dateIdentified = null
     const detDateParts = []
@@ -364,12 +355,11 @@ export default function mapRecord(record, fieldMappings, abbreviateCountries, us
       }
     }
     if (detDateParts.length) {
-      mappedRecord.dateIdentified = detDateParts.join('-')
+      mappedRecord.dateIdentified = detDateParts.join('/')
     }
   }
-
-  if (mappedRecord.dateIdentified && useRomanNumeralMonths) {
-    mappedRecord.dateIdentified = addRomanNumeralDates(mappedRecord.dateIdentified)
+  else {
+    mappedRecord.dateIdentified = getDateTimeRange(mappedRecord.dateIdentified, null, null, null, true, useRomanNumeralMonths)
   }
 
   if (!mappedRecord.identifiedBy) {
